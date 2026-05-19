@@ -100,20 +100,20 @@ function calcPricing(tour, groupSize) {
    BOOKING — SAVE TO FIRESTORE + localStorage backup
 ═══════════════════════════════════════════════════════════ */
 async function saveBooking({ name, phone, tourId, date, groupSize, rideStyle, total, deposit, remainder }) {
-  const tour    = tours.find(t => t.id === tourId);
+  const tour = tours.find(t => t.id === tourId);
   const booking = {
     name,
-    phone:     phone || '',
+    phone: phone || '',
     tourId,
-    tourName:  tour ? tour.name : tourId,
+    tourName: tour ? tour.name : tourId,
     date,
-    duration:  tour ? tour.days : 1,
+    duration: tour ? tour.days : 1,
     groupSize,
     rideStyle,
     total,
     deposit,
     remainder,
-    status:    'pending',
+    status: 'pending',
     scooterId: null,
     createdAt: new Date().toISOString(),
   };
@@ -121,10 +121,16 @@ async function saveBooking({ name, phone, tourId, date, groupSize, rideStyle, to
   let firestoreId = null;
   if (window.db) {
     try {
-      const ref   = await window.db.collection('bookings').add(booking);
+      const firestorePromise = window.db.collection('bookings').add(booking);
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Firestore timeout')), 5000)
+      );
+      
+      // Forces the request to fail if it takes longer than 5 seconds
+      const ref = await Promise.race([firestorePromise, timeoutPromise]);
       firestoreId = ref.id;
     } catch (e) {
-      console.error('Firestore save failed:', e);
+      console.error('Firestore save failed or timed out:', e);
     }
   }
 
@@ -310,35 +316,47 @@ async function handleFormSubmit(e) {
   if (!validateForm()) return;
 
   const submitBtn = document.getElementById('submitBtn');
-  const origHTML  = submitBtn?.innerHTML || '';
-  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Saving…'; }
-
-  const name      = document.getElementById('name').value.trim();
-  const phone     = document.getElementById('phone')?.value.trim() || '';
-  const tourId    = document.getElementById('tourSelect').value;
-  const dateVal   = document.getElementById('startDate').value;
-  const groupSize = parseInt(document.getElementById('groupSize').value, 10);
-  const rideStyle = document.querySelector('input[name="rideStyle"]:checked').value;
-  const tour      = tours.find(t => t.id === tourId);
-  const { total, deposit, remainder } = calcPricing(tour, groupSize);
-
-  // Re-check right before saving (race condition guard)
-  if (_availabilityLoaded && !isDateRangeAvailable(dateVal, tour.days)) {
-    document.getElementById('dateError').textContent = 'These dates just became unavailable. Please choose different dates.';
-    if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = origHTML; }
-    return;
+  const origHTML = submitBtn?.innerHTML || '';
+  
+  if (submitBtn) { 
+    submitBtn.disabled = true; 
+    submitBtn.textContent = 'Saving…'; 
   }
 
-  await saveBooking({ name, phone, tourId, date: dateVal, groupSize, rideStyle, total, deposit, remainder });
+  try {
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone')?.value.trim() || '';
+    const tourId = document.getElementById('tourSelect').value;
+    const dateVal = document.getElementById('startDate').value;
+    const groupSize = parseInt(document.getElementById('groupSize').value, 10);
+    const rideStyle = document.querySelector('input[name="rideStyle"]:checked').value;
+    const tour = tours.find(t => t.id === tourId);
+    const { total, deposit, remainder } = calcPricing(tour, groupSize);
 
-  if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = origHTML; }
+    // Re-check right before saving (race condition guard)
+    if (_availabilityLoaded && !isDateRangeAvailable(dateVal, tour.days)) {
+      document.getElementById('dateError').textContent = 'These dates just became unavailable. Please choose different dates.';
+      return; // The finally block will handle resetting the button
+    }
 
-  document.getElementById('bookingForm')?.reset();
-  setGroupCount(1);
-  const ps = document.getElementById('priceSummary');
-  if (ps) ps.style.display = 'none';
+    await saveBooking({ name, phone, tourId, date: dateVal, groupSize, rideStyle, total, deposit, remainder });
 
-  showPaymentModal(deposit);
+    document.getElementById('bookingForm')?.reset();
+    setGroupCount(1);
+    const ps = document.getElementById('priceSummary');
+    if (ps) ps.style.display = 'none';
+
+    showPaymentModal(deposit);
+  } catch (error) {
+    console.error("Booking submission error:", error);
+    alert("An unexpected error occurred. Please try again.");
+  } finally {
+    // This guarantees the button is always restored
+    if (submitBtn) { 
+      submitBtn.disabled = false; 
+      submitBtn.innerHTML = origHTML; 
+    }
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════

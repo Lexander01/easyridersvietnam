@@ -312,6 +312,13 @@
 
         <button class="btn btn-danger" onclick="submitBlockDate()" style="margin-top: 10px;">BLOCK NOW</button>
       </div>
+
+      <div class="card" style="margin-top: 20px;">
+        <h3 class="card-title" style="font-size: 1.4rem; margin-bottom: 16px;">Upcoming Blocked Dates</h3>
+        <div id="blocked-dates-list">
+          <p style="color:var(--text-muted);font-size:1.05rem;">Loading…</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -409,6 +416,7 @@
     db.collection('blockedDates').onSnapshot(snap => {
       blockedDates = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       renderSchedule();
+      renderBlockedDatesList();
     }, err => console.error('BlockedDates listener:', err));
 
     // ── Button-fill progress helpers ───────────────────────────
@@ -598,10 +606,19 @@
         let rowHTML = `<div class="scooter-row">`;
         
         if (isBlocked) {
+          const blockDoc = blockedDates.find(b => b.date === dayStr && (b.scooterId === 'all' || b.scooterId == s));
+          const blockId  = blockDoc ? blockDoc.id : null;
           rowHTML += `
             <div class="scooter-header">
               <span>SCOOTER ${s}</span>
-              <span class="status-badge status-blocked">BLOCKED</span>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="status-badge status-blocked">BLOCKED</span>
+                ${blockId ? `<button onclick="unblockScooter('${blockId}', this)"
+                    style="padding:6px 14px;background:white;border:2px solid var(--danger);color:var(--danger);
+                           border-radius:8px;font-weight:800;font-size:0.9rem;cursor:pointer;line-height:1.4;">
+                    UNBLOCK
+                  </button>` : ''}
+              </div>
             </div>`;
         } else if (booking) {
           rowHTML += `
@@ -796,6 +813,54 @@
       }
     }
 
+    async function unblockScooter(blockId, btn) {
+      const origText = btn ? btn.textContent : 'UNBLOCK';
+      const fillInterval = startBtnFill(btn);
+      if (btn) { btn.disabled = true; btn.textContent = 'REMOVING…'; }
+      try {
+        await db.collection('blockedDates').doc(blockId).delete();
+        showMessage('BLOCK REMOVED.');
+      } catch (e) {
+        showMessage('ERROR. CHECK CONNECTION.', true);
+        console.error(e);
+      } finally {
+        completeBtnFill(btn, fillInterval, origText);
+      }
+    }
+
+    function renderBlockedDatesList() {
+      const container = document.getElementById('blocked-dates-list');
+      if (!container) return;
+      const todayStr = formatDate(new Date());
+      const future   = blockedDates
+        .filter(b => b.date >= todayStr)
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+      if (future.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted);font-size:1.05rem;padding:8px 0;">No upcoming blocked dates.</p>';
+        return;
+      }
+      let html = '';
+      future.forEach(b => {
+        const label = b.scooterId === 'all' ? 'ALL 10 SCOOTERS' : `SCOOTER ${b.scooterId}`;
+        html += `
+          <div style="display:flex;justify-content:space-between;align-items:center;
+                      padding:14px;background:#f9fafb;border:2px solid var(--border);
+                      border-radius:10px;margin-bottom:10px;">
+            <div>
+              <p style="font-weight:800;font-size:1.1rem;margin-bottom:2px;">${b.date}</p>
+              <p style="color:var(--danger);font-weight:700;font-size:0.95rem;">${label}</p>
+            </div>
+            <button onclick="unblockScooter('${b.id}', this)"
+                    style="padding:10px 18px;background:white;border:2px solid var(--danger);
+                           color:var(--danger);border-radius:8px;font-weight:800;font-size:1rem;cursor:pointer;">
+              UNBLOCK
+            </button>
+          </div>`;
+      });
+      container.innerHTML = html;
+    }
+
     function showConflictModal(conflicts, dateStr) {
       let bodyHtml = `<p style="font-weight: 800; margin-bottom: 16px; color: var(--danger);">
         ATTENTION! There is already a confirmed booking on ${dateStr} for this scooter(s).
@@ -863,6 +928,7 @@
     // Initial render with empty arrays; listeners will fill them and re-render automatically
     renderPending();
     renderSchedule();
+    renderBlockedDatesList();
 
   </script>
 </body>

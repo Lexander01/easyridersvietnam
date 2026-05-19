@@ -13,13 +13,16 @@ const GUIDE_WHATSAPP  = '84000000000'; // ← replace with real guide WhatsApp n
    TOUR DATA
 ═══════════════════════════════════════════════════════════ */
 const tours = [
-  { id: 'highlight-1', name: 'Dalat to Hoi An',                   days: 5, nights: 4, rateType: 'daily' },
-  { id: 'highlight-3', name: 'Dalat Loop',                         days: 3, nights: 2, rateType: 'daily' },
-  { id: 'alt-3day',    name: 'Alternative 3-Day Trip',             days: 3, nights: 2, rateType: 'daily' },
-  { id: 'highlight-4', name: 'Hoi An to Dalat',                    days: 5, nights: 4, rateType: 'daily' },
-  { id: 'highlight-5', name: 'Dalat to Mui Ne Beach',              days: 2, nights: 1, rateType: 'daily' },
-  { id: 'saigon',      name: 'Dalat to Ho Chi Minh City (Saigon)', days: 4, nights: 3, rateType: 'daily' },
-  { id: 'local',       name: 'One-Day Local Dalat Tour',           days: 1, nights: 0, rateType: 'flat'  },
+  { id: 'highlight-1',       name: 'Dalat to Hoi An',                   days: 5, nights: 4, rateType: 'daily', startsOutsideDalat: false },
+  { id: 'highlight-3',       name: 'Dalat Loop',                         days: 3, nights: 2, rateType: 'daily', startsOutsideDalat: false },
+  { id: 'alt-3day',          name: 'Alternative 3-Day Trip',             days: 3, nights: 2, rateType: 'daily', startsOutsideDalat: false },
+  { id: 'highlight-4',       name: 'Hoi An to Dalat',                    days: 5, nights: 4, rateType: 'daily', startsOutsideDalat: true  },
+  { id: 'highlight-5',       name: 'Dalat to Mui Ne Beach',              days: 2, nights: 1, rateType: 'daily', startsOutsideDalat: false },
+  { id: 'saigon-from-dalat', name: 'Dalat to Ho Chi Minh City',          days: 4, nights: 3, rateType: 'daily', startsOutsideDalat: false },
+  { id: 'saigon-from-hcmc',  name: 'Ho Chi Minh City to Dalat',          days: 4, nights: 3, rateType: 'daily', startsOutsideDalat: true  },
+  { id: 'local',             name: 'One-Day Local Dalat Tour',           days: 1, nights: 0, rateType: 'flat',  startsOutsideDalat: false },
+  // legacy ID kept for backward-compatible Firestore lookups
+  { id: 'saigon',            name: 'Dalat to Ho Chi Minh City (Saigon)', days: 4, nights: 3, rateType: 'daily', startsOutsideDalat: false },
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -182,10 +185,26 @@ function checkDateAvailability() {
   const dateErr   = document.getElementById('dateError');
   const submitBtn = document.getElementById('submitBtn');
 
-  if (!dateVal || !tourId || !_availabilityLoaded) return;
+  if (!dateVal || !tourId) return;
 
   const tour = tours.find(t => t.id === tourId);
   if (!tour) return;
+
+  // 2-day advance rule for tours starting outside Dalat
+  if (tour.startsOutsideDalat) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const minDate = new Date(today);
+    minDate.setDate(minDate.getDate() + 2);
+    const selected = new Date(dateVal + 'T00:00:00');
+    if (selected < minDate) {
+      if (dateErr)   dateErr.textContent = 'This tour starts outside Dalat. Please book at least 2 days in advance so your guide has time to travel there.';
+      if (submitBtn) submitBtn.disabled  = true;
+      return;
+    }
+  }
+
+  if (!_availabilityLoaded) return;
 
   if (!isDateRangeAvailable(dateVal, tour.days)) {
     if (dateErr)   dateErr.textContent   = 'Sorry, one or more days in this range are fully booked. Please choose a different start date.';
@@ -227,13 +246,24 @@ function prefillTour(tourId) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SET MIN DATE
+   SET MIN DATE (tour-aware: +2 days for tours starting outside Dalat)
 ═══════════════════════════════════════════════════════════ */
-function setMinDate() {
+function updateMinDate() {
   const d = document.getElementById('startDate');
   if (!d) return;
-  const t = new Date();
-  d.min = fmtYMD(t);
+  const tourId = document.getElementById('tourSelect')?.value;
+  const tour   = tours.find(t => t.id === tourId);
+  const today  = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (tour && tour.startsOutsideDalat) {
+    const minDate = new Date(today);
+    minDate.setDate(minDate.getDate() + 2);
+    d.min = fmtYMD(minDate);
+    // Clear the current value if it's now too early
+    if (d.value && d.value < d.min) d.value = '';
+  } else {
+    d.min = fmtYMD(today);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -265,11 +295,24 @@ function validateForm() {
 
   const tourId  = document.getElementById('tourSelect')?.value;
   const dateVal = document.getElementById('startDate')?.value;
-  if (valid && tourId && dateVal && _availabilityLoaded) {
+  if (valid && tourId && dateVal) {
     const tour = tours.find(t => t.id === tourId);
-    if (tour && !isDateRangeAvailable(dateVal, tour.days)) {
-      document.getElementById('dateError').textContent = 'Sorry, one or more days in this range are fully booked. Please choose a different start date.';
-      valid = false;
+    if (tour && tour.startsOutsideDalat) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const minDate = new Date(today);
+      minDate.setDate(minDate.getDate() + 2);
+      if (new Date(dateVal + 'T00:00:00') < minDate) {
+        document.getElementById('dateError').textContent = 'This tour starts outside Dalat. Please book at least 2 days in advance.';
+        valid = false;
+      }
+    }
+    if (valid && _availabilityLoaded) {
+      const tour2 = tours.find(t => t.id === tourId);
+      if (tour2 && !isDateRangeAvailable(dateVal, tour2.days)) {
+        document.getElementById('dateError').textContent = 'Sorry, one or more days in this range are fully booked. Please choose a different start date.';
+        valid = false;
+      }
     }
   }
   return valid;
@@ -397,17 +440,17 @@ function closeMenu() {
    INIT
 ═══════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
-  setMinDate();
+  updateMinDate();
   setGroupCount(1);
   loadAvailabilityData();
 
   const preselect = new URLSearchParams(window.location.search).get('tour');
   if (preselect) {
     const sel = document.getElementById('tourSelect');
-    if (sel) { sel.value = preselect; updatePriceSummary(); }
+    if (sel) { sel.value = preselect; updateMinDate(); updatePriceSummary(); }
   }
 
-  document.getElementById('tourSelect')?.addEventListener('change', updatePriceSummary);
+  document.getElementById('tourSelect')?.addEventListener('change', () => { updateMinDate(); updatePriceSummary(); });
   document.getElementById('startDate')?.addEventListener('change', checkDateAvailability);
   document.getElementById('decreaseGroup')?.addEventListener('click', () => setGroupCount(groupCount - 1));
   document.getElementById('increaseGroup')?.addEventListener('click', () => setGroupCount(groupCount + 1));

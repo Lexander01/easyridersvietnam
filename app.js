@@ -276,37 +276,32 @@ function validateForm() {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   PROGRESS BAR
+   BUTTON FILL PROGRESS
 ═══════════════════════════════════════════════════════════ */
 let _progressInterval = null;
 
-function startProgressBar() {
-  const bar  = document.getElementById('bookingProgress');
-  const fill = document.getElementById('bookingProgressFill');
-  if (!bar || !fill) return;
-  fill.style.transition = 'width 0.15s ease-out';
-  fill.style.width = '0%';
-  bar.style.display = 'block';
+function startButtonFill(btn) {
+  if (!btn) return;
   let pct = 0;
+  btn.style.setProperty('--bp', '0');
+  btn.classList.add('btn-fill-progress');
   _progressInterval = setInterval(() => {
-    pct += (88 - pct) * 0.07;   // eases toward 88%, never reaches it
-    fill.style.width = pct + '%';
+    pct += (88 - pct) * 0.07;
+    btn.style.setProperty('--bp', (pct / 100).toFixed(3));
   }, 150);
 }
 
-function completeProgressBar() {
+function completeButtonFill(btn, origHTML) {
   clearInterval(_progressInterval);
   _progressInterval = null;
-  const fill = document.getElementById('bookingProgressFill');
-  if (fill) {
-    fill.style.transition = 'width 0.3s ease';
-    fill.style.width = '100%';
-  }
+  if (!btn) return;
+  btn.style.setProperty('--bp', '1');
   setTimeout(() => {
-    const bar = document.getElementById('bookingProgress');
-    if (bar)  bar.style.display = 'none';
-    if (fill) { fill.style.transition = 'none'; fill.style.width = '0%'; }
-  }, 350);
+    btn.classList.remove('btn-fill-progress');
+    btn.style.removeProperty('--bp');
+    btn.disabled = false;
+    if (origHTML !== undefined) btn.innerHTML = origHTML;
+  }, 250);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -356,7 +351,7 @@ async function handleFormSubmit(e) {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Saving…';
   }
-  startProgressBar();
+  startButtonFill(submitBtn);
 
   try {
     const name = document.getElementById('name').value.trim();
@@ -386,11 +381,7 @@ async function handleFormSubmit(e) {
     console.error("Booking submission error:", error);
     alert("An unexpected error occurred. Please try again.");
   } finally {
-    completeProgressBar();
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = origHTML;
-    }
+    completeButtonFill(submitBtn, origHTML);
   }
 }
 

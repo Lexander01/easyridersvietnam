@@ -409,19 +409,13 @@ button, input, select, textarea { font-family: inherit; }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   BOOKING PROGRESS BAR
+   BUTTON FILL PROGRESS  (shared by customer + guide pages)
 ═══════════════════════════════════════════════════════════ */
-.booking-progress {
-  height: 6px;
-  background: rgba(0,0,0,0.10);
-  border-radius: 3px;
-  margin-top: 14px;
-  overflow: hidden;
-}
-.booking-progress-fill {
-  height: 100%;
-  background: var(--orange);
-  border-radius: 3px;
-  width: 0%;
-  transition: width 0.15s ease-out;
+.btn-fill-progress {
+  /* dark overlay grows from left; sits on top of the button's background-color
+     but below the text because background-image is below the content layer */
+  background-image: linear-gradient(rgba(0,0,0,0.22), rgba(0,0,0,0.22));
+  background-size: calc(var(--bp, 0) * 100%) 100%;
+  background-position: left center;
+  background-repeat: no-repeat;
 }

@@ -239,6 +239,14 @@
     .message-box.error { background: var(--danger); }
 
     .empty-state { padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 1.2rem; font-weight: 600;}
+
+    /* Button-fill progress (same technique as main site) */
+    .btn-fill-progress {
+      background-image: linear-gradient(rgba(0,0,0,0.22), rgba(0,0,0,0.22));
+      background-size: calc(var(--bp, 0) * 100%) 100%;
+      background-position: left center;
+      background-repeat: no-repeat;
+    }
   </style>
 </head>
 <body>
@@ -354,6 +362,19 @@
     </div>
   </div>
 
+  <!-- Cancel booking confirmation modal -->
+  <div class="modal-overlay" id="cancel-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="color: var(--danger);">CANCEL BOOKING?</h3>
+        <button class="modal-close" onclick="closeModal('cancel-modal')">×</button>
+      </div>
+      <div id="cancel-modal-body">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
   <!-- Custom Alert Message Box for big visibility -->
   <div class="message-box" id="message-box">Action completed.</div>
 
@@ -389,6 +410,98 @@
       blockedDates = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       renderSchedule();
     }, err => console.error('BlockedDates listener:', err));
+
+    // ── Button-fill progress helpers ───────────────────────────
+    function startBtnFill(btn) {
+      if (!btn) return null;
+      btn.style.setProperty('--bp', '0');
+      btn.classList.add('btn-fill-progress');
+      let pct = 0;
+      return setInterval(() => {
+        pct += (88 - pct) * 0.09;
+        btn.style.setProperty('--bp', (pct / 100).toFixed(3));
+      }, 120);
+    }
+
+    function completeBtnFill(btn, interval, origText) {
+      clearInterval(interval);
+      if (!btn) return;
+      btn.style.setProperty('--bp', '1');
+      setTimeout(() => {
+        btn.classList.remove('btn-fill-progress');
+        btn.style.removeProperty('--bp');
+        btn.disabled = false;
+        if (origText) btn.textContent = origText;
+      }, 250);
+    }
+
+    // ── Cancel booking ─────────────────────────────────────────
+    let _cancelBookingId = null;
+
+    function openCancelModal(bookingId) {
+      const b = bookings.find(x => x.id === bookingId);
+      if (!b) return;
+      _cancelBookingId = bookingId;
+
+      const digits  = (b.phone || '').replace(/\D/g, '');
+      const waPhone = digits.startsWith('0') ? '84' + digits.slice(1) : digits;
+      const hasPhone = !!waPhone;
+
+      document.getElementById('cancel-modal-body').innerHTML = `
+        <p style="font-size:1.15rem; margin-bottom:14px;">
+          You are about to <strong>cancel the booking</strong> for:
+        </p>
+        <p style="font-size:1.4rem; font-weight:800; margin-bottom:20px;">${b.name}</p>
+        <p style="color:var(--danger); font-weight:800; font-size:1.05rem; margin-bottom:20px;">
+          ⚠️ Please contact the customer first before you cancel!
+        </p>
+        ${hasPhone ? `
+          <a href="https://wa.me/${waPhone}" target="_blank"
+             style="display:flex;align-items:center;justify-content:center;gap:10px;
+                    background:#25D366;color:white;font-weight:800;font-size:1.1rem;
+                    padding:18px;border-radius:10px;text-decoration:none;margin-bottom:8px;">
+            📱 Message ${b.name} on WhatsApp
+          </a>
+          <p style="text-align:center;color:var(--text-muted);font-size:1rem;margin-bottom:24px;">
+            ${b.phone}
+          </p>
+        ` : `
+          <p style="color:var(--danger);margin-bottom:24px;font-size:1rem;">
+            No phone number saved for this booking.
+          </p>
+        `}
+        <div style="display:flex;gap:12px;margin-top:4px;">
+          <button class="btn btn-primary btn-half" onclick="closeModal('cancel-modal')"
+                  style="background:var(--text-main);">
+            NO — KEEP BOOKING
+          </button>
+          <button class="btn btn-danger btn-half" id="confirm-cancel-btn"
+                  onclick="confirmCancel()">
+            YES — CANCEL IT
+          </button>
+        </div>
+      `;
+      document.getElementById('cancel-modal').classList.add('active');
+    }
+
+    async function confirmCancel() {
+      if (!_cancelBookingId) return;
+      const bookingId = _cancelBookingId;
+      const btn = document.getElementById('confirm-cancel-btn');
+      const fillInterval = startBtnFill(btn);
+      if (btn) { btn.disabled = true; btn.textContent = 'CANCELLING…'; }
+      try {
+        await db.collection('bookings').doc(bookingId).update({ status: 'cancelled' });
+        closeModal('cancel-modal');
+        showMessage('BOOKING CANCELLED.');
+        _cancelBookingId = null;
+      } catch (e) {
+        showMessage('ERROR. CHECK CONNECTION.', true);
+        console.error(e);
+      } finally {
+        completeBtnFill(btn, fillInterval, 'YES — CANCEL IT');
+      }
+    }
 
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -462,7 +575,7 @@
             <p class="card-text"><strong>GROUP:</strong> ${b.groupSize || b.pax || 1} person(s)</p>
             <p class="card-text"><strong>STYLE:</strong> ${b.rideStyle === 'self' ? 'Self-drive' : 'Guide-driven'}</p>
             <div class="card-actions">
-              <button class="btn btn-danger btn-half" onclick="rejectBooking('${b.id}')">REJECT</button>
+              <button class="btn btn-danger btn-half" onclick="openCancelModal('${b.id}')">CANCEL</button>
               <button class="btn btn-success btn-half" onclick="openApproveModal('${b.id}')">APPROVE</button>
             </div>
           </div>
@@ -607,6 +720,7 @@
       }
 
       const btn = document.getElementById('confirm-approve-btn');
+      const fillInterval = startBtnFill(btn);
       btn.disabled = true;
       btn.textContent = 'SAVING…';
       try {
@@ -620,8 +734,7 @@
         showMessage('ERROR SAVING. CHECK CONNECTION.', true);
         console.error(e);
       } finally {
-        btn.disabled = false;
-        btn.textContent = 'CONFIRM';
+        completeBtnFill(btn, fillInterval, 'CONFIRM');
       }
     }
 
@@ -666,6 +779,7 @@
 
     async function executeBlock(dateStr, scooterVal) {
       const btn = document.querySelector('#view-block .btn');
+      const fillInterval = startBtnFill(btn);
       if (btn) { btn.disabled = true; btn.textContent = 'SAVING…'; }
       try {
         await db.collection('blockedDates').add({
@@ -678,7 +792,7 @@
         showMessage('ERROR SAVING. CHECK CONNECTION.', true);
         console.error(e);
       } finally {
-        if (btn) { btn.disabled = false; btn.textContent = 'BLOCK NOW'; }
+        completeBtnFill(btn, fillInterval, 'BLOCK NOW');
       }
     }
 
@@ -707,14 +821,24 @@
       const b = bookings.find(x => x.id === bookingId);
       if(!b) return;
 
+      const waPhone = (b.phone || '').replace(/\D/g, '');
       document.getElementById('details-body').innerHTML = `
         <p style="margin-bottom:12px;"><strong>CLIENT:</strong><br> ${b.name}</p>
-        <p style="margin-bottom:12px;"><strong>PHONE:</strong><br> <a href="https://wa.me/${b.phone.replace('+','')}" style="color:var(--primary); font-weight: bold;">${b.phone}</a></p>
+        <p style="margin-bottom:12px;"><strong>PHONE:</strong><br>
+          <a href="https://wa.me/${waPhone}" style="color:var(--primary); font-weight:bold;">${b.phone || '—'}</a>
+        </p>
         <p style="margin-bottom:12px;"><strong>TOUR:</strong><br> ${b.tourName || b.tour || '—'}</p>
         <p style="margin-bottom:12px;"><strong>START:</strong><br> ${b.date}</p>
         <p style="margin-bottom:12px;"><strong>DURATION:</strong><br> ${b.duration} DAYS</p>
-        <p style="margin-bottom:12px; color: var(--success); font-weight: bold;">ASSIGNED SCOOTERS: ${getScooterIds(b).join(', ') || '—'}</p>
-        <button class="btn btn-primary" style="margin-top:20px;" onclick="closeModal('details-modal')">CLOSE</button>
+        <p style="margin-bottom:12px; color: var(--success); font-weight: bold;">
+          ASSIGNED SCOOTERS: ${getScooterIds(b).join(', ') || '—'}
+        </p>
+        <div style="display:flex; gap:12px; margin-top:20px;">
+          <button class="btn btn-danger btn-half" onclick="closeModal('details-modal'); openCancelModal('${b.id}')">
+            CANCEL BOOKING
+          </button>
+          <button class="btn btn-primary btn-half" onclick="closeModal('details-modal')">CLOSE</button>
+        </div>
       `;
       document.getElementById('details-modal').classList.add('active');
     }

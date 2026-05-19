@@ -11,12 +11,13 @@ const DEPOSIT_PCT   = 0.20;
    TOUR DATA (Stripped for Pricing & Logic Only)
 ═══════════════════════════════════════════════════════════ */
 const tours = [
-  { id: 'dalat-loop', name: 'Dalat Loop', days: 3, nights: 2, rateType: 'daily' },
-  { id: 'dalat-hoian-express', name: 'Dalat to Hoi An (Express)', days: 3, nights: 2, rateType: 'daily' },
-  { id: 'dalat-hoian-hcm', name: 'Dalat to Hoi An (Ho Chi Minh Trail)', days: 5, nights: 4, rateType: 'daily' },
-  { id: 'dalat-muine', name: 'Dalat to Mui Ne Beach', days: 2, nights: 1, rateType: 'daily' },
-  { id: 'dalat-saigon', name: 'Dalat to Saigon', days: 4, nights: 3, rateType: 'daily' },
-  { id: 'local-dalat', name: 'Local Dalat Day Tour', days: 1, nights: 0, rateType: 'flat' }
+  { id: 'highlight-1', name: 'Dalat to Hoi An', days: 5, nights: 4, rateType: 'daily' },
+  { id: 'highlight-3', name: 'Dalat Loop', days: 3, nights: 2, rateType: 'daily' },
+  { id: 'alt-3day', name: 'Alternative 3-Day Trip', days: 3, nights: 2, rateType: 'daily' },
+  { id: 'highlight-4', name: 'Hoi An to Dalat', days: 5, nights: 4, rateType: 'daily' },
+  { id: 'highlight-5', name: 'Dalat to Mui Ne Beach', days: 2, nights: 1, rateType: 'daily' },
+  { id: 'saigon', name: 'Dalat to Ho Chi Minh City (Saigon)', days: 4, nights: 3, rateType: 'daily' },
+  { id: 'local', name: 'One-Day Local Dalat Tour', days: 1, nights: 0, rateType: 'flat' },
 ];
 
 /* ═══════════════════════════════════════════════════════════

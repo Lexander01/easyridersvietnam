@@ -358,10 +358,12 @@ function showPaymentModal(deposit) {
   const amountEl = document.getElementById('paymentAmount');
   if (amountEl) amountEl.textContent = formatEUR(deposit);
   if (modal)    modal.classList.add('active');
+  document.body.classList.add('no-scroll');
 }
 
 function closePaymentModal() {
   document.getElementById('paymentModal')?.classList.remove('active');
+  document.body.classList.remove('no-scroll');
 }
 
 function handlePaymentSuccess() {
@@ -373,11 +375,13 @@ function handlePaymentSuccess() {
     if (waLink) waLink.href        = `https://wa.me/${GUIDE_WHATSAPP}`;
     if (waNum)  waNum.textContent  = `+${GUIDE_WHATSAPP}`;
     successModal.classList.add('active');
+    document.body.classList.add('no-scroll');
   }
 }
 
 function closeSuccessModal() {
   document.getElementById('successModal')?.classList.remove('active');
+  document.body.classList.remove('no-scroll');
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -434,6 +438,7 @@ async function handleFormSubmit(e) {
 function closeMenu() {
   document.getElementById('navLinks')?.classList.remove('open');
   document.getElementById('hamburger')?.classList.remove('open');
+  document.body.classList.remove('no-scroll');
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -459,7 +464,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('hamburger')?.addEventListener('click', function () {
     this.classList.toggle('open');
-    document.getElementById('navLinks')?.classList.toggle('open');
+    const navLinks = document.getElementById('navLinks');
+    navLinks?.classList.toggle('open');
+    document.body.classList.toggle('no-scroll', navLinks?.classList.contains('open') ?? false);
   });
 
   document.addEventListener('click', e => {

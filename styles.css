@@ -40,12 +40,9 @@ button, input, select, textarea { font-family: inherit; }
 
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 26px; border-radius: var(--radius); font-size: 14px; font-weight: 700; letter-spacing: 0.02em; border: 2px solid transparent; cursor: pointer; transition: all var(--transition); white-space: nowrap; }
 .btn-primary { background: var(--orange); color: var(--white); border-color: var(--orange); }
-.btn-primary:hover { background: var(--orange-d); border-color: var(--orange-d); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(232,100,10,0.4); }
 .btn-ghost { background: transparent; color: var(--white); border-color: rgba(255,255,255,0.4); }
-.btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.7); }
 .btn-full { width: 100%; }
 .btn-whatsapp { background: var(--green-wa); border-color: var(--green-wa); font-size: 15px; padding: 16px 24px; }
-.btn-whatsapp:hover { background: var(--green-wa-d); border-color: var(--green-wa-d); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
 .btn-whatsapp:disabled { background: #444; border-color: #444; color: #888; cursor: not-allowed; transform: none; box-shadow: none; }
 
 .nav-wrapper { position: sticky; top: 0; z-index: 100; background: rgba(13,13,13,0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); height: var(--nav-h); }
@@ -56,10 +53,8 @@ button, input, select, textarea { font-family: inherit; }
 .logo-text em { font-style: normal; color: var(--orange); }
 .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
 .nav-link { color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 8px; transition: color var(--transition); }
-.nav-link:hover { color: var(--white); background: rgba(255,255,255,0.06); }
 .nav-link.nav-cta { background: var(--orange); color: var(--white); padding: 7px 16px; }
-.nav-link.nav-cta:hover { background: var(--orange-d); }
-.nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+.nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 10px; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
 .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.25s; }
 .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav-hamburger.open span:nth-child(2) { opacity: 0; }
@@ -92,7 +87,6 @@ button, input, select, textarea { font-family: inherit; }
 
 .tours-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
 .tour-card { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.06); display: flex; flex-direction: column; transition: transform var(--transition), box-shadow var(--transition); }
-.tour-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
 .tour-card-header { background: linear-gradient(135deg, var(--dark-2), var(--dark-3)); padding: 24px 22px 20px; position: relative; overflow: hidden; }
 .tour-card-header::after { content: ''; position: absolute; bottom: -20px; right: -20px; width: 100px; height: 100px; background: radial-gradient(circle, rgba(232,100,10,0.2) 0%, transparent 70%); }
 .tour-tag { display: inline-block; background: rgba(232,100,10,0.2); color: var(--orange-l); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 100px; margin-bottom: 10px; }
@@ -141,19 +135,18 @@ button, input, select, textarea { font-family: inherit; }
 .form-group { display: flex; flex-direction: column; gap: 6px; }
 .form-group label { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.85); display: flex; align-items: center; gap: 6px; }
 .label-note { font-weight: 500; color: rgba(255,255,255,0.4); }
-.form-group input[type="text"], .form-group input[type="date"], .form-group select { background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.12); border-radius: var(--radius); color: var(--white); font-size: 15px; padding: 13px 16px; width: 100%; outline: none; transition: border-color var(--transition); appearance: none; -webkit-appearance: none; }
+.form-group input[type="text"], .form-group input[type="date"], .form-group select { background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.12); border-radius: var(--radius); color: var(--white); font-size: 16px; padding: 13px 16px; width: 100%; outline: none; transition: border-color var(--transition); appearance: none; -webkit-appearance: none; }
 .form-group input:focus, .form-group select:focus { border-color: var(--orange); background: rgba(255,255,255,0.08); }
 .form-group input::placeholder { color: rgba(255,255,255,0.3); }
 .form-group select option { background: var(--dark-2); color: var(--white); }
 .stepper { display: flex; align-items: center; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.12); border-radius: var(--radius); overflow: hidden; width: fit-content; }
 .stepper-btn { background: none; border: none; color: var(--white); font-size: 22px; width: 50px; height: 50px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background var(--transition); line-height: 1; }
-.stepper-btn:hover { background: rgba(255,255,255,0.08); }
 .stepper-btn:active { background: rgba(232,100,10,0.2); }
 .stepper-value { font-size: 20px; font-weight: 800; color: var(--white); min-width: 50px; text-align: center; }
 .toggle-group { display: flex; gap: 10px; }
 .toggle-option { display: flex; align-items: center; cursor: pointer; flex: 1; }
 .toggle-option input[type="radio"] { display: none; }
-.toggle-label { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.12); border-radius: var(--radius); font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); transition: all var(--transition); cursor: pointer; }
+.toggle-label { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 12px 16px; min-height: 44px; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.12); border-radius: var(--radius); font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); transition: all var(--transition); cursor: pointer; }
 .toggle-option input[type="radio"]:checked + .toggle-label { background: rgba(232,100,10,0.15); border-color: var(--orange); color: var(--orange-l); }
 .toggle-note { font-size: 11px; color: rgba(255,255,255,0.35); }
 .field-error { font-size: 11px; color: #FF6B6B; font-weight: 600; min-height: 14px; }
@@ -174,7 +167,6 @@ button, input, select, textarea { font-family: inherit; }
 .footer-tagline { font-size: 13px; color: rgba(255,255,255,0.4); flex: 1; }
 .footer-links { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
 .footer-links a { font-size: 13px; color: rgba(255,255,255,0.5); font-weight: 600; transition: color var(--transition); }
-.footer-links a:hover { color: var(--orange-l); }
 .footer-copy { font-size: 12px; color: rgba(255,255,255,0.25); }
 
 @media (max-width: 768px) {
@@ -383,7 +375,6 @@ button, input, select, textarea { font-family: inherit; }
   margin: 24px 0 12px;
   transition: background 0.2s;
 }
-.btn-whatsapp-reveal:hover { background: #1fba58; }
 .btn-simulate {
   width: 100%;
   padding: 16px;
@@ -397,7 +388,6 @@ button, input, select, textarea { font-family: inherit; }
   margin-top: 8px;
   transition: background 0.2s;
 }
-.btn-simulate:hover { background: var(--orange-d); }
 .btn-modal-cancel {
   background: none;
   border: none;
@@ -412,10 +402,64 @@ button, input, select, textarea { font-family: inherit; }
    BUTTON FILL PROGRESS  (shared by customer + guide pages)
 ═══════════════════════════════════════════════════════════ */
 .btn-fill-progress {
-  /* dark overlay grows from left; sits on top of the button's background-color
-     but below the text because background-image is below the content layer */
   background-image: linear-gradient(rgba(0,0,0,0.22), rgba(0,0,0,0.22));
   background-size: calc(var(--bp, 0) * 100%) 100%;
   background-position: left center;
   background-repeat: no-repeat;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   NO-SCROLL UTILITY  (body lock when modal or mobile menu open)
+═══════════════════════════════════════════════════════════ */
+.no-scroll { overflow: hidden; height: 100vh; }
+
+/* ═══════════════════════════════════════════════════════════
+   DATE PICKER — full-area tap target (iOS / Android)
+═══════════════════════════════════════════════════════════ */
+.form-group input[type="date"] { position: relative; }
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL — small viewport fix (iPhone SE etc.)
+═══════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .modal-box { padding: 24px 16px; }
+  .modal-amount { font-size: 2rem; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HOVER EFFECTS — mouse/trackpad only
+   Prevents sticky :hover states after a finger tap on mobile
+═══════════════════════════════════════════════════════════ */
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover { background: var(--orange-d); border-color: var(--orange-d); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(232,100,10,0.4); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.7); }
+  .btn-whatsapp:hover { background: var(--green-wa-d); border-color: var(--green-wa-d); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+  .nav-link:hover { color: var(--white); background: rgba(255,255,255,0.06); }
+  .nav-link.nav-cta:hover { background: var(--orange-d); }
+  .tour-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .stepper-btn:hover { background: rgba(255,255,255,0.08); }
+  .toggle-label:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25); }
+  .footer-links a:hover { color: var(--orange-l); }
+  .btn-whatsapp-reveal:hover { background: #1fba58; }
+  .btn-simulate:hover { background: var(--orange-d); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ACTIVE STATES — touch feedback for all devices
+═══════════════════════════════════════════════════════════ */
+.btn-primary:active { background: var(--orange-d); border-color: var(--orange-d); transform: translateY(0); }
+.btn-ghost:active { background: rgba(255,255,255,0.12); }
+.btn-whatsapp:active { background: var(--green-wa-d); }
+.nav-link:active { color: var(--white); background: rgba(255,255,255,0.1); }
+.tour-card:active { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+.toggle-label:active { background: rgba(232,100,10,0.1); border-color: rgba(232,100,10,0.3); }
+.btn-whatsapp-reveal:active { background: #1fba58; }
+.btn-simulate:active { background: var(--orange-d); }

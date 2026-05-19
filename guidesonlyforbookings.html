@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   
   <style>
     :root {
@@ -359,21 +361,37 @@
   <div class="message-box" id="message-box">Action completed.</div>
 
   <script>
-    // Set to current date context: May 19, 2026
-    let currentDate = new Date('2026-05-19T00:00:00'); 
+    // ── Firebase init ──────────────────────────────────────────
+    const firebaseConfig = {
+      apiKey: 'AIzaSyBSSeMTLVn3qRXXPGikqNMEu5y2Kd-5mlY',
+      authDomain: 'easyridersvietnam-a559e.firebaseapp.com',
+      projectId: 'easyridersvietnam-a559e',
+      storageBucket: 'easyridersvietnam-a559e.firebasestorage.app',
+      messagingSenderId: '256202959661',
+      appId: '1:256202959661:web:db9eaedd4fa4f2a2a881a4',
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ── State ──────────────────────────────────────────────────
+    let currentDate  = new Date();
+    currentDate.setHours(0,0,0,0);
     const TOTAL_SCOOTERS = 10;
 
-    let bookings = [
-      { id: "BK-1050", name: "Lukas Weber", tour: "Dalat Loop", date: "2026-05-21", duration: 3, pax: 1, phone: "+4912345678", status: "pending", scooterId: null },
-      { id: "BK-1051", name: "Emma Smith", tour: "1-Day Local", date: "2026-05-20", duration: 1, pax: 1, phone: "+4479111234", status: "pending", scooterId: null },
-      { id: "BK-1042", name: "Maria Santos", tour: "Dalat to Hoi An", date: "2026-05-18", duration: 5, pax: 1, phone: "+3461234567", status: "approved", scooterId: 1 },
-      { id: "BK-1043", name: "James Wilson", tour: "Dalat to Mui Ne", date: "2026-05-19", duration: 2, pax: 1, phone: "+1555123456", status: "approved", scooterId: 3 }
-    ];
+    let bookings     = [];
+    let blockedDates = [];
 
-    let blockedDates = [
-      { date: "2026-05-20", scooterId: 5 },
-      { date: "2026-05-19", scooterId: 10 } // Blocked today
-    ];
+    // ── Live listeners ─────────────────────────────────────────
+    db.collection('bookings').onSnapshot(snap => {
+      bookings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderPending();
+      renderSchedule();
+    }, err => console.error('Bookings listener:', err));
+
+    db.collection('blockedDates').onSnapshot(snap => {
+      blockedDates = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderSchedule();
+    }, err => console.error('BlockedDates listener:', err));
 
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -438,9 +456,11 @@
         list.innerHTML += `
           <div class="card">
             <h3 class="card-title">${b.name}</h3>
-            <p class="card-text"><strong>TOUR:</strong> ${b.tour}</p>
+            <p class="card-text"><strong>TOUR:</strong> ${b.tourName || b.tour || '—'}</p>
             <p class="card-text"><strong>START:</strong> ${b.date}</p>
             <p class="card-text"><strong>DAYS:</strong> ${b.duration}</p>
+            <p class="card-text"><strong>GROUP:</strong> ${b.groupSize || b.pax || 1} person(s)</p>
+            <p class="card-text"><strong>STYLE:</strong> ${b.rideStyle === 'self' ? 'Self-drive' : 'Guide-driven'}</p>
             <div class="card-actions">
               <button class="btn btn-danger btn-half" onclick="rejectBooking('${b.id}')">REJECT</button>
               <button class="btn btn-success btn-half" onclick="openApproveModal('${b.id}')">APPROVE</button>
@@ -478,7 +498,7 @@
             </div>
             <div class="scooter-body" style="background: #fff7ed; border-top: 2px solid #fdba74;">
               <p class="scooter-body-text">👤 ${booking.name}</p>
-              <p class="scooter-body-text">🗺️ ${booking.tour}</p>
+              <p class="scooter-body-text">🗺️ ${booking.tourName || booking.tour || '—'}</p>
               <button class="btn btn-primary" style="margin-top: 10px;" onclick="viewBookingDetails('${booking.id}')">VIEW DETAILS</button>
             </div>`;
         } else {
@@ -525,30 +545,37 @@
       document.getElementById('approve-modal').classList.add('active');
     }
 
-    function confirmApproval() {
+    async function confirmApproval() {
       const bookingId = document.getElementById('approve-booking-id').value;
       const scooterId = document.getElementById('assign-scooter').value;
-      
-      if(!scooterId) return;
+      if (!scooterId) return;
 
-      const idx = bookings.findIndex(b => b.id === bookingId);
-      if(idx > -1) {
-        bookings[idx].status = 'approved';
-        bookings[idx].scooterId = parseInt(scooterId);
-        
+      const btn = document.getElementById('confirm-approve-btn');
+      btn.disabled = true;
+      btn.textContent = 'SAVING…';
+      try {
+        await db.collection('bookings').doc(bookingId).update({
+          status: 'approved',
+          scooterId: parseInt(scooterId),
+        });
         closeModal('approve-modal');
         showMessage(`BOOKING APPROVED. SCOOTER ${scooterId} ASSIGNED.`);
-        renderPending();
-        renderSchedule();
+      } catch (e) {
+        showMessage('ERROR SAVING. CHECK CONNECTION.', true);
+        console.error(e);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'CONFIRM';
       }
     }
 
-    function rejectBooking(bookingId) {
-      const idx = bookings.findIndex(b => b.id === bookingId);
-      if(idx > -1) {
-        bookings[idx].status = 'rejected';
-        showMessage(`BOOKING REJECTED.`, true);
-        renderPending();
+    async function rejectBooking(bookingId) {
+      try {
+        await db.collection('bookings').doc(bookingId).update({ status: 'rejected' });
+        showMessage('BOOKING REJECTED.', true);
+      } catch (e) {
+        showMessage('ERROR SAVING. CHECK CONNECTION.', true);
+        console.error(e);
       }
     }
 
@@ -581,15 +608,22 @@
       executeBlock(dateStr, scooterVal);
     }
 
-    function executeBlock(dateStr, scooterVal) {
-      blockedDates.push({
-        date: dateStr,
-        scooterId: scooterVal === 'all' ? 'all' : parseInt(scooterVal)
-      });
-
-      showMessage("DATE BLOCKED SUCCESSFULLY.");
-      renderSchedule();
-      document.getElementById('block-date').value = '';
+    async function executeBlock(dateStr, scooterVal) {
+      const btn = document.querySelector('#view-block .btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'SAVING…'; }
+      try {
+        await db.collection('blockedDates').add({
+          date: dateStr,
+          scooterId: scooterVal === 'all' ? 'all' : parseInt(scooterVal),
+        });
+        showMessage('DATE BLOCKED SUCCESSFULLY.');
+        document.getElementById('block-date').value = '';
+      } catch (e) {
+        showMessage('ERROR SAVING. CHECK CONNECTION.', true);
+        console.error(e);
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'BLOCK NOW'; }
+      }
     }
 
     function showConflictModal(conflicts, dateStr) {
@@ -620,7 +654,7 @@
       document.getElementById('details-body').innerHTML = `
         <p style="margin-bottom:12px;"><strong>CLIENT:</strong><br> ${b.name}</p>
         <p style="margin-bottom:12px;"><strong>PHONE:</strong><br> <a href="https://wa.me/${b.phone.replace('+','')}" style="color:var(--primary); font-weight: bold;">${b.phone}</a></p>
-        <p style="margin-bottom:12px;"><strong>TOUR:</strong><br> ${b.tour}</p>
+        <p style="margin-bottom:12px;"><strong>TOUR:</strong><br> ${b.tourName || b.tour || '—'}</p>
         <p style="margin-bottom:12px;"><strong>START:</strong><br> ${b.date}</p>
         <p style="margin-bottom:12px;"><strong>DURATION:</strong><br> ${b.duration} DAYS</p>
         <p style="margin-bottom:12px; color: var(--success); font-weight: bold;">ASSIGNED TO SCOOTER ${b.scooterId}</p>
@@ -646,6 +680,7 @@
     }
 
     document.getElementById('block-date').value = formatDate(currentDate);
+    // Initial render with empty arrays; listeners will fill them and re-render automatically
     renderPending();
     renderSchedule();
 

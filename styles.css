@@ -298,3 +298,112 @@ button, input, select, textarea { font-family: inherit; }
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   BOOKING MODALS (payment + success)
+═══════════════════════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.70);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 9000;
+}
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-box {
+  background: var(--light);
+  border-radius: 16px;
+  padding: 40px 32px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  transform: translateY(20px);
+  transition: transform 0.25s ease;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.modal-overlay.active .modal-box {
+  transform: translateY(0);
+}
+.modal-box h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--dark);
+  margin-bottom: 12px;
+}
+.modal-box p {
+  color: #555;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+.modal-amount {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--orange);
+  margin: 20px 0;
+  letter-spacing: -1px;
+}
+.modal-note {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 12px;
+}
+.modal-success-icon {
+  width: 64px;
+  height: 64px;
+  background: #22c55e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 2rem;
+  color: white;
+}
+.btn-whatsapp-reveal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #25D366;
+  color: white;
+  font-weight: 800;
+  font-size: 1.1rem;
+  padding: 16px 24px;
+  border-radius: 12px;
+  text-decoration: none;
+  margin: 24px 0 12px;
+  transition: background 0.2s;
+}
+.btn-whatsapp-reveal:hover { background: #1fba58; }
+.btn-simulate {
+  width: 100%;
+  padding: 16px;
+  background: var(--orange);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+.btn-simulate:hover { background: var(--orange-d); }
+.btn-modal-cancel {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 12px;
+  text-decoration: underline;
+}

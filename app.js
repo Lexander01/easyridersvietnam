@@ -278,27 +278,49 @@ function clearErrors() {
     const el = document.getElementById(id);
     if (el) el.textContent = '';
   });
+  document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
 }
 
 function validateForm() {
   clearErrors();
   let valid = true;
 
-  if (!document.getElementById('name')?.value.trim())
-    { document.getElementById('nameError').textContent  = 'Please enter your name.';              valid = false; }
-  const phoneEl = document.getElementById('phone');
-  if (phoneEl && !phoneEl.value.trim())
-    { document.getElementById('phoneError').textContent = 'Please enter your WhatsApp number.';   valid = false; }
-  if (!document.getElementById('tourSelect')?.value)
-    { document.getElementById('tourError').textContent  = 'Please select a tour.';                valid = false; }
-  if (!document.getElementById('startDate')?.value)
-    { document.getElementById('dateError').textContent  = 'Please choose a start date.';          valid = false; }
-  const g = parseInt(document.getElementById('groupSize')?.value, 10);
-  if (!g || g < 1 || g > MAX_GROUP)
-    { document.getElementById('groupError').textContent = `Group size must be 1–${MAX_GROUP}.`;   valid = false; }
+  const nameEl = document.getElementById('name');
+  if (!nameEl?.value.trim()) {
+    document.getElementById('nameError').textContent = 'Please enter your name.';
+    nameEl?.classList.add('input-error');
+    valid = false;
+  }
 
-  const tourId  = document.getElementById('tourSelect')?.value;
-  const dateVal = document.getElementById('startDate')?.value;
+  const phoneEl = document.getElementById('phone');
+  if (phoneEl && !phoneEl.value.trim()) {
+    document.getElementById('phoneError').textContent = 'Please enter your WhatsApp number.';
+    phoneEl.classList.add('input-error');
+    valid = false;
+  }
+
+  const tourEl = document.getElementById('tourSelect');
+  if (!tourEl?.value) {
+    document.getElementById('tourError').textContent = 'Please select a tour.';
+    tourEl?.classList.add('input-error');
+    valid = false;
+  }
+
+  const dateEl = document.getElementById('startDate');
+  if (!dateEl?.value) {
+    document.getElementById('dateError').textContent = 'Please choose a start date.';
+    dateEl?.classList.add('input-error');
+    valid = false;
+  }
+
+  const g = parseInt(document.getElementById('groupSize')?.value, 10);
+  if (!g || g < 1 || g > MAX_GROUP) {
+    document.getElementById('groupError').textContent = `Group size must be 1–${MAX_GROUP}.`;
+    valid = false;
+  }
+
+  const tourId  = tourEl?.value;
+  const dateVal = dateEl?.value;
   if (valid && tourId && dateVal) {
     const tour = tours.find(t => t.id === tourId);
     if (tour && tour.startsOutsideDalat) {
@@ -308,6 +330,7 @@ function validateForm() {
       minDate.setDate(minDate.getDate() + 2);
       if (new Date(dateVal + 'T00:00:00') < minDate) {
         document.getElementById('dateError').textContent = 'This tour starts outside Dalat. Please book at least 2 days in advance.';
+        dateEl?.classList.add('input-error');
         valid = false;
       }
     }
@@ -315,6 +338,7 @@ function validateForm() {
       const tour2 = tours.find(t => t.id === tourId);
       if (tour2 && !isDateRangeAvailable(dateVal, tour2.days)) {
         document.getElementById('dateError').textContent = 'Sorry, one or more days in this range are fully booked. Please choose a different start date.';
+        dateEl?.classList.add('input-error');
         valid = false;
       }
     }
@@ -393,7 +417,14 @@ function closeSuccessModal() {
 ═══════════════════════════════════════════════════════════ */
 async function handleFormSubmit(e) {
   e.preventDefault();
-  if (!validateForm()) return;
+  if (!validateForm()) {
+    // Scroll to the section heading so the user can see all error messages
+    const scrollTarget = document.getElementById('book')
+      || document.querySelector('.bookings-hero')
+      || document.getElementById('bookingForm');
+    scrollTarget?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
 
   const submitBtn = document.getElementById('submitBtn');
   const origHTML = submitBtn?.innerHTML || '';
@@ -459,12 +490,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sel) { sel.value = preselect; updateMinDate(); updatePriceSummary(); }
   }
 
-  document.getElementById('tourSelect')?.addEventListener('change', () => { updateMinDate(); updatePriceSummary(); });
-  document.getElementById('startDate')?.addEventListener('change', checkDateAvailability);
+  document.getElementById('tourSelect')?.addEventListener('change', () => { updateMinDate(); updatePriceSummary(); document.getElementById('tourSelect')?.classList.remove('input-error'); });
+  document.getElementById('startDate')?.addEventListener('change', () => { checkDateAvailability(); document.getElementById('startDate')?.classList.remove('input-error'); });
   document.getElementById('decreaseGroup')?.addEventListener('click', () => setGroupCount(groupCount - 1));
   document.getElementById('increaseGroup')?.addEventListener('click', () => setGroupCount(groupCount + 1));
   document.querySelectorAll('input[name="rideStyle"]').forEach(r => r.addEventListener('change', updatePriceSummary));
   document.getElementById('bookingForm')?.addEventListener('submit', handleFormSubmit);
+
+  // Clear red border as soon as the user starts correcting a field
+  document.getElementById('name')?.addEventListener('input', () => document.getElementById('name')?.classList.remove('input-error'));
+  document.getElementById('phone')?.addEventListener('input', () => document.getElementById('phone')?.classList.remove('input-error'));
 
   document.getElementById('hamburger')?.addEventListener('click', function () {
     this.classList.toggle('open');

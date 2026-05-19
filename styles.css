@@ -150,6 +150,11 @@ button, input, select, textarea { font-family: inherit; }
 .toggle-option input[type="radio"]:checked + .toggle-label { background: rgba(232,100,10,0.15); border-color: var(--orange); color: var(--orange-l); }
 .toggle-note { font-size: 11px; color: rgba(255,255,255,0.35); }
 .field-error { font-size: 11px; color: #FF6B6B; font-weight: 600; min-height: 14px; }
+.form-group input.input-error,
+.form-group select.input-error {
+  border-color: #FF6B6B !important;
+  background: rgba(255, 107, 107, 0.08) !important;
+}
 .price-summary { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12); border-radius: var(--radius-lg); padding: 20px; display: flex; flex-direction: column; gap: 10px; }
 .price-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
 .price-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: rgba(255,255,255,0.7); }

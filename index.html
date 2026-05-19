@@ -107,7 +107,27 @@
         <p class="section-desc">Every tour departs from Dalat — Vietnam's mountain city of eternal spring. All prices are <strong>70 EUR/person/day</strong> for multi-day tours, <strong>40 EUR</strong> for day tours. Accommodation, sightseeing tickets, and full insurance included.</p>
       </div>
       <div class="tours-grid" id="toursGrid">
-        <!-- Dynamically injected by app.js -->
+        <div class="tour-card">
+          <div class="tour-content">
+            <h3>Dalat Countryside Loop</h3>
+            <p>1 Day</p>
+            <a href="tour-countryside.html" class="btn btn-primary">View Tour</a>
+          </div>
+        </div>
+        <div class="tour-card">
+          <div class="tour-content">
+            <h3>Highlands to the Coast</h3>
+            <p>2 Days, 1 Night</p>
+            <a href="tour-nha-trang.html" class="btn btn-primary">View Tour</a>
+          </div>
+        </div>
+        <div class="tour-card">
+          <div class="tour-content">
+            <h3>The Ultimate Highlands Loop</h3>
+            <p>3 Days, 2 Nights</p>
+            <a href="tour-central-highlands.html" class="btn btn-primary">View Tour</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -241,7 +261,10 @@
           <div class="form-group">
             <label for="tourSelect">Select Tour</label>
             <select id="tourSelect">
-              <option value="">— Choose a tour —</option>
+              <option value="">Choose a tour</option>
+              <option value="countryside">Dalat Countryside (1 Day)</option>
+              <option value="nha-trang">Highlands to Coast (2 Days)</option>
+              <option value="central-highlands">Ultimate Highlands (3 Days)</option>
             </select>
             <span class="field-error" id="tourError"></span>
           </div>

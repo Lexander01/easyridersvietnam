@@ -315,14 +315,11 @@
       </div>
       
       <p style="margin-bottom: 24px; font-size: 1.1rem; color: var(--text-muted);">
-        Assign a scooter to <strong id="approve-client-name" style="color: black;"></strong>.
+        Assign <strong id="approve-scooter-count" style="color: black;"></strong> scooter(s) to <strong id="approve-client-name" style="color: black;"></strong>.
       </p>
-      
-      <div class="form-group">
-        <label>AVAILABLE SCOOTERS:</label>
-        <select id="assign-scooter" class="form-control" style="height: 60px;">
-          <!-- Options injected via JS -->
-        </select>
+
+      <div id="scooter-selects-container">
+        <!-- One select per person, injected via JS -->
       </div>
       <input type="hidden" id="approve-booking-id" />
       
@@ -424,18 +421,21 @@
       return dayDate >= start && dayDate <= end;
     }
 
+    function getScooterIds(booking) {
+      if (Array.isArray(booking.scooterIds) && booking.scooterIds.length) return booking.scooterIds;
+      if (booking.scooterId != null) return [booking.scooterId];
+      return [];
+    }
+
     function isScooterAvailable(scooterId, startDateStr, duration) {
       const start = new Date(startDateStr);
-      for(let i=0; i<duration; i++) {
-        let currentDay = new Date(start);
-        currentDay.setDate(start.getDate() + i);
-        let dayStr = formatDate(currentDay);
+      for (let i = 0; i < duration; i++) {
+        let day = new Date(start);
+        day.setDate(start.getDate() + i);
+        let dayStr = formatDate(day);
 
-        let isBlocked = blockedDates.some(b => b.date === dayStr && (b.scooterId === 'all' || b.scooterId == scooterId));
-        if (isBlocked) return false;
-
-        let hasBooking = bookings.some(b => b.status === 'approved' && b.scooterId == scooterId && isDayInBooking(dayStr, b));
-        if (hasBooking) return false;
+        if (blockedDates.some(b => b.date === dayStr && (b.scooterId === 'all' || b.scooterId == scooterId))) return false;
+        if (bookings.some(b => b.status === 'approved' && getScooterIds(b).includes(scooterId) && isDayInBooking(dayStr, b))) return false;
       }
       return true;
     }
@@ -480,7 +480,7 @@
 
       for(let s = 1; s <= TOTAL_SCOOTERS; s++) {
         const isBlocked = blockedDates.some(b => b.date === dayStr && (b.scooterId === 'all' || b.scooterId == s));
-        const booking = bookings.find(b => b.status === 'approved' && b.scooterId == s && isDayInBooking(dayStr, b));
+        const booking = bookings.find(b => b.status === 'approved' && getScooterIds(b).includes(s) && isDayInBooking(dayStr, b));
 
         let rowHTML = `<div class="scooter-row">`;
         
@@ -514,32 +514,79 @@
       }
     }
 
+    // Build the available-scooter options for a given select, excluding already-chosen ones
+    function buildScooterOptions(excludeIds, booking) {
+      let html = '<option value="">— pick scooter —</option>';
+      for (let s = 1; s <= TOTAL_SCOOTERS; s++) {
+        if (excludeIds.includes(s)) continue;
+        if (!isScooterAvailable(s, booking.date, booking.duration)) continue;
+        html += `<option value="${s}">SCOOTER ${s}</option>`;
+      }
+      return html;
+    }
+
+    // Refresh all scooter selects so no two can pick the same one
+    function refreshScooterSelects(booking) {
+      const container = document.getElementById('scooter-selects-container');
+      const selects   = Array.from(container.querySelectorAll('.scooter-select'));
+      selects.forEach((sel, idx) => {
+        const chosen = selects
+          .filter((_, i) => i !== idx)
+          .map(s => parseInt(s.value))
+          .filter(v => !isNaN(v));
+        const current = parseInt(sel.value);
+        sel.innerHTML  = buildScooterOptions(chosen, booking);
+        if (!isNaN(current)) sel.value = String(current);
+      });
+      // Disable confirm if any select is still empty
+      const allPicked = selects.every(s => s.value !== '');
+      const btn = document.getElementById('confirm-approve-btn');
+      btn.disabled    = !allPicked;
+      btn.style.opacity = allPicked ? '1' : '0.5';
+    }
+
     function openApproveModal(bookingId) {
-      const booking = bookings.find(b => b.id === bookingId);
+      const booking   = bookings.find(b => b.id === bookingId);
       if (!booking) return;
 
-      document.getElementById('approve-booking-id').value = booking.id;
+      const groupSize = booking.groupSize || 1;
+      document.getElementById('approve-booking-id').value    = booking.id;
       document.getElementById('approve-client-name').innerText = booking.name.toUpperCase();
-      
-      const select = document.getElementById('assign-scooter');
-      select.innerHTML = '';
-      
-      let availableCount = 0;
-      for(let s=1; s<=TOTAL_SCOOTERS; s++) {
-        if(isScooterAvailable(s, booking.date, booking.duration)) {
-          select.innerHTML += `<option value="${s}">SCOOTER ${s}</option>`;
-          availableCount++;
-        }
+      document.getElementById('approve-scooter-count').innerText = groupSize;
+
+      // Build one select per person
+      const container = document.getElementById('scooter-selects-container');
+      container.innerHTML = '';
+
+      // Check if there are enough available scooters at all
+      const available = [];
+      for (let s = 1; s <= TOTAL_SCOOTERS; s++) {
+        if (isScooterAvailable(s, booking.date, booking.duration)) available.push(s);
       }
 
       const btn = document.getElementById('confirm-approve-btn');
-      if(availableCount === 0) {
-        select.innerHTML = `<option value="">❌ NONE AVAILABLE</option>`;
+      if (available.length < groupSize) {
+        container.innerHTML = `<p style="color:var(--danger); font-weight:800; padding:12px 0;">
+          ❌ NOT ENOUGH SCOOTERS AVAILABLE (need ${groupSize}, have ${available.length})
+        </p>`;
         btn.disabled = true;
         btn.style.opacity = '0.5';
       } else {
-        btn.disabled = false;
-        btn.style.opacity = '1';
+        for (let i = 0; i < groupSize; i++) {
+          const label = groupSize > 1 ? `PERSON ${i + 1}:` : 'SCOOTER:';
+          container.innerHTML += `
+            <div class="form-group">
+              <label>${label}</label>
+              <select class="form-control scooter-select" style="height:60px;"
+                      onchange="refreshScooterSelects(bookings.find(b=>b.id===document.getElementById('approve-booking-id').value))">
+                <option value="">— pick scooter —</option>
+              </select>
+            </div>`;
+        }
+        // Initial population of all selects
+        refreshScooterSelects(booking);
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
       }
 
       document.getElementById('approve-modal').classList.add('active');
@@ -547,19 +594,28 @@
 
     async function confirmApproval() {
       const bookingId = document.getElementById('approve-booking-id').value;
-      const scooterId = document.getElementById('assign-scooter').value;
-      if (!scooterId) return;
+      const selects   = Array.from(document.querySelectorAll('#scooter-selects-container .scooter-select'));
+      const scooterIds = selects.map(s => parseInt(s.value)).filter(v => !isNaN(v));
+
+      if (scooterIds.length !== selects.length) {
+        showMessage('PLEASE SELECT A SCOOTER FOR EACH PERSON.', true);
+        return;
+      }
+      if (new Set(scooterIds).size !== scooterIds.length) {
+        showMessage('EACH PERSON NEEDS A DIFFERENT SCOOTER.', true);
+        return;
+      }
 
       const btn = document.getElementById('confirm-approve-btn');
       btn.disabled = true;
       btn.textContent = 'SAVING…';
       try {
         await db.collection('bookings').doc(bookingId).update({
-          status: 'approved',
-          scooterId: parseInt(scooterId),
+          status:     'approved',
+          scooterIds: scooterIds,
         });
         closeModal('approve-modal');
-        showMessage(`BOOKING APPROVED. SCOOTER ${scooterId} ASSIGNED.`);
+        showMessage(`BOOKING APPROVED. SCOOTERS ${scooterIds.join(', ')} ASSIGNED.`);
       } catch (e) {
         showMessage('ERROR SAVING. CHECK CONNECTION.', true);
         console.error(e);
@@ -592,7 +648,7 @@
       let conflicts = [];
       bookings.forEach(b => {
         if (b.status === 'approved' && isDayInBooking(dateStr, b)) {
-          if (scooterVal === 'all' || b.scooterId == scooterVal) {
+          if (scooterVal === 'all' || getScooterIds(b).includes(parseInt(scooterVal))) {
             conflicts.push(b);
           }
         }
@@ -657,7 +713,7 @@
         <p style="margin-bottom:12px;"><strong>TOUR:</strong><br> ${b.tourName || b.tour || '—'}</p>
         <p style="margin-bottom:12px;"><strong>START:</strong><br> ${b.date}</p>
         <p style="margin-bottom:12px;"><strong>DURATION:</strong><br> ${b.duration} DAYS</p>
-        <p style="margin-bottom:12px; color: var(--success); font-weight: bold;">ASSIGNED TO SCOOTER ${b.scooterId}</p>
+        <p style="margin-bottom:12px; color: var(--success); font-weight: bold;">ASSIGNED SCOOTERS: ${getScooterIds(b).join(', ') || '—'}</p>
         <button class="btn btn-primary" style="margin-top:20px;" onclick="closeModal('details-modal')">CLOSE</button>
       `;
       document.getElementById('details-modal').classList.add('active');

@@ -276,6 +276,40 @@ function validateForm() {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   PROGRESS BAR
+═══════════════════════════════════════════════════════════ */
+let _progressInterval = null;
+
+function startProgressBar() {
+  const bar  = document.getElementById('bookingProgress');
+  const fill = document.getElementById('bookingProgressFill');
+  if (!bar || !fill) return;
+  fill.style.transition = 'width 0.15s ease-out';
+  fill.style.width = '0%';
+  bar.style.display = 'block';
+  let pct = 0;
+  _progressInterval = setInterval(() => {
+    pct += (88 - pct) * 0.07;   // eases toward 88%, never reaches it
+    fill.style.width = pct + '%';
+  }, 150);
+}
+
+function completeProgressBar() {
+  clearInterval(_progressInterval);
+  _progressInterval = null;
+  const fill = document.getElementById('bookingProgressFill');
+  if (fill) {
+    fill.style.transition = 'width 0.3s ease';
+    fill.style.width = '100%';
+  }
+  setTimeout(() => {
+    const bar = document.getElementById('bookingProgress');
+    if (bar)  bar.style.display = 'none';
+    if (fill) { fill.style.transition = 'none'; fill.style.width = '0%'; }
+  }, 350);
+}
+
+/* ═══════════════════════════════════════════════════════════
    PAYMENT MODAL
 ═══════════════════════════════════════════════════════════ */
 let _pendingDeposit = 0;
@@ -318,10 +352,11 @@ async function handleFormSubmit(e) {
   const submitBtn = document.getElementById('submitBtn');
   const origHTML = submitBtn?.innerHTML || '';
   
-  if (submitBtn) { 
-    submitBtn.disabled = true; 
-    submitBtn.textContent = 'Saving…'; 
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Saving…';
   }
+  startProgressBar();
 
   try {
     const name = document.getElementById('name').value.trim();
@@ -351,10 +386,10 @@ async function handleFormSubmit(e) {
     console.error("Booking submission error:", error);
     alert("An unexpected error occurred. Please try again.");
   } finally {
-    // This guarantees the button is always restored
-    if (submitBtn) { 
-      submitBtn.disabled = false; 
-      submitBtn.innerHTML = origHTML; 
+    completeProgressBar();
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = origHTML;
     }
   }
 }

@@ -11,6 +11,9 @@
 </head>
 <body>
 
+  <!-- ═══════════════════════════════════════════════════════════
+       STICKY NAV
+  ═══════════════════════════════════════════════════════════ -->
   <header class="nav-wrapper" id="top">
     <nav class="nav-inner">
       <a href="#top" class="nav-logo">
@@ -23,51 +26,95 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="#tours" class="nav-link" onclick="closeMenu()">Tours</a></li>
         <li><a href="#about" class="nav-link" onclick="closeMenu()">About</a></li>
+        <li><a href="faq.html" class="nav-link" onclick="closeMenu()">FAQ</a></li>
         <li><a href="#guarantee" class="nav-link" onclick="closeMenu()">Guarantee</a></li>
         <li><a href="#book" class="nav-link nav-cta" onclick="closeMenu()">Book Now</a></li>
       </ul>
     </nav>
   </header>
 
+  <!-- ═══════════════════════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════════════════════ -->
   <section class="hero">
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <span class="hero-badge">Dalat · Central Highlands · Vietnam</span>
-      <h1 class="hero-headline">Experience the<br><em>Real Vietnam.</em></h1>
-      <p class="hero-sub">While all the tourists are crowded on the Ha Giang Loop, our Dalat and Central Highlands routes offer <strong>untouched, authentic roads</strong> — zero tourist buses, real villages, real life.</p>
+      <h1 class="hero-headline">
+        Experience the<br>
+        <em>Real Vietnam.</em>
+      </h1>
+      <p class="hero-sub">
+        While all the tourists are crowded on the Ha Giang Loop, our Dalat and Central Highlands routes offer <strong>untouched, authentic roads</strong> — zero tourist buses, real villages, real life.
+      </p>
       <div class="hero-progression">
-        <div class="progression-item"><span class="prog-day">Day 1</span><span class="prog-word">Amazing</span></div>
+        <div class="progression-item">
+          <span class="prog-day">Day 1</span>
+          <span class="prog-word">Amazing</span>
+        </div>
         <div class="prog-divider">→</div>
-        <div class="progression-item"><span class="prog-day">Day 2</span><span class="prog-word">Excellent</span></div>
+        <div class="progression-item">
+          <span class="prog-day">Day 2</span>
+          <span class="prog-word">Excellent</span>
+        </div>
         <div class="prog-divider">→</div>
-        <div class="progression-item"><span class="prog-day">Day 3</span><span class="prog-word">Unbelievable</span></div>
+        <div class="progression-item">
+          <span class="prog-day">Day 3</span>
+          <span class="prog-word">Unbelievable</span>
+        </div>
       </div>
       <div class="hero-actions">
         <a href="#tours" class="btn btn-primary">See All Tours</a>
         <a href="#guarantee" class="btn btn-ghost">Our Guarantee</a>
       </div>
     </div>
-    <div class="hero-scroll-hint"><span>Scroll</span><div class="scroll-arrow">↓</div></div>
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-arrow">↓</div>
+    </div>
   </section>
 
+  <!-- ═══════════════════════════════════════════════════════════
+       TRUST BAR
+  ═══════════════════════════════════════════════════════════ -->
   <section class="trust-bar">
-    <div class="trust-item"><span class="trust-icon">🛡️</span><span>100% Money-Back Guarantee</span></div>
-    <div class="trust-item"><span class="trust-icon">👥</span><span>Max 10 People Per Tour</span></div>
-    <div class="trust-item"><span class="trust-icon">🏍️</span><span>Full Insurance Included</span></div>
-    <div class="trust-item"><span class="trust-icon">🗺️</span><span>Local Expert Guides</span></div>
+    <div class="trust-item">
+      <span class="trust-icon">🛡️</span>
+      <span>100% Money-Back Guarantee</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon">👥</span>
+      <span>Max 10 People Per Tour</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon">🏍️</span>
+      <span>Full Insurance Included</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon">🗺️</span>
+      <span>Local Expert Guides</span>
+    </div>
   </section>
 
+  <!-- ═══════════════════════════════════════════════════════════
+       TOURS
+  ═══════════════════════════════════════════════════════════ -->
   <section class="section" id="tours">
     <div class="container">
       <div class="section-header">
         <span class="section-label">Our Routes</span>
         <h2 class="section-title">Choose Your Adventure</h2>
-        <p class="section-desc">Every tour departs from Dalat — Vietnam’s mountain city of eternal spring. All prices are <strong>70 EUR/person/day</strong> for multi-day tours, <strong>40 EUR</strong> for day tours. Accommodation, sightseeing tickets, and full insurance included.</p>
+        <p class="section-desc">Every tour departs from Dalat — Vietnam's mountain city of eternal spring. All prices are <strong>70 EUR/person/day</strong> for multi-day tours, <strong>40 EUR</strong> for day tours. Accommodation, sightseeing tickets, and full insurance included.</p>
       </div>
-      <div class="tours-grid" id="toursGrid"></div>
+      <div class="tours-grid" id="toursGrid">
+        <!-- Dynamically injected by app.js -->
+      </div>
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════════════════════════════
+       ABOUT
+  ═══════════════════════════════════════════════════════════ -->
   <section class="section section-dark" id="about">
     <div class="container">
       <div class="section-header">
@@ -77,25 +124,56 @@
       <div class="about-grid">
         <div class="about-text">
           <p>We are a small crew of passionate Vietnamese riders who have spent decades exploring every mountain pass, forest trail, and hidden village in the Central Highlands and coastal regions of Vietnam.</p>
-          <p>Dalat is our home. These roads are our backyard. When you ride with us, you’re not following a guidebook — you’re riding with someone who knows the farmer at the roadside stall, the family at the guesthouse, and the shortcut through the pine forest that no tourist has ever seen.</p>
-          <p>We deliberately keep our groups <strong>small — maximum 10 people</strong> — because a convoy is not an adventure.</p>
+          <p>Dalat is our home. These roads are our backyard. When you ride with us, you're not following a guidebook — you're riding with someone who knows the farmer at the roadside stall, the family at the guesthouse, and the shortcut through the pine forest that no tourist has ever seen.</p>
+          <p>We deliberately keep our groups <strong>small — maximum 10 people</strong> — because a convoy is not an adventure. A small group means flexibility, spontaneity, and a genuine connection with the places you pass through.</p>
           <div class="about-stats">
-            <div class="stat"><span class="stat-num">10+</span><span class="stat-label">Years guiding</span></div>
-            <div class="stat"><span class="stat-num">6</span><span class="stat-label">Unique routes</span></div>
-            <div class="stat"><span class="stat-num">10</span><span class="stat-label">Max group size</span></div>
-            <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Money-back guarantee</span></div>
+            <div class="stat">
+              <span class="stat-num">10+</span>
+              <span class="stat-label">Years guiding</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num">6</span>
+              <span class="stat-label">Unique routes</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num">10</span>
+              <span class="stat-label">Max group size</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num">100%</span>
+              <span class="stat-label">Money-back guarantee</span>
+            </div>
           </div>
         </div>
         <div class="about-highlights">
-          <div class="highlight-card"><span class="highlight-icon">🏔️</span><h3>Mountain &amp; Country Roads</h3><p>Dramatic passes, pine forests, coffee plantations, and rice terraces — all without a tour bus in sight.</p></div>
-          <div class="highlight-card"><span class="highlight-icon">🤝</span><h3>Deep Local Knowledge</h3><p>We speak the language, know the culture, and have relationships with communities along every route.</p></div>
-          <div class="highlight-card"><span class="highlight-icon">🛵</span><h3>Self-Drive Available</h3><p>Prefer to ride yourself? Self-drive tours are available at the same price — motorbike and fuel included.</p></div>
-          <div class="highlight-card"><span class="highlight-icon">📍</span><h3>No Crowds. Ever.</h3><p>The southern and central routes we run see almost no foreign tourists. This is as authentic as Vietnam gets.</p></div>
+          <div class="highlight-card">
+            <span class="highlight-icon">🏔️</span>
+            <h3>Mountain &amp; Country Roads</h3>
+            <p>Dramatic passes, pine forests, coffee plantations, and rice terraces — all without a tour bus in sight.</p>
+          </div>
+          <div class="highlight-card">
+            <span class="highlight-icon">🤝</span>
+            <h3>Deep Local Knowledge</h3>
+            <p>We speak the language, know the culture, and have relationships with communities along every route.</p>
+          </div>
+          <div class="highlight-card">
+            <span class="highlight-icon">🛵</span>
+            <h3>Self-Drive Available</h3>
+            <p>Prefer to ride yourself? Self-drive tours are available at the same price — motorbike and fuel included.</p>
+          </div>
+          <div class="highlight-card">
+            <span class="highlight-icon">📍</span>
+            <h3>No Crowds. Ever.</h3>
+            <p>The southern and central routes we run see almost no foreign tourists. This is as authentic as Vietnam gets.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════════════════════════════
+       GUARANTEE
+  ═══════════════════════════════════════════════════════════ -->
   <section class="section" id="guarantee">
     <div class="container">
       <div class="guarantee-wrapper">
@@ -113,9 +191,27 @@
           <h2 class="section-title">We Put Our Money Where Our Mouth Is</h2>
           <p class="guarantee-lead">We are so confident in the quality of our tours and guides that we back every single booking with an unconditional money-back guarantee.</p>
           <div class="guarantee-terms">
-            <div class="guarantee-term"><span class="term-icon">✓</span><div><strong>If your guide lets you down</strong><p>If your guide is unprofessional, late, or fails to deliver on what was promised — you get a full refund.</p></div></div>
-            <div class="guarantee-term"><span class="term-icon">✓</span><div><strong>If the service is disappointing</strong><p>If at any point the experience falls short of what we described, tell us and we will issue a complete refund — no questions, no arguments.</p></div></div>
-            <div class="guarantee-term"><span class="term-icon">✓</span><div><strong>No fine print</strong><p>This is a genuine, human guarantee backed by our reputation. We have built this business on trust and word-of-mouth.</p></div></div>
+            <div class="guarantee-term">
+              <span class="term-icon">✓</span>
+              <div>
+                <strong>If your guide lets you down</strong>
+                <p>If your guide is unprofessional, late, or fails to deliver on what was promised — you get a full refund.</p>
+              </div>
+            </div>
+            <div class="guarantee-term">
+              <span class="term-icon">✓</span>
+              <div>
+                <strong>If the service is disappointing</strong>
+                <p>If at any point the experience falls short of what we described, tell us and we will issue a complete refund — no questions, no arguments.</p>
+              </div>
+            </div>
+            <div class="guarantee-term">
+              <span class="term-icon">✓</span>
+              <div>
+                <strong>No fine print</strong>
+                <p>This is a genuine, human guarantee backed by our reputation. We have built this business on trust and word-of-mouth. We cannot afford to disappoint you.</p>
+              </div>
+            </div>
           </div>
           <a href="#book" class="btn btn-primary">Book with Confidence</a>
         </div>
@@ -123,30 +219,39 @@
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════════════════════════════
+       BOOKING FORM
+  ═══════════════════════════════════════════════════════════ -->
   <section class="section section-dark" id="book">
     <div class="container">
       <div class="section-header">
         <span class="section-label">Ready to Ride?</span>
         <h2 class="section-title">Book Your Tour</h2>
-        <p class="section-desc">Fill in your details below. We’ll confirm your booking via WhatsApp within a few hours. A <strong>20% deposit</strong> secures your spot — the rest you pay in cash or card directly to your guide on arrival.</p>
+        <p class="section-desc">Fill in your details below. We'll confirm your booking via WhatsApp within a few hours. A <strong>20% deposit</strong> secures your spot — the rest you pay in cash or card directly to your guide on arrival.</p>
       </div>
       <div class="booking-wrapper">
         <form class="booking-form" id="bookingForm" novalidate>
+
           <div class="form-group">
             <label for="name">Your Full Name</label>
             <input type="text" id="name" placeholder="e.g. Maria Santos" autocomplete="name" />
             <span class="field-error" id="nameError"></span>
           </div>
+
           <div class="form-group">
             <label for="tourSelect">Select Tour</label>
-            <select id="tourSelect"><option value="">— Choose a tour —</option></select>
+            <select id="tourSelect">
+              <option value="">— Choose a tour —</option>
+            </select>
             <span class="field-error" id="tourError"></span>
           </div>
+
           <div class="form-group">
             <label for="startDate">Start Date</label>
             <input type="date" id="startDate" />
             <span class="field-error" id="dateError"></span>
           </div>
+
           <div class="form-group">
             <label for="groupSize">Group Size <span class="label-note">(max 10)</span></label>
             <div class="stepper">
@@ -157,41 +262,78 @@
             <input type="hidden" id="groupSize" value="1" />
             <span class="field-error" id="groupError"></span>
           </div>
+
           <div class="form-group">
-            <label>Riding Style</label>
+            <label for="selfDrive">Riding Style</label>
             <div class="toggle-group">
-              <label class="toggle-option"><input type="radio" name="rideStyle" value="guided" checked /><span class="toggle-label">🧑‍✈️ Guide-driven</span></label>
-              <label class="toggle-option"><input type="radio" name="rideStyle" value="self" /><span class="toggle-label">🏍️ Self-drive</span></label>
+              <label class="toggle-option">
+                <input type="radio" name="rideStyle" value="guided" checked />
+                <span class="toggle-label">🧑‍✈️ Guide-driven</span>
+              </label>
+              <label class="toggle-option">
+                <input type="radio" name="rideStyle" value="self" />
+                <span class="toggle-label">🏍️ Self-drive</span>
+              </label>
             </div>
             <p class="toggle-note">Self-drive includes motorbike + fuel. Same price.</p>
           </div>
+
+          <!-- Price Summary -->
           <div class="price-summary" id="priceSummary" style="display:none">
             <h3 class="price-title">Price Breakdown</h3>
-            <div class="price-row"><span id="priceLabel">Tour rate</span><span id="priceBase">—</span></div>
-            <div class="price-row"><span>Group size</span><span id="priceGroup">—</span></div>
-            <div class="price-row price-total-row"><span>Total</span><strong id="priceTotal">—</strong></div>
+            <div class="price-row">
+              <span id="priceLabel">Tour rate</span>
+              <span id="priceBase">—</span>
+            </div>
+            <div class="price-row">
+              <span>Group size</span>
+              <span id="priceGroup">—</span>
+            </div>
+            <div class="price-row price-total-row">
+              <span>Total</span>
+              <strong id="priceTotal">—</strong>
+            </div>
             <div class="price-divider"></div>
-            <div class="price-row deposit-row"><span>20% Deposit (online now)</span><strong id="priceDeposit" class="deposit-amount">—</strong></div>
-            <div class="price-row"><span>80% on arrival (cash/card to guide)</span><span id="priceRemainder">—</span></div>
+            <div class="price-row deposit-row">
+              <span>20% Deposit (online now)</span>
+              <strong id="priceDeposit" class="deposit-amount">—</strong>
+            </div>
+            <div class="price-row">
+              <span>80% on arrival (cash/card to guide)</span>
+              <span id="priceRemainder">—</span>
+            </div>
             <p class="price-note">Full insurance included. Accommodation &amp; sightseeing tickets included on multi-day tours.</p>
           </div>
+
           <button type="submit" class="btn btn-primary btn-full btn-whatsapp" id="submitBtn" disabled>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             Send Booking via WhatsApp
           </button>
-          <p class="submit-note">Tapping the button will open WhatsApp with your booking details pre-filled. We’ll confirm within a few hours.</p>
+          <p class="submit-note">Tapping the button will open WhatsApp with your booking details pre-filled. We'll confirm within a few hours.</p>
         </form>
       </div>
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════════════════ -->
   <footer class="footer">
     <div class="container">
       <div class="footer-top">
-        <div class="footer-brand"><span class="logo-icon">🏍</span><span class="logo-text">Easy Rider<br><em>Vietnam Loops</em></span></div>
-        <p class="footer-tagline">Dalat’s most authentic motorcycle tours. Real roads. Real Vietnam.</p>
+        <div class="footer-brand">
+          <span class="logo-icon">🏍</span>
+          <span class="logo-text">Easy Rider<br><em>Vietnam Loops</em></span>
+        </div>
+        <p class="footer-tagline">Dalat's most authentic motorcycle tours. Real roads. Real Vietnam.</p>
       </div>
-      <div class="footer-links"><a href="#tours">Tours</a><a href="#about">About</a><a href="#guarantee">Guarantee</a><a href="#book">Book Now</a></div>
+      <div class="footer-links">
+        <a href="#tours">Tours</a>
+        <a href="#about">About</a>
+        <a href="faq.html">FAQ</a>
+        <a href="#guarantee">Guarantee</a>
+        <a href="#book">Book Now</a>
+      </div>
       <p class="footer-copy">© 2025 Easy Rider Vietnam Loops. Based in Dalat, Vietnam.</p>
     </div>
   </footer>

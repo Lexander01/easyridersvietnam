@@ -202,6 +202,9 @@ function checkDateAvailability() {
       if (submitBtn) submitBtn.disabled  = true;
       return;
     }
+    // Date is valid for 2-day rule — clear any previous error and re-enable
+    if (dateErr) dateErr.textContent = '';
+    if (submitBtn) submitBtn.disabled = false;
   }
 
   if (!_availabilityLoaded) return;
@@ -211,6 +214,7 @@ function checkDateAvailability() {
     if (submitBtn) submitBtn.disabled    = true;
   } else {
     if (dateErr)   dateErr.textContent   = '';
+    if (submitBtn) submitBtn.disabled    = false;
   }
 }
 

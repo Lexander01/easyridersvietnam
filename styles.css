@@ -135,7 +135,7 @@ button, input, select, textarea { font-family: inherit; }
 .form-group { display: flex; flex-direction: column; gap: 6px; }
 .form-group label { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.85); display: flex; align-items: center; gap: 6px; }
 .label-note { font-weight: 500; color: rgba(255,255,255,0.4); }
-.form-group input[type="text"], .form-group input[type="date"], .form-group select { background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.12); border-radius: var(--radius); color: var(--white); font-size: 16px; padding: 13px 16px; width: 100%; outline: none; transition: border-color var(--transition); appearance: none; -webkit-appearance: none; }
+.form-group input[type="text"], .form-group input[type="tel"], .form-group input[type="date"], .form-group select { background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.12); border-radius: var(--radius); color: var(--white); font-size: 16px; padding: 13px 16px; width: 100%; outline: none; transition: border-color var(--transition); appearance: none; -webkit-appearance: none; }
 .form-group input:focus, .form-group select:focus { border-color: var(--orange); background: rgba(255,255,255,0.08); }
 .form-group input::placeholder { color: rgba(255,255,255,0.3); }
 .form-group select option { background: var(--dark-2); color: var(--white); }

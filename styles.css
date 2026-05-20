@@ -178,7 +178,7 @@ button, input, select, textarea { font-family: inherit; }
   .section { padding: 52px 0; }
   .section-header { margin-bottom: 32px; }
   .nav-hamburger { display: flex; }
-  .nav-links { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: rgba(13,13,13,0.98); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); flex-direction: column; gap: 0; padding: 12px 16px 20px; border-bottom: 1px solid var(--border); z-index: 99; }
+  .nav-links { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: rgba(13,13,13,0.98); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); flex-direction: column; gap: 0; padding: 12px 16px 20px; border-bottom: 1px solid var(--border); z-index: 1001; }
   .nav-links.open { display: flex; }
   .nav-links li { width: 100%; }
   .nav-link { display: block; padding: 12px 16px; font-size: 15px; border-radius: 10px; }

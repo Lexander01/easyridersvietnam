@@ -194,14 +194,18 @@
 
     .form-group { margin-bottom: 24px; }
     .form-group label { display: block; margin-bottom: 10px; color: var(--text-main); font-weight: 800; font-size: 1.1rem; }
-    .form-control { 
-      width: 100%; 
-      padding: 16px; 
-      background: white; 
-      border: 2px solid var(--border); 
-      color: var(--text-main); 
-      border-radius: 8px; 
-      font-size: 1.1rem; 
+    .form-control {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      padding: 16px;
+      background: white;
+      border: 2px solid var(--border);
+      color: var(--text-main);
+      border-radius: 8px;
+      font-size: 1.1rem;
+      -webkit-appearance: none;
+      appearance: none;
     }
     .form-control:focus { outline: none; border-color: var(--primary); }
     @media (max-width: 420px) {

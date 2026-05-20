@@ -534,7 +534,7 @@
 
           <div class="form-group">
             <label for="startDate">Start Date</label>
-            <input type="date" id="startDate" />
+            <input type="text" id="startDate" placeholder="Pick your start date" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'" />
             <span class="field-error" id="dateError"></span>
           </div>
 

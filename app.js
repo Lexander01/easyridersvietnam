@@ -14,16 +14,14 @@ const GUIDE_WHATSAPP  = '84000000000'; // ← replace with real guide WhatsApp n
    TOUR DATA
 ═══════════════════════════════════════════════════════════ */
 const tours = [
-  { id: 'highlight-1',       name: 'Dalat to Hoi An',                   days: 5, nights: 4, rateType: 'daily', startsOutsideDalat: false },
-  { id: 'highlight-3',       name: 'Dalat Loop',                         days: 3, nights: 2, rateType: 'daily', startsOutsideDalat: false },
-  { id: 'alt-3day',          name: 'Alternative 3-Day Trip',             days: 3, nights: 2, rateType: 'daily', startsOutsideDalat: false },
-  { id: 'highlight-4',       name: 'Hoi An to Dalat',                    days: 5, nights: 4, rateType: 'daily', startsOutsideDalat: true  },
-  { id: 'highlight-5',       name: 'Dalat to Mui Ne Beach',              days: 2, nights: 1, rateType: 'daily', startsOutsideDalat: false },
-  { id: 'saigon-from-dalat', name: 'Dalat to Ho Chi Minh City',          days: 4, nights: 3, rateType: 'daily', startsOutsideDalat: false },
-  { id: 'saigon-from-hcmc',  name: 'Ho Chi Minh City to Dalat',          days: 4, nights: 3, rateType: 'daily', startsOutsideDalat: true  },
-  { id: 'local',             name: 'One-Day Local Dalat Tour',           days: 1, nights: 0, rateType: 'flat',  startsOutsideDalat: false },
-  // legacy ID kept for backward-compatible Firestore lookups
-  { id: 'saigon',            name: 'Dalat to Ho Chi Minh City (Saigon)', days: 4, nights: 3, rateType: 'daily', startsOutsideDalat: false },
+  { id: 'dalatloop3day',   name: 'Dalat Loop',                  days: 3, nights: 2, rateType: 'daily', startsOutsideDalat: false },
+  { id: 'dalathoian5day',  name: 'Dalat to Hoi An',             days: 5, nights: 4, rateType: 'daily', startsOutsideDalat: false },
+  { id: 'hoiandalat5day',  name: 'Hoi An to Dalat',             days: 5, nights: 4, rateType: 'daily', startsOutsideDalat: true  },
+  { id: 'dalatsaigon4day', name: 'Dalat to Ho Chi Minh City',   days: 4, nights: 3, rateType: 'daily', startsOutsideDalat: false },
+  { id: 'saigondalat4day', name: 'Ho Chi Minh City to Dalat',   days: 4, nights: 3, rateType: 'daily', startsOutsideDalat: true  },
+  { id: 'dalatmuine2day',  name: 'Dalat to Mui Ne Beach',       days: 2, nights: 1, rateType: 'daily', startsOutsideDalat: false },
+  { id: 'alternative3day', name: 'Alternative 3-Day Trip',      days: 3, nights: 2, rateType: 'daily', startsOutsideDalat: false },
+  { id: 'dalattour1day',   name: 'One-Day Local Dalat Tour',    days: 1, nights: 0, rateType: 'flat',  startsOutsideDalat: false },
 ];
 
 /* ═══════════════════════════════════════════════════════════

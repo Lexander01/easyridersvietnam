@@ -154,8 +154,7 @@ function updatePriceSummary() {
   const submitBtn = document.getElementById('submitBtn');
 
   if (!tourId || !groupSize || !summary) {
-    if (summary)   summary.style.display = 'none';
-    if (submitBtn) submitBtn.disabled    = true;
+    if (summary) summary.style.display = 'none';
     return;
   }
 

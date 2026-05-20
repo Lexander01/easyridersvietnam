@@ -7,6 +7,7 @@ const RATE_MULTIDAY   = 70;
 const RATE_ONEDAY     = 40;
 const DEPOSIT_PCT     = 0.20;
 const TOTAL_SCOOTERS  = 10;
+const EUR_TO_VND      = 30000;
 const GUIDE_WHATSAPP  = '84000000000'; // ← replace with real guide WhatsApp number
 
 /* ═══════════════════════════════════════════════════════════
@@ -88,14 +89,23 @@ function formatEUR(amount) {
   return `€${amount.toLocaleString('en-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 }
 
+function formatVND(eurAmount) {
+  const vnd = Math.round(eurAmount * EUR_TO_VND);
+  return vnd.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' ₫';
+}
+
+function fmtDual(eurAmount) {
+  return `${formatVND(eurAmount)} <small style="opacity:0.6;font-size:0.8em">≈ ${formatEUR(eurAmount)}</small>`;
+}
+
 function calcPricing(tour, groupSize) {
   const perPerson = getTourPricePerPerson(tour);
   const total     = perPerson * groupSize;
   const deposit   = Math.ceil(total * DEPOSIT_PCT);
   const remainder = total - deposit;
   const rateLabel = tour.rateType === 'flat'
-    ? `${formatEUR(RATE_ONEDAY)} flat / person`
-    : `${formatEUR(RATE_MULTIDAY)}/person/day × ${tour.days} days`;
+    ? `${formatVND(RATE_ONEDAY)} flat / person`
+    : `${formatVND(RATE_MULTIDAY)}/person/day × ${tour.days} days`;
   return { perPerson, total, deposit, remainder, rateLabel };
 }
 
@@ -163,12 +173,12 @@ function updatePriceSummary() {
 
   const { total, deposit, remainder, rateLabel } = calcPricing(tour, groupSize);
 
-  document.getElementById('priceLabel').textContent     = rateLabel;
-  document.getElementById('priceBase').textContent      = formatEUR(getTourPricePerPerson(tour));
-  document.getElementById('priceGroup').textContent     = `× ${groupSize} ${groupSize === 1 ? 'person' : 'people'}`;
-  document.getElementById('priceTotal').textContent     = formatEUR(total);
-  document.getElementById('priceDeposit').textContent   = formatEUR(deposit);
-  document.getElementById('priceRemainder').textContent = formatEUR(remainder);
+  document.getElementById('priceLabel').textContent    = rateLabel;
+  document.getElementById('priceBase').innerHTML       = fmtDual(getTourPricePerPerson(tour));
+  document.getElementById('priceGroup').textContent    = `× ${groupSize} ${groupSize === 1 ? 'person' : 'people'}`;
+  document.getElementById('priceTotal').innerHTML      = fmtDual(total);
+  document.getElementById('priceDeposit').innerHTML    = fmtDual(deposit);
+  document.getElementById('priceRemainder').innerHTML  = fmtDual(remainder);
 
   summary.style.display = 'flex';
   if (submitBtn) submitBtn.disabled = false;
@@ -393,7 +403,7 @@ function showConfirmModal(data) {
     <div class="confirm-row"><span>Start date</span><strong>${fmtDate}</strong></div>
     <div class="confirm-row"><span>Group size</span><strong>${data.groupSize} person${data.groupSize > 1 ? 's' : ''}</strong></div>
     <div class="confirm-row"><span>Riding style</span><strong>${styleLabel}</strong></div>
-    <div class="confirm-row confirm-deposit-row"><span>Deposit due now</span><strong class="confirm-deposit-amt">${formatEUR(data.deposit)}</strong></div>
+    <div class="confirm-row confirm-deposit-row"><span>Deposit due now</span><strong class="confirm-deposit-amt">${formatVND(data.deposit)} <small style="opacity:0.6;font-size:0.8em">≈ ${formatEUR(data.deposit)}</small></strong></div>
   `;
   document.getElementById('confirmModal').classList.add('active');
   document.body.classList.add('no-scroll');
@@ -448,7 +458,7 @@ function showPaymentModal(deposit) {
   _pendingDeposit = deposit;
   const modal    = document.getElementById('paymentModal');
   const amountEl = document.getElementById('paymentAmount');
-  if (amountEl) amountEl.textContent = formatEUR(deposit);
+  if (amountEl) amountEl.innerHTML = `${formatVND(deposit)}<br><small style="opacity:0.7;font-size:0.65em">≈ ${formatEUR(deposit)}</small>`;
   if (modal)    modal.classList.add('active');
   document.body.classList.add('no-scroll');
 }

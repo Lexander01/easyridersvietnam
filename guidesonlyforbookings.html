@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   
   <style>
     :root {
@@ -247,6 +248,61 @@
 
     .empty-state { padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 1.2rem; font-weight: 600;}
 
+    /* ── PIN overlay ─────────────────────────────────────── */
+    #pin-overlay {
+      position: fixed; inset: 0;
+      background: #000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 9999;
+      padding: 40px 20px;
+    }
+    .pin-logo {
+      color: white; font-size: 1.3rem; font-weight: 800;
+      margin-bottom: 52px; text-align: center;
+    }
+    .pin-logo em { color: var(--primary); font-style: normal; }
+    .pin-subtitle {
+      color: rgba(255,255,255,0.7); font-size: 1rem; font-weight: 600;
+      margin-bottom: 28px; letter-spacing: 0.03em;
+    }
+    #pin-dots {
+      display: flex; gap: 22px; margin-bottom: 52px;
+    }
+    .pin-dot {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.45);
+      transition: background 0.1s, border-color 0.1s;
+    }
+    .pin-dot.filled { background: white; border-color: white; }
+    @keyframes pin-shake {
+      0%,100% { transform: translateX(0); }
+      15%      { transform: translateX(-10px); }
+      30%      { transform: translateX(10px); }
+      45%      { transform: translateX(-7px); }
+      60%      { transform: translateX(7px); }
+      75%      { transform: translateX(-4px); }
+      90%      { transform: translateX(4px); }
+    }
+    .pin-dots-shake { animation: pin-shake 0.5s ease; }
+    #pin-keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 76px);
+      gap: 18px;
+    }
+    .pin-key {
+      width: 76px; height: 76px; border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      border: none; color: white;
+      font-size: 1.75rem; font-weight: 300;
+      font-family: inherit; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.12s;
+    }
+    .pin-key:active { background: rgba(255,255,255,0.38); }
+    .pin-key-empty { width: 76px; height: 76px; }
+    .pin-key-delete { font-size: 1.4rem; }
+
     /* Button-fill progress (same technique as main site) */
     .btn-fill-progress {
       background-image: linear-gradient(rgba(0,0,0,0.22), rgba(0,0,0,0.22));
@@ -258,13 +314,13 @@
 </head>
 <body>
 
-  <header>
+  <header id="app-header" style="display:none">
     <div class="brand">
       🏍 Easy Rider <em>Guides</em>
     </div>
   </header>
 
-  <div class="container">
+  <div class="container" id="app-main" style="display:none">
     <div class="nav-tabs" id="nav-tabs">
       <button class="tab-btn active" data-target="view-pending">
         1. PENDING <span class="badge-count" id="pending-count">0</span>
@@ -326,6 +382,32 @@
           <p style="color:var(--text-muted);font-size:1.05rem;">Loading…</p>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- PIN login screen -->
+  <div id="pin-overlay">
+    <p class="pin-logo">🏍 Easy Rider <em>Guides</em></p>
+    <p class="pin-subtitle">Enter Passcode</p>
+    <div id="pin-dots">
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+    </div>
+    <div id="pin-keypad">
+      <button class="pin-key" data-digit="1">1</button>
+      <button class="pin-key" data-digit="2">2</button>
+      <button class="pin-key" data-digit="3">3</button>
+      <button class="pin-key" data-digit="4">4</button>
+      <button class="pin-key" data-digit="5">5</button>
+      <button class="pin-key" data-digit="6">6</button>
+      <button class="pin-key" data-digit="7">7</button>
+      <button class="pin-key" data-digit="8">8</button>
+      <button class="pin-key" data-digit="9">9</button>
+      <div class="pin-key-empty"></div>
+      <button class="pin-key" data-digit="0">0</button>
+      <button class="pin-key pin-key-delete" id="pin-delete">⌫</button>
     </div>
   </div>
 
@@ -413,18 +495,75 @@
     let bookings     = [];
     let blockedDates = [];
 
-    // ── Live listeners ─────────────────────────────────────────
-    db.collection('bookings').onSnapshot(snap => {
-      bookings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    // ── PIN login logic ────────────────────────────────────────
+    let pinDigits = [];
+
+    function pinKeyPress(digit) {
+      if (pinDigits.length >= 4) return;
+      pinDigits.push(digit);
+      updateDots();
+      if (pinDigits.length === 4) attemptLogin();
+    }
+
+    function pinDelete() {
+      pinDigits.pop();
+      updateDots();
+    }
+
+    function updateDots() {
+      document.querySelectorAll('.pin-dot').forEach((dot, i) => {
+        dot.classList.toggle('filled', i < pinDigits.length);
+      });
+    }
+
+    async function attemptLogin() {
+      const pinStr = pinDigits.join('');
+      try {
+        await firebase.auth().signInWithEmailAndPassword('lexanderko@gmail.com', pinStr + '00');
+      } catch (e) {
+        shakeDots();
+        pinDigits = [];
+        setTimeout(updateDots, 500);
+      }
+    }
+
+    function shakeDots() {
+      const dots = document.getElementById('pin-dots');
+      dots.classList.remove('pin-dots-shake');
+      void dots.offsetWidth;
+      dots.classList.add('pin-dots-shake');
+      setTimeout(() => dots.classList.remove('pin-dots-shake'), 500);
+    }
+
+    document.querySelectorAll('.pin-key[data-digit]').forEach(btn => {
+      btn.addEventListener('click', () => pinKeyPress(btn.dataset.digit));
+    });
+    document.getElementById('pin-delete').addEventListener('click', pinDelete);
+
+    // ── Auth gate — start listeners only when signed in ───────
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) return;
+      document.getElementById('pin-overlay').style.display = 'none';
+      document.getElementById('app-header').style.display  = '';
+      document.getElementById('app-main').style.display    = '';
+
+      db.collection('bookings').onSnapshot(snap => {
+        bookings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderPending();
+        renderSchedule();
+      }, err => console.error('Bookings listener:', err));
+
+      db.collection('blockedDates').onSnapshot(snap => {
+        blockedDates = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderSchedule();
+        renderBlockedDatesList();
+      }, err => console.error('BlockedDates listener:', err));
+
+      document.getElementById('block-date').value = formatDate(currentDate);
       renderPending();
       renderSchedule();
-    }, err => console.error('Bookings listener:', err));
-
-    db.collection('blockedDates').onSnapshot(snap => {
-      blockedDates = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderSchedule();
       renderBlockedDatesList();
-    }, err => console.error('BlockedDates listener:', err));
+    });
 
     // ── Button-fill progress helpers ───────────────────────────
     function startBtnFill(btn) {
@@ -931,11 +1070,6 @@
       setTimeout(() => box.classList.remove('show'), 3000);
     }
 
-    document.getElementById('block-date').value = formatDate(currentDate);
-    // Initial render with empty arrays; listeners will fill them and re-render automatically
-    renderPending();
-    renderSchedule();
-    renderBlockedDatesList();
 
   </script>
 </body>

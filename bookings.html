@@ -194,6 +194,20 @@
     </div>
   </div>
 
+  <!-- Confirm modal -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-box">
+      <h2>Does everything look right?</h2>
+      <p>Please check your details before we confirm your booking.</p>
+      <div class="confirm-summary" id="confirmDetails"></div>
+      <div class="phone-warning">
+        ⚠️ <strong>Check your WhatsApp number carefully.</strong> If it is wrong, your guide will not be able to reach you — and your tour may be cancelled.
+      </div>
+      <button class="btn-simulate" onclick="confirmAndPay()">Yes, this is correct — continue →</button>
+      <br><button class="btn-modal-cancel" onclick="closeConfirmModal()">Go back and edit</button>
+    </div>
+  </div>
+
   <!-- Payment modal -->
   <div class="modal-overlay" id="paymentModal">
     <div class="modal-box">

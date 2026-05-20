@@ -375,6 +375,71 @@ function completeButtonFill(btn, origHTML) {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   CONFIRM MODAL
+═══════════════════════════════════════════════════════════ */
+let _pendingBookingData = null;
+
+function showConfirmModal(data) {
+  _pendingBookingData = data;
+  const tour       = tours.find(t => t.id === data.tourId);
+  const dateObj    = new Date(data.date + 'T00:00:00');
+  const fmtDate    = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  const styleLabel = data.rideStyle === 'self' ? 'Self-drive 🏍️' : 'Guide-driven 🧑‍✈️';
+
+  document.getElementById('confirmDetails').innerHTML = `
+    <div class="confirm-row"><span>Name</span><strong>${data.name}</strong></div>
+    <div class="confirm-row"><span>WhatsApp number</span><strong>${data.phone}</strong></div>
+    <div class="confirm-row"><span>Tour</span><strong>${tour ? tour.name : data.tourId}</strong></div>
+    <div class="confirm-row"><span>Start date</span><strong>${fmtDate}</strong></div>
+    <div class="confirm-row"><span>Group size</span><strong>${data.groupSize} person${data.groupSize > 1 ? 's' : ''}</strong></div>
+    <div class="confirm-row"><span>Riding style</span><strong>${styleLabel}</strong></div>
+    <div class="confirm-row confirm-deposit-row"><span>Deposit due now</span><strong class="confirm-deposit-amt">${formatEUR(data.deposit)}</strong></div>
+  `;
+  document.getElementById('confirmModal').classList.add('active');
+  document.body.classList.add('no-scroll');
+}
+
+function closeConfirmModal() {
+  document.getElementById('confirmModal')?.classList.remove('active');
+  document.body.classList.remove('no-scroll');
+  _pendingBookingData = null;
+}
+
+async function confirmAndPay() {
+  if (!_pendingBookingData) return;
+  const data = { ..._pendingBookingData };
+  const tour = tours.find(t => t.id === data.tourId);
+
+  // Race-condition guard: re-check availability at the moment of confirmation
+  if (_availabilityLoaded && tour && !isDateRangeAvailable(data.date, tour.days)) {
+    closeConfirmModal();
+    document.getElementById('dateError').textContent = 'These dates just became unavailable. Please choose different dates.';
+    return;
+  }
+
+  closeConfirmModal();
+
+  const submitBtn = document.getElementById('submitBtn');
+  const origHTML  = submitBtn?.innerHTML || '';
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Saving…'; }
+  startButtonFill(submitBtn);
+
+  try {
+    await saveBooking(data);
+    document.getElementById('bookingForm')?.reset();
+    setGroupCount(1);
+    const ps = document.getElementById('priceSummary');
+    if (ps) ps.style.display = 'none';
+    showPaymentModal(data.deposit);
+  } catch (error) {
+    console.error('Booking submission error:', error);
+    alert('An unexpected error occurred. Please try again.');
+  } finally {
+    completeButtonFill(submitBtn, origHTML);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
    PAYMENT MODAL
 ═══════════════════════════════════════════════════════════ */
 let _pendingDeposit = 0;
@@ -414,10 +479,9 @@ function closeSuccessModal() {
 /* ═══════════════════════════════════════════════════════════
    FORM SUBMIT
 ═══════════════════════════════════════════════════════════ */
-async function handleFormSubmit(e) {
+function handleFormSubmit(e) {
   e.preventDefault();
   if (!validateForm()) {
-    // Scroll to the section heading so the user can see all error messages
     const scrollTarget = document.getElementById('book')
       || document.querySelector('.bookings-hero')
       || document.getElementById('bookingForm');
@@ -425,45 +489,16 @@ async function handleFormSubmit(e) {
     return;
   }
 
-  const submitBtn = document.getElementById('submitBtn');
-  const origHTML = submitBtn?.innerHTML || '';
-  
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Saving…';
-  }
-  startButtonFill(submitBtn);
+  const name      = document.getElementById('name').value.trim();
+  const phone     = document.getElementById('phone')?.value.trim() || '';
+  const tourId    = document.getElementById('tourSelect').value;
+  const dateVal   = document.getElementById('startDate').value;
+  const groupSize = parseInt(document.getElementById('groupSize').value, 10);
+  const rideStyle = document.querySelector('input[name="rideStyle"]:checked').value;
+  const tour      = tours.find(t => t.id === tourId);
+  const { total, deposit, remainder } = calcPricing(tour, groupSize);
 
-  try {
-    const name = document.getElementById('name').value.trim();
-    const phone = document.getElementById('phone')?.value.trim() || '';
-    const tourId = document.getElementById('tourSelect').value;
-    const dateVal = document.getElementById('startDate').value;
-    const groupSize = parseInt(document.getElementById('groupSize').value, 10);
-    const rideStyle = document.querySelector('input[name="rideStyle"]:checked').value;
-    const tour = tours.find(t => t.id === tourId);
-    const { total, deposit, remainder } = calcPricing(tour, groupSize);
-
-    // Re-check right before saving (race condition guard)
-    if (_availabilityLoaded && !isDateRangeAvailable(dateVal, tour.days)) {
-      document.getElementById('dateError').textContent = 'These dates just became unavailable. Please choose different dates.';
-      return; // The finally block will handle resetting the button
-    }
-
-    await saveBooking({ name, phone, tourId, date: dateVal, groupSize, rideStyle, total, deposit, remainder });
-
-    document.getElementById('bookingForm')?.reset();
-    setGroupCount(1);
-    const ps = document.getElementById('priceSummary');
-    if (ps) ps.style.display = 'none';
-
-    showPaymentModal(deposit);
-  } catch (error) {
-    console.error("Booking submission error:", error);
-    alert("An unexpected error occurred. Please try again.");
-  } finally {
-    completeButtonFill(submitBtn, origHTML);
-  }
+  showConfirmModal({ name, phone, tourId, date: dateVal, groupSize, rideStyle, total, deposit, remainder });
 }
 
 /* ═══════════════════════════════════════════════════════════

@@ -358,6 +358,94 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════
+       REVIEWS
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="reviews-section">
+    <div class="section-header">
+      <span class="section-label">Traveller Reviews</span>
+      <h2 class="section-title">What Our Riders Say</h2>
+    </div>
+
+    <div class="marquee-outer">
+      <div class="marquee-track" id="marqueeTrack">
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Absolutely the best travel experience I've had in Vietnam. Our guide knew every hidden viewpoint and family-run restaurant along the way. Five stars isn't enough."</p>
+          <div class="review-author">
+            <span class="review-name">Sophie M.</span>
+            <span class="review-tour">Dalat to Hoi An · 5 Days</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"We were nervous about self-drive but the support was incredible. Any time we struggled on a hill our guide was right there. The route through the highlands is jaw-dropping."</p>
+          <div class="review-author">
+            <span class="review-name">Tom &amp; Anna K.</span>
+            <span class="review-tour">Dalat Loop · 3 Days</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"I did the Dalat to Saigon route solo and it was the highlight of my whole trip. The guide felt like a friend by day two. Accommodation was way better than expected."</p>
+          <div class="review-author">
+            <span class="review-name">James R.</span>
+            <span class="review-tour">Dalat → Ho Chi Minh City · 4 Days</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"The one-day Dalat tour was worth every cent. We saw coffee farms, waterfalls, and had lunch at a local place no tourist would ever find on their own. Book it."</p>
+          <div class="review-author">
+            <span class="review-name">Lena V.</span>
+            <span class="review-tour">One-Day Local Dalat Tour</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"We did the Hoi An to Dalat route with a group of four. The 2-day booking notice was easy to organise and the guide was waiting for us exactly as promised. Flawless."</p>
+          <div class="review-author">
+            <span class="review-name">Marco &amp; Friends</span>
+            <span class="review-tour">Hoi An → Dalat · 5 Days</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Riding the Ho Chi Minh Trail with a guide who actually lived through its history was something else entirely. He'd stop and just explain what happened here, right on the spot."</p>
+          <div class="review-author">
+            <span class="review-name">Claire D.</span>
+            <span class="review-tour">Dalat to Hoi An · 5 Days</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Ta Dung Lake at sunrise — I will never forget it. The longhouse stay was authentic and the food was incredible. Nothing like the typical tourist experience."</p>
+          <div class="review-author">
+            <span class="review-name">Priya S.</span>
+            <span class="review-tour">Dalat Loop · 3 Days</span>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Already planning to come back and do a second route. The 20% deposit booking was smooth, communication was fast on WhatsApp, and everything was exactly as described."</p>
+          <div class="review-author">
+            <span class="review-name">Erik &amp; Mia L.</span>
+            <span class="review-tour">Dalat to Mui Ne Beach · 2 Days</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
        BOOKING FORM
   ═══════════════════════════════════════════════════════════ -->
   <section class="section section-dark" id="book">
@@ -534,5 +622,14 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script src="firebase-init.js"></script>
   <script src="app.js"></script>
+  <script>
+    // Duplicate marquee cards so the loop is seamless
+    (function () {
+      const track = document.getElementById('marqueeTrack');
+      if (!track) return;
+      const clone = track.innerHTML;
+      track.innerHTML += clone;
+    }());
+  </script>
 </body>
 </html>

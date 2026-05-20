@@ -500,3 +500,70 @@ button, input, select, textarea { font-family: inherit; }
 .toggle-label:active { background: rgba(232,100,10,0.1); border-color: rgba(232,100,10,0.3); }
 .btn-whatsapp-reveal:active { background: #1fba58; }
 .btn-simulate:active { background: var(--orange-d); }
+
+/* ═══════════════════════════════════════════════════════════
+   REVIEWS MARQUEE
+═══════════════════════════════════════════════════════════ */
+.reviews-section {
+  background: var(--dark);
+  padding: 64px 0;
+  overflow: hidden;
+}
+.reviews-section .section-header { margin-bottom: 40px; }
+.reviews-section .section-label { color: var(--orange); }
+.reviews-section .section-title { color: var(--white); }
+
+.marquee-outer {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+.marquee-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: marquee-scroll 40s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.review-card {
+  background: var(--dark-3);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 24px 28px;
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.review-stars {
+  color: var(--orange);
+  font-size: 1rem;
+  letter-spacing: 2px;
+}
+.review-text {
+  color: rgba(255,255,255,0.85);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  flex: 1;
+}
+.review-author {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.review-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--white);
+}
+.review-tour {
+  font-size: 0.8rem;
+  color: var(--muted);
+}

@@ -112,35 +112,24 @@
           <a href="guides.html" class="btn btn-primary">Meet Our Guides →</a>
         </div>
 
-        <div class="guides-photo-stack" id="guidesHeroStack">
-          <!-- Filled by JS from photos/guides-hero/ -->
-          <div class="guides-photo-item primary" id="guidesPrimary">
-            <div class="guides-photo-placeholder">📷</div>
+        <div class="guides-photo-stack">
+          <div class="guides-photo-item primary">
+            <img src="photos/guides-hero/01.jpg" alt="Our guides" loading="lazy"
+                 onerror="this.closest('.guides-photo-item').style.display='none'">
           </div>
-          <div class="guides-photo-item secondary" id="guidesSecondary" style="display:none"></div>
-          <div class="guides-photo-item secondary" id="guidesTertiary" style="display:none"></div>
+          <div class="guides-photo-item secondary">
+            <img src="photos/guides-hero/02.jpg" alt="Our guides" loading="lazy"
+                 onerror="this.closest('.guides-photo-item').style.display='none'">
+          </div>
+          <div class="guides-photo-item secondary">
+            <img src="photos/guides-hero/03.jpg" alt="Our guides" loading="lazy"
+                 onerror="this.closest('.guides-photo-item').style.display='none'">
+          </div>
         </div>
 
       </div>
     </div>
   </section>
-  <script>
-    (function () {
-      const slots = [
-        { el: document.getElementById('guidesPrimary'),   path: 'photos/guides-hero/01.jpg' },
-        { el: document.getElementById('guidesSecondary'), path: 'photos/guides-hero/02.jpg' },
-        { el: document.getElementById('guidesTertiary'),  path: 'photos/guides-hero/03.jpg' },
-      ];
-      slots.forEach(function (slot) {
-        const img = new Image();
-        img.onload = function () {
-          slot.el.innerHTML = '<img src="' + slot.path + '" alt="Our guides">';
-          slot.el.style.display = '';
-        };
-        img.src = slot.path;
-      });
-    }());
-  </script>
 
   <!-- ═══════════════════════════════════════════════════════════
        TOURS

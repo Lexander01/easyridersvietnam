@@ -51,9 +51,10 @@
           <p>Groups stay small — a maximum of ten riders — because that is how the guides have always worked. Not a convoy, not a package tour. Your guide is not following a script. They are sharing their home with you.</p>
           <p>Every guide holds a Vietnamese motorcycle guide licence and carries full emergency training. Your safety is the foundation on which every tour is built.</p>
         </div>
-        <div class="guides-bio-photo" id="guidesBioPhoto">
-          <!-- Filled by JS if photos/guides/01.jpg exists -->
-          <div style="width:100%;height:100%;min-height:300px;display:flex;align-items:center;justify-content:center;background:#e5e7eb;color:#aaa;font-size:2rem;">📷</div>
+        <div class="guides-bio-photo">
+          <img src="photos/guides/01.jpg" alt="Our guides"
+               style="width:100%;height:100%;object-fit:cover;display:block;"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{style:'width:100%;height:100%;min-height:300px;display:flex;align-items:center;justify-content:center;background:#e5e7eb;color:#aaa;font-size:2rem',textContent:'📷'}))">
         </div>
       </div>
 
@@ -129,16 +130,6 @@
   </div>
 
   <script>
-    // Bio photo — try photos/guides/01.jpg as featured image
-    (function () {
-      const img = new Image();
-      img.onload = function () {
-        document.getElementById('guidesBioPhoto').innerHTML =
-          '<img src="photos/guides/01.jpg" alt="Our guides" style="width:100%;height:100%;object-fit:cover;display:block;">';
-      };
-      img.src = 'photos/guides/01.jpg';
-    }());
-
     // Full gallery — photos/guides/01.jpg, 02.jpg, ...
     // Skip 01 in gallery since it's already shown in the bio section above
     (function () {

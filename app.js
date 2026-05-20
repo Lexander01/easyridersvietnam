@@ -515,7 +515,6 @@ function handleFormSubmit(e) {
 function closeMenu() {
   document.getElementById('navLinks')?.classList.remove('open');
   document.getElementById('hamburger')?.classList.remove('open');
-  document.body.classList.remove('no-scroll');
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -545,9 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('hamburger')?.addEventListener('click', function () {
     this.classList.toggle('open');
-    const navLinks = document.getElementById('navLinks');
-    navLinks?.classList.toggle('open');
-    document.body.classList.toggle('no-scroll', navLinks?.classList.contains('open') ?? false);
+    document.getElementById('navLinks')?.classList.toggle('open');
   });
 
   document.addEventListener('click', e => {

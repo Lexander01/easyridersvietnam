@@ -587,6 +587,41 @@ button, input, select, textarea { font-family: inherit; }
   .guides-bio-photo { aspect-ratio: 4 / 3; }
 }
 
+.guide-portraits {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media (max-width: 500px) {
+  .guide-portraits { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+}
+.guide-portrait-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.guide-portrait-img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--dark-3);
+}
+.guide-portrait-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+.guide-portrait-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--dark);
+  text-align: center;
+}
+
 /* ═══════════════════════════════════════════════════════════
    TOUR MAP
 ═══════════════════════════════════════════════════════════ */

@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dalat to Hoi An – 5-Day Tour | Easy Rider Vietnam Loops</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 
@@ -15,7 +20,7 @@
         <span class="logo-text">Easy Rider<br><em>Vietnam Loops</em></span>
       </a>
       <ul class="nav-links">
-        <li><a href="index.html#tours" class="nav-link">Back to Tours</a></li>
+        <li><a href="tour-hoian.html" class="nav-link">← Both Directions</a></li>
         <li><a href="index.html#book" class="nav-link nav-cta">Book Now</a></li>
       </ul>
     </nav>
@@ -24,7 +29,7 @@
   <section class="hero" style="min-height: 60vh;">
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <span class="hero-badge">5 Days, 4 Nights</span>
+      <span class="hero-badge">5 Days · 4 Nights</span>
       <h1 class="hero-headline">Dalat to Hoi An</h1>
       <p class="hero-sub">Follow the legendary Ho Chi Minh Trail north through the Central Highlands — dramatic mountain passes, remote minority villages, and ancient history leading to the lantern-lit streets of Hoi An.</p>
     </div>
@@ -32,17 +37,20 @@
 
   <section class="section">
     <div class="container">
+
       <div class="section-header">
         <h2 class="section-title">Tour Itinerary</h2>
+        <p style="text-align:center; color:#666;">Starting in Dalat — your guide picks you up at your hotel.</p>
       </div>
+
       <div class="itinerary">
         <div class="itinerary-day">
-          <h3>Day 1: Dalat – The Start</h3>
-          <p>We leave Dalat's cool mountain air and head north, winding through pine forests and flower farms. First stops include local villages and roadside coffee stops with views that open onto the highland plateau.</p>
+          <h3>Day 1: Dalat — Departure into the Highlands</h3>
+          <p>We leave Dalat's cool mountain air and head north, winding through pine forests and flower farms. First stops include local villages and roadside coffee stops with views that open onto the highland plateau. Overnight in a guesthouse in the highlands.</p>
         </div>
         <div class="itinerary-day">
           <h3>Day 2: Deep into the Highlands</h3>
-          <p>We continue along the Ho Chi Minh Trail, passing through remote jungle and stepping into communities that have seen very few foreign visitors. Overnight at a guesthouse deep in the highlands.</p>
+          <p>We continue along the Ho Chi Minh Trail, passing through remote jungle and stepping into communities that have seen very few foreign visitors. Dense forest, wartime history, and highland guesthouses that feel a world away. Overnight deep in the highlands.</p>
         </div>
         <div class="itinerary-day">
           <h3>Day 3: Mountain Passes and History</h3>
@@ -58,19 +66,121 @@
         </div>
       </div>
 
-      <div class="pricing-box" style="margin-top: 40px; padding: 20px; background: #f4f4f4; border-radius: 8px;">
-        <h3>Pricing: 350 EUR / Person</h3>
-        <p>70 EUR/person/day × 5 days. Includes guide, motorcycle, fuel, 4 nights accommodation, and insurance.</p>
-        <a href="index.html#book" class="btn btn-primary">Book This Tour</a>
+      <div class="map-section">
+        <h3 class="info-title">Approximate Route</h3>
+        <p class="map-note">Route shown is approximate — your guide may adjust based on conditions and group preference.</p>
+        <div id="tourMap" class="map-embed"></div>
       </div>
+
+      <div class="info-box" style="margin-top: 40px;">
+        <h3 class="info-title">What's Included</h3>
+        <ul class="info-list">
+          <li>✅ Experienced local guide (or self-drive scooter + support)</li>
+          <li>✅ All fuel</li>
+          <li>✅ 4 nights accommodation</li>
+          <li>✅ Full motorbike insurance</li>
+          <li>✅ Hotel pickup in Dalat</li>
+          <li>✅ Hotel drop-off in Hoi An</li>
+          <li>✅ Sightseeing stops along the Ho Chi Minh Trail</li>
+        </ul>
+      </div>
+
+      <div class="pricing-box" style="margin-top: 32px; padding: 28px; background: #fff8f0; border: 2px solid #f97316; border-radius: 12px;">
+        <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 8px;">10.500.000 ₫ per person</h3>
+        <p style="color: #888; font-size: 0.9rem; margin-bottom: 12px;">≈ €350</p>
+        <p style="color: #555; margin-bottom: 20px;">2.100.000 ₫/person/day × 5 days · ≈ €350. Pay 20% deposit now, 80% in cash to your guide on Day 1.</p>
+        <a href="index.html#book" class="btn btn-primary" style="display:inline-block; text-decoration:none;">
+          Book This Tour →
+        </a>
+      </div>
+
+      <div class="gallery-section">
+        <h3 class="info-title">Photos from the Road</h3>
+        <p class="gallery-note">Add photos by uploading to <code>photos/highlight-1/01.jpg</code>, <code>02.jpg</code>, etc.</p>
+        <div class="gallery-grid" id="photoGallery"></div>
+        <p class="gallery-empty" id="galleryEmpty">Photos coming soon — check back before your tour!</p>
+      </div>
+
     </div>
   </section>
 
   <footer class="footer">
     <div class="container">
-      <p class="footer-copy">© 2025 Easy Rider Vietnam Loops.</p>
+      <p class="footer-copy">© 2025 Easy Rider Vietnam Loops. Based in Dalat, Vietnam.</p>
     </div>
   </footer>
+
+  <div class="gallery-lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">✕</button>
+    <button class="lightbox-prev" id="lightboxPrev">‹</button>
+    <img class="lightbox-img" id="lightboxImg" alt="Tour photo" />
+    <button class="lightbox-next" id="lightboxNext">›</button>
+  </div>
+
+  <script>
+    const TOUR_ID = 'dalathoian5day';
+
+    // MAP
+    const route = [[11.9415,108.4423],[12.6722,108.0504],[13.9832,108.0066],[14.3497,107.9985],[15.8800,108.3350]];
+    const startLabel = 'Start: Dalat', endLabel = 'End: Hoi An';
+
+    const map = L.map('tourMap', { scrollWheelZoom: false });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 18
+    }).addTo(map);
+    const poly = L.polyline(route, { color: '#E8640A', weight: 4, opacity: 0.85 }).addTo(map);
+    map.fitBounds(poly.getBounds(), { padding: [32, 32] });
+    L.circleMarker(route[0], { radius: 8, color: '#E8640A', fillColor: '#fff', fillOpacity: 1, weight: 3 })
+      .bindPopup('<strong>' + startLabel + '</strong>').addTo(map).openPopup();
+    if (route[route.length-1][0] !== route[0][0]) {
+      L.circleMarker(route[route.length-1], { radius: 8, color: '#E8640A', fillColor: '#E8640A', fillOpacity: 1, weight: 3 })
+        .bindPopup('<strong>' + endLabel + '</strong>').addTo(map);
+    }
+
+    // GALLERY
+    (function() {
+      const grid = document.getElementById('photoGallery');
+      const empty = document.getElementById('galleryEmpty');
+      const loaded = [];
+      let i = 1;
+      function tryNext() {
+        const img = new Image();
+        const path = 'photos/' + TOUR_ID + '/' + String(i).padStart(2,'0') + '.jpg';
+        img.onload = function() {
+          loaded.push(path);
+          const idx = loaded.length - 1;
+          const el = document.createElement('div');
+          el.className = 'gallery-item';
+          el.innerHTML = '<img src="' + path + '" alt="Tour photo ' + i + '" loading="lazy">';
+          el.addEventListener('click', function() { openLb(idx); });
+          grid.appendChild(el);
+          i++; tryNext();
+        };
+        img.onerror = function() { if (loaded.length === 0) empty.style.display = 'block'; };
+        img.src = path;
+      }
+      tryNext();
+
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightboxImg');
+      let cur = 0;
+      function openLb(idx) {
+        cur = idx; lbImg.src = loaded[idx];
+        lb.classList.add('active');
+        document.body.classList.add('no-scroll');
+      }
+      function closeLb() { lb.classList.remove('active'); document.body.classList.remove('no-scroll'); }
+      document.getElementById('lightboxClose').addEventListener('click', closeLb);
+      document.getElementById('lightboxPrev').addEventListener('click', function() {
+        cur = (cur - 1 + loaded.length) % loaded.length; lbImg.src = loaded[cur];
+      });
+      document.getElementById('lightboxNext').addEventListener('click', function() {
+        cur = (cur + 1) % loaded.length; lbImg.src = loaded[cur];
+      });
+      lb.addEventListener('click', function(e) { if (e.target === lb) closeLb(); });
+    }());
+  </script>
 
 </body>
 </html>

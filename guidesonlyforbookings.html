@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Guide Portal – Easy Rider Vietnam</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  
+  <style>
+    :root {
+      --bg-page: #f3f4f6; /* Light gray background to reduce glare */
+      --bg-card: #ffffff;
+      --text-main: #111827; /* Near black for maximum contrast */
+      --text-muted: #4b5563;
+      --primary: #ea580c; /* High contrast Orange */
+      --primary-hover: #c2410c;
+      --success: #15803d; /* Darker green for white text */
+      --danger: #b91c1c; /* Darker red */
+      --border: #d1d5db;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      font-size: 16px; /* Base font size larger for readability */
+      padding-bottom: 80px; /* Space for bottom nav if needed */
+    }
+
+    .container { 
+      padding: 16px; 
+      max-width: 600px; /* Kept narrow to force mobile-like view even on desktop */
+      margin: 0 auto; 
+    }
+
+    header {
+      background: var(--bg-card);
+      padding: 20px 16px;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .brand { 
+      font-size: 1.5rem; 
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .brand em { color: var(--primary); font-style: normal; }
+
+    .btn {
+      display: inline-flex; 
+      align-items: center; 
+      justify-content: center;
+      padding: 16px 20px; /* HUGE tap target */
+      border-radius: 8px; 
+      font-weight: 800; /* Extra bold text */
+      font-size: 1.1rem; 
+      cursor: pointer; 
+      border: 2px solid transparent; 
+      width: 100%; /* Full width on mobile */
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .btn-primary { background-color: var(--primary); color: white; }
+    .btn-success { background-color: var(--success); color: white; }
+    .btn-danger { background-color: white; color: var(--danger); border-color: var(--danger); }
+    .btn-danger:active { background-color: #fee2e2; }
+    
+    .btn-half { width: calc(50% - 8px); }
+
+    .nav-tabs {
+      display: flex; 
+      flex-direction: column; /* Stack on very small screens, row on slightly larger */
+      gap: 12px; 
+      margin-bottom: 24px;
+    }
+    @media (min-width: 400px) {
+      .nav-tabs { flex-direction: row; flex-wrap: wrap; }
+      .tab-btn { flex: 1; }
+    }
+    
+    .tab-btn {
+      background: white; 
+      border: 2px solid var(--border); 
+      color: var(--text-muted); 
+      font-weight: 800;
+      padding: 16px; 
+      border-radius: var(--radius);
+      font-size: 1rem;
+      position: relative;
+    }
+    .tab-btn.active { 
+      background: var(--primary); 
+      color: white; 
+      border-color: var(--primary);
+    }
+    
+    .badge-count {
+      background: #dc2626; /* Bright red notification */
+      color: white; 
+      font-size: 0.85rem; 
+      padding: 4px 8px;
+      border-radius: 20px; 
+      margin-left: 8px;
+    }
+    .tab-btn.active .badge-count {
+      background: white;
+      color: var(--primary);
+    }
+
+    .view-section { display: none; }
+    .view-section.active { display: block; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .card {
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .card-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; }
+    .card-text { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 6px; }
+    .card-text strong { color: var(--text-main); }
+    .card-actions { display: flex; gap: 16px; margin-top: 20px; }
+
+    .day-controls { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 20px;
+      background: white;
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      padding: 8px;
+    }
+    .btn-nav {
+      background: var(--bg-page);
+      border: none;
+      font-size: 1.5rem;
+      font-weight: bold;
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      color: var(--text-main);
+    }
+    .current-day-label {
+      font-size: 1.2rem;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .scooter-row {
+      display: flex;
+      flex-direction: column;
+      border: 2px solid var(--border);
+      background: white;
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .scooter-header {
+      padding: 16px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+    }
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+    .status-free { background: #dcfce7; color: var(--success); }
+    .status-booked { background: #ffedd5; color: var(--primary); }
+    .status-blocked { background: #fee2e2; color: var(--danger); }
+    
+    .scooter-body { padding: 16px; background: #f9fafb; }
+    .scooter-body-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px;}
+
+    .form-group { margin-bottom: 24px; }
+    .form-group label { display: block; margin-bottom: 10px; color: var(--text-main); font-weight: 800; font-size: 1.1rem; }
+    .form-control { 
+      width: 100%; 
+      padding: 16px; 
+      background: white; 
+      border: 2px solid var(--border); 
+      color: var(--text-main); 
+      border-radius: 8px; 
+      font-size: 1.1rem; 
+    }
+    .form-control:focus { outline: none; border-color: var(--primary); }
+    @media (max-width: 420px) {
+      .form-control { padding: 12px; font-size: 1rem; }
+    }
+
+    .modal-overlay { 
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+      background: rgba(0,0,0,0.8); display: flex; align-items: flex-end; /* Bottom sheet style */
+      opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 100; 
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    
+    .modal-content { 
+      background: white; width: 100%; 
+      border-radius: 20px 20px 0 0; /* Rounded top corners */
+      padding: 24px;
+      transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal-overlay.active .modal-content { transform: translateY(0); }
+    
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .modal-header h3 { font-size: 1.5rem; font-weight: 800; }
+    .modal-close { 
+      background: var(--bg-page); border: none; color: var(--text-main); 
+      font-size: 1.5rem; font-weight: bold; width: 44px; height: 44px; border-radius: 22px; 
+    }
+
+    .message-box { 
+      position: fixed; top: 20px; left: 20px; right: 20px; 
+      background: var(--text-main); color: white;
+      padding: 20px; border-radius: 12px; font-weight: 800; font-size: 1.1rem;
+      text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+      transform: translateY(-150%); transition: transform 0.3s; z-index: 1000; 
+    }
+    .message-box.show { transform: translateY(0); }
+    .message-box.error { background: var(--danger); }
+
+    .empty-state { padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 1.2rem; font-weight: 600;}
+
+    /* Button-fill progress (same technique as main site) */
+    .btn-fill-progress {
+      background-image: linear-gradient(rgba(0,0,0,0.22), rgba(0,0,0,0.22));
+      background-size: calc(var(--bp, 0) * 100%) 100%;
+      background-position: left center;
+      background-repeat: no-repeat;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      🏍 Easy Rider <em>Guides</em>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="nav-tabs" id="nav-tabs">
+      <button class="tab-btn active" data-target="view-pending">
+        1. PENDING <span class="badge-count" id="pending-count">0</span>
+      </button>
+      <button class="tab-btn" data-target="view-schedule">2. SCHEDULE</button>
+      <button class="tab-btn" data-target="view-block">3. BLOCK DATES</button>
+    </div>
+
+    <div id="view-pending" class="view-section active">
+      <div id="pending-list">
+        <!-- Cards injected via JS -->
+      </div>
+    </div>
+
+    <div id="view-schedule" class="view-section">
+      <div class="day-controls">
+        <button class="btn-nav" onclick="changeDay(-1)">❮</button>
+        <div class="current-day-label" id="current-day-label">MAY 19, 2026</div>
+        <button class="btn-nav" onclick="changeDay(1)">❯</button>
+      </div>
+      
+      <div id="schedule-list">
+        <!-- Scooter rows injected via JS -->
+      </div>
+    </div>
+
+    <div id="view-block" class="view-section">
+      <div class="card">
+        <h3 class="card-title" style="font-size: 1.5rem; margin-bottom: 20px;">Block a Scooter</h3>
+        
+        <div class="form-group">
+          <label>DATE TO BLOCK:</label>
+          <input type="date" id="block-date" class="form-control" />
+        </div>
+        
+        <div class="form-group">
+          <label>SELECT SCOOTER:</label>
+          <select id="block-scooter" class="form-control">
+            <option value="all">ALL 10 SCOOTERS</option>
+            <option value="1">SCOOTER 1</option>
+            <option value="2">SCOOTER 2</option>
+            <option value="3">SCOOTER 3</option>
+            <option value="4">SCOOTER 4</option>
+            <option value="5">SCOOTER 5</option>
+            <option value="6">SCOOTER 6</option>
+            <option value="7">SCOOTER 7</option>
+            <option value="8">SCOOTER 8</option>
+            <option value="9">SCOOTER 9</option>
+            <option value="10">SCOOTER 10</option>
+          </select>
+        </div>
+
+        <button class="btn btn-danger" onclick="submitBlockDate()" style="margin-top: 10px;">BLOCK NOW</button>
+      </div>
+
+      <div class="card" style="margin-top: 20px;">
+        <h3 class="card-title" style="font-size: 1.4rem; margin-bottom: 16px;">Upcoming Blocked Dates</h3>
+        <div id="blocked-dates-list">
+          <p style="color:var(--text-muted);font-size:1.05rem;">Loading…</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="approve-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>APPROVE BOOKING</h3>
+        <button class="modal-close" onclick="closeModal('approve-modal')">×</button>
+      </div>
+      
+      <p style="margin-bottom: 24px; font-size: 1.1rem; color: var(--text-muted);">
+        Assign <strong id="approve-scooter-count" style="color: black;"></strong> scooter(s) to <strong id="approve-client-name" style="color: black;"></strong>.
+      </p>
+
+      <div id="scooter-selects-container">
+        <!-- One select per person, injected via JS -->
+      </div>
+      <input type="hidden" id="approve-booking-id" />
+      
+      <button class="btn btn-success" id="confirm-approve-btn" onclick="confirmApproval()">CONFIRM</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="details-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>TOUR DETAILS</h3>
+        <button class="modal-close" onclick="closeModal('details-modal')">×</button>
+      </div>
+      <div id="details-body" style="font-size: 1.2rem;">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="conflict-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="color: var(--danger);">BOOKING CONFLICT</h3>
+        <button class="modal-close" onclick="closeModal('conflict-modal')">×</button>
+      </div>
+      <div id="conflict-body" style="font-size: 1.1rem; margin-bottom: 20px;">
+        <!-- Injected via JS -->
+      </div>
+      <button class="btn btn-primary" onclick="closeModal('conflict-modal')" style="background-color: var(--text-main);">
+        CANCEL / DO NOT BLOCK
+      </button>
+    </div>
+  </div>
+
+  <!-- Cancel booking confirmation modal -->
+  <div class="modal-overlay" id="cancel-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="color: var(--danger);">CANCEL BOOKING?</h3>
+        <button class="modal-close" onclick="closeModal('cancel-modal')">×</button>
+      </div>
+      <div id="cancel-modal-body">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Alert Message Box for big visibility -->
+  <div class="message-box" id="message-box">Action completed.</div>
+
+  <script>
+    // ── Firebase init ──────────────────────────────────────────
+    const firebaseConfig = {
+      apiKey: 'AIzaSyBSSeMTLVn3qRXXPGikqNMEu5y2Kd-5mlY',
+      authDomain: 'easyridersvietnam-a559e.firebaseapp.com',
+      projectId: 'easyridersvietnam-a559e',
+      storageBucket: 'easyridersvietnam-a559e.firebasestorage.app',
+      messagingSenderId: '256202959661',
+      appId: '1:256202959661:web:db9eaedd4fa4f2a2a881a4',
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ── State ──────────────────────────────────────────────────
+    let currentDate  = new Date();
+    currentDate.setHours(0,0,0,0);
+    const TOTAL_SCOOTERS = 10;
+
+    let bookings     = [];
+    let blockedDates = [];
+
+    // ── Live listeners ─────────────────────────────────────────
+    db.collection('bookings').onSnapshot(snap => {
+      bookings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderPending();
+      renderSchedule();
+    }, err => console.error('Bookings listener:', err));
+
+    db.collection('blockedDates').onSnapshot(snap => {
+      blockedDates = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderSchedule();
+      renderBlockedDatesList();
+    }, err => console.error('BlockedDates listener:', err));
+
+    // ── Button-fill progress helpers ───────────────────────────
+    function startBtnFill(btn) {
+      if (!btn) return null;
+      btn.style.setProperty('--bp', '0');
+      btn.classList.add('btn-fill-progress');
+      let pct = 0;
+      return setInterval(() => {
+        pct += (88 - pct) * 0.09;
+        btn.style.setProperty('--bp', (pct / 100).toFixed(3));
+      }, 120);
+    }
+
+    function completeBtnFill(btn, interval, origText) {
+      clearInterval(interval);
+      if (!btn) return;
+      btn.style.setProperty('--bp', '1');
+      setTimeout(() => {
+        btn.classList.remove('btn-fill-progress');
+        btn.style.removeProperty('--bp');
+        btn.disabled = false;
+        if (origText) btn.textContent = origText;
+      }, 250);
+    }
+
+    // ── Cancel booking ─────────────────────────────────────────
+    let _cancelBookingId = null;
+
+    function openCancelModal(bookingId) {
+      const b = bookings.find(x => x.id === bookingId);
+      if (!b) return;
+      _cancelBookingId = bookingId;
+
+      const digits  = (b.phone || '').replace(/\D/g, '');
+      const waPhone = digits.startsWith('0') ? '84' + digits.slice(1) : digits;
+      const hasPhone = !!waPhone;
+
+      document.getElementById('cancel-modal-body').innerHTML = `
+        <p style="font-size:1.15rem; margin-bottom:14px;">
+          You are about to <strong>cancel the booking</strong> for:
+        </p>
+        <p style="font-size:1.4rem; font-weight:800; margin-bottom:20px;">${b.name}</p>
+        <p style="color:var(--danger); font-weight:800; font-size:1.05rem; margin-bottom:20px;">
+          ⚠️ Please contact the customer first before you cancel!
+        </p>
+        ${hasPhone ? `
+          <a href="https://wa.me/${waPhone}" target="_blank"
+             style="display:flex;align-items:center;justify-content:center;gap:10px;
+                    background:#25D366;color:white;font-weight:800;font-size:1.1rem;
+                    padding:18px;border-radius:10px;text-decoration:none;margin-bottom:8px;">
+            📱 Message ${b.name} on WhatsApp
+          </a>
+          <p style="text-align:center;color:var(--text-muted);font-size:1rem;margin-bottom:24px;">
+            ${b.phone}
+          </p>
+        ` : `
+          <p style="color:var(--danger);margin-bottom:24px;font-size:1rem;">
+            No phone number saved for this booking.
+          </p>
+        `}
+        <div style="display:flex;gap:12px;margin-top:4px;">
+          <button class="btn btn-primary btn-half" onclick="closeModal('cancel-modal')"
+                  style="background:var(--text-main);">
+            NO — KEEP BOOKING
+          </button>
+          <button class="btn btn-danger btn-half" id="confirm-cancel-btn"
+                  onclick="confirmCancel()">
+            YES — CANCEL IT
+          </button>
+        </div>
+      `;
+      document.getElementById('cancel-modal').classList.add('active');
+    }
+
+    async function confirmCancel() {
+      if (!_cancelBookingId) return;
+      const bookingId = _cancelBookingId;
+      const btn = document.getElementById('confirm-cancel-btn');
+      const fillInterval = startBtnFill(btn);
+      if (btn) { btn.disabled = true; btn.textContent = 'CANCELLING…'; }
+      try {
+        await db.collection('bookings').doc(bookingId).update({ status: 'cancelled' });
+        closeModal('cancel-modal');
+        showMessage('BOOKING CANCELLED.');
+        _cancelBookingId = null;
+      } catch (e) {
+        showMessage('ERROR. CHECK CONNECTION.', true);
+        console.error(e);
+      } finally {
+        completeBtnFill(btn, fillInterval, 'YES — CANCEL IT');
+      }
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+        
+        let targetBtn = e.target.closest('.tab-btn');
+        targetBtn.classList.add('active');
+        document.getElementById(targetBtn.dataset.target).classList.add('active');
+      });
+    });
+
+    function formatDate(dateObj) {
+      const yyyy = dateObj.getFullYear();
+      const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const dd = String(dateObj.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function changeDay(offsetDays) {
+      currentDate.setDate(currentDate.getDate() + offsetDays);
+      renderSchedule();
+    }
+
+    function isDayInBooking(dayStr, booking) {
+      const dayDate = new Date(dayStr);
+      const start = new Date(booking.date);
+      const end = new Date(booking.date);
+      end.setDate(end.getDate() + booking.duration - 1);
+      return dayDate >= start && dayDate <= end;
+    }
+
+    function getScooterIds(booking) {
+      if (Array.isArray(booking.scooterIds) && booking.scooterIds.length) return booking.scooterIds;
+      if (booking.scooterId != null) return [booking.scooterId];
+      return [];
+    }
+
+    function isScooterAvailable(scooterId, startDateStr, duration) {
+      const start = new Date(startDateStr);
+      for (let i = 0; i < duration; i++) {
+        let day = new Date(start);
+        day.setDate(start.getDate() + i);
+        let dayStr = formatDate(day);
+
+        if (blockedDates.some(b => b.date === dayStr && (b.scooterId === 'all' || b.scooterId == scooterId))) return false;
+        if (bookings.some(b => b.status === 'approved' && getScooterIds(b).includes(scooterId) && isDayInBooking(dayStr, b))) return false;
+      }
+      return true;
+    }
+
+    function renderPending() {
+      const pending = bookings.filter(b => b.status === 'pending');
+      document.getElementById('pending-count').innerText = pending.length;
+      
+      const list = document.getElementById('pending-list');
+      list.innerHTML = '';
+
+      if (pending.length === 0) {
+        list.innerHTML = `<div class="empty-state">No pending bookings.<br>Time for a coffee! ☕</div>`;
+        return;
+      }
+
+      pending.forEach(b => {
+        list.innerHTML += `
+          <div class="card">
+            <h3 class="card-title">${b.name}</h3>
+            <p class="card-text"><strong>TOUR:</strong> ${b.tourName || b.tour || '—'}</p>
+            <p class="card-text"><strong>START:</strong> ${b.date}</p>
+            <p class="card-text"><strong>DAYS:</strong> ${b.duration}</p>
+            <p class="card-text"><strong>GROUP:</strong> ${b.groupSize || b.pax || 1} person(s)</p>
+            <p class="card-text"><strong>STYLE:</strong> ${b.rideStyle === 'self' ? 'Self-drive' : 'Guide-driven'}</p>
+            <div class="card-actions">
+              <button class="btn btn-danger btn-half" onclick="openCancelModal('${b.id}')">CANCEL</button>
+              <button class="btn btn-success btn-half" onclick="openApproveModal('${b.id}')">APPROVE</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function renderSchedule() {
+      const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+      document.getElementById('current-day-label').innerText = currentDate.toLocaleDateString('en-US', options).toUpperCase();
+
+      const list = document.getElementById('schedule-list');
+      list.innerHTML = '';
+      const dayStr = formatDate(currentDate);
+
+      for(let s = 1; s <= TOTAL_SCOOTERS; s++) {
+        const isBlocked = blockedDates.some(b => b.date === dayStr && (b.scooterId === 'all' || b.scooterId == s));
+        const booking = bookings.find(b => b.status === 'approved' && getScooterIds(b).includes(s) && isDayInBooking(dayStr, b));
+
+        let rowHTML = `<div class="scooter-row">`;
+        
+        if (isBlocked) {
+          const blockDoc = blockedDates.find(b => b.date === dayStr && (b.scooterId === 'all' || b.scooterId == s));
+          const blockId  = blockDoc ? blockDoc.id : null;
+          rowHTML += `
+            <div class="scooter-header">
+              <span>SCOOTER ${s}</span>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="status-badge status-blocked">BLOCKED</span>
+                ${blockId ? `<button onclick="unblockScooter('${blockId}', this)"
+                    style="padding:6px 14px;background:white;border:2px solid var(--danger);color:var(--danger);
+                           border-radius:8px;font-weight:800;font-size:0.9rem;cursor:pointer;line-height:1.4;">
+                    UNBLOCK
+                  </button>` : ''}
+              </div>
+            </div>`;
+        } else if (booking) {
+          rowHTML += `
+            <div class="scooter-header" style="background: #fff7ed; border-bottom: none;">
+              <span>SCOOTER ${s}</span>
+              <span class="status-badge status-booked">BOOKED</span>
+            </div>
+            <div class="scooter-body" style="background: #fff7ed; border-top: 2px solid #fdba74;">
+              <p class="scooter-body-text">👤 ${booking.name}</p>
+              <p class="scooter-body-text">🗺️ ${booking.tourName || booking.tour || '—'}</p>
+              <button class="btn btn-primary" style="margin-top: 10px;" onclick="viewBookingDetails('${booking.id}')">VIEW DETAILS</button>
+            </div>`;
+        } else {
+          rowHTML += `
+            <div class="scooter-header">
+              <span>SCOOTER ${s}</span>
+              <span class="status-badge status-free">FREE</span>
+            </div>`;
+        }
+
+        rowHTML += `</div>`;
+        list.innerHTML += rowHTML;
+      }
+    }
+
+    // Build the available-scooter options for a given select, excluding already-chosen ones
+    function buildScooterOptions(excludeIds, booking) {
+      let html = '<option value="">— pick scooter —</option>';
+      for (let s = 1; s <= TOTAL_SCOOTERS; s++) {
+        if (excludeIds.includes(s)) continue;
+        if (!isScooterAvailable(s, booking.date, booking.duration)) continue;
+        html += `<option value="${s}">SCOOTER ${s}</option>`;
+      }
+      return html;
+    }
+
+    // Refresh all scooter selects so no two can pick the same one
+    function refreshScooterSelects(booking) {
+      const container = document.getElementById('scooter-selects-container');
+      const selects   = Array.from(container.querySelectorAll('.scooter-select'));
+      selects.forEach((sel, idx) => {
+        const chosen = selects
+          .filter((_, i) => i !== idx)
+          .map(s => parseInt(s.value))
+          .filter(v => !isNaN(v));
+        const current = parseInt(sel.value);
+        sel.innerHTML  = buildScooterOptions(chosen, booking);
+        if (!isNaN(current)) sel.value = String(current);
+      });
+      // Disable confirm if any select is still empty
+      const allPicked = selects.every(s => s.value !== '');
+      const btn = document.getElementById('confirm-approve-btn');
+      btn.disabled    = !allPicked;
+      btn.style.opacity = allPicked ? '1' : '0.5';
+    }
+
+    function openApproveModal(bookingId) {
+      const booking   = bookings.find(b => b.id === bookingId);
+      if (!booking) return;
+
+      const groupSize = booking.groupSize || 1;
+      document.getElementById('approve-booking-id').value    = booking.id;
+      document.getElementById('approve-client-name').innerText = booking.name.toUpperCase();
+      document.getElementById('approve-scooter-count').innerText = groupSize;
+
+      // Build one select per person
+      const container = document.getElementById('scooter-selects-container');
+      container.innerHTML = '';
+
+      // Check if there are enough available scooters at all
+      const available = [];
+      for (let s = 1; s <= TOTAL_SCOOTERS; s++) {
+        if (isScooterAvailable(s, booking.date, booking.duration)) available.push(s);
+      }
+
+      const btn = document.getElementById('confirm-approve-btn');
+      if (available.length < groupSize) {
+        container.innerHTML = `<p style="color:var(--danger); font-weight:800; padding:12px 0;">
+          ❌ NOT ENOUGH SCOOTERS AVAILABLE (need ${groupSize}, have ${available.length})
+        </p>`;
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+      } else {
+        for (let i = 0; i < groupSize; i++) {
+          const label = groupSize > 1 ? `PERSON ${i + 1}:` : 'SCOOTER:';
+          container.innerHTML += `
+            <div class="form-group">
+              <label>${label}</label>
+              <select class="form-control scooter-select" style="height:60px;"
+                      onchange="refreshScooterSelects(bookings.find(b=>b.id===document.getElementById('approve-booking-id').value))">
+                <option value="">— pick scooter —</option>
+              </select>
+            </div>`;
+        }
+        // Initial population of all selects
+        refreshScooterSelects(booking);
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+      }
+
+      document.getElementById('approve-modal').classList.add('active');
+    }
+
+    async function confirmApproval() {
+      const bookingId = document.getElementById('approve-booking-id').value;
+      const selects   = Array.from(document.querySelectorAll('#scooter-selects-container .scooter-select'));
+      const scooterIds = selects.map(s => parseInt(s.value)).filter(v => !isNaN(v));
+
+      if (scooterIds.length !== selects.length) {
+        showMessage('PLEASE SELECT A SCOOTER FOR EACH PERSON.', true);
+        return;
+      }
+      if (new Set(scooterIds).size !== scooterIds.length) {
+        showMessage('EACH PERSON NEEDS A DIFFERENT SCOOTER.', true);
+        return;
+      }
+
+      const btn = document.getElementById('confirm-approve-btn');
+      const fillInterval = startBtnFill(btn);
+      btn.disabled = true;
+      btn.textContent = 'SAVING…';
+      try {
+        await db.collection('bookings').doc(bookingId).update({
+          status:     'approved',
+          scooterIds: scooterIds,
+        });
+        closeModal('approve-modal');
+        showMessage(`BOOKING APPROVED. SCOOTERS ${scooterIds.join(', ')} ASSIGNED.`);
+      } catch (e) {
+        showMessage('ERROR SAVING. CHECK CONNECTION.', true);
+        console.error(e);
+      } finally {
+        completeBtnFill(btn, fillInterval, 'CONFIRM');
+      }
+    }
+
+    async function rejectBooking(bookingId) {
+      try {
+        await db.collection('bookings').doc(bookingId).update({ status: 'rejected' });
+        showMessage('BOOKING REJECTED.', true);
+      } catch (e) {
+        showMessage('ERROR SAVING. CHECK CONNECTION.', true);
+        console.error(e);
+      }
+    }
+
+    function submitBlockDate() {
+      const dateStr = document.getElementById('block-date').value;
+      const scooterVal = document.getElementById('block-scooter').value;
+      
+      if(!dateStr) {
+        showMessage("PLEASE SELECT A DATE.", true);
+        return;
+      }
+
+      // Check for any approved bookings that overlap with the selected date and scooter
+      let conflicts = [];
+      bookings.forEach(b => {
+        if (b.status === 'approved' && isDayInBooking(dateStr, b)) {
+          if (scooterVal === 'all' || getScooterIds(b).includes(parseInt(scooterVal))) {
+            conflicts.push(b);
+          }
+        }
+      });
+
+      if (conflicts.length > 0) {
+        // Show conflict popup instead of blocking
+        showConflictModal(conflicts, dateStr);
+        return;
+      }
+
+      // No conflicts found, execute the block
+      executeBlock(dateStr, scooterVal);
+    }
+
+    async function executeBlock(dateStr, scooterVal) {
+      const btn = document.querySelector('#view-block .btn');
+      const fillInterval = startBtnFill(btn);
+      if (btn) { btn.disabled = true; btn.textContent = 'SAVING…'; }
+      try {
+        await db.collection('blockedDates').add({
+          date: dateStr,
+          scooterId: scooterVal === 'all' ? 'all' : parseInt(scooterVal),
+        });
+        showMessage('DATE BLOCKED SUCCESSFULLY.');
+        document.getElementById('block-date').value = '';
+      } catch (e) {
+        showMessage('ERROR SAVING. CHECK CONNECTION.', true);
+        console.error(e);
+      } finally {
+        completeBtnFill(btn, fillInterval, 'BLOCK NOW');
+      }
+    }
+
+    async function unblockScooter(blockId, btn) {
+      const origText = btn ? btn.textContent : 'UNBLOCK';
+      const fillInterval = startBtnFill(btn);
+      if (btn) { btn.disabled = true; btn.textContent = 'REMOVING…'; }
+      try {
+        await db.collection('blockedDates').doc(blockId).delete();
+        showMessage('BLOCK REMOVED.');
+      } catch (e) {
+        showMessage('ERROR. CHECK CONNECTION.', true);
+        console.error(e);
+      } finally {
+        completeBtnFill(btn, fillInterval, origText);
+      }
+    }
+
+    function renderBlockedDatesList() {
+      const container = document.getElementById('blocked-dates-list');
+      if (!container) return;
+      const todayStr = formatDate(new Date());
+      const future   = blockedDates
+        .filter(b => b.date >= todayStr)
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+      if (future.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted);font-size:1.05rem;padding:8px 0;">No upcoming blocked dates.</p>';
+        return;
+      }
+      let html = '';
+      future.forEach(b => {
+        const label = b.scooterId === 'all' ? 'ALL 10 SCOOTERS' : `SCOOTER ${b.scooterId}`;
+        html += `
+          <div style="display:flex;justify-content:space-between;align-items:center;
+                      padding:14px;background:#f9fafb;border:2px solid var(--border);
+                      border-radius:10px;margin-bottom:10px;">
+            <div>
+              <p style="font-weight:800;font-size:1.1rem;margin-bottom:2px;">${b.date}</p>
+              <p style="color:var(--danger);font-weight:700;font-size:0.95rem;">${label}</p>
+            </div>
+            <button onclick="unblockScooter('${b.id}', this)"
+                    style="padding:10px 18px;background:white;border:2px solid var(--danger);
+                           color:var(--danger);border-radius:8px;font-weight:800;font-size:1rem;cursor:pointer;">
+              UNBLOCK
+            </button>
+          </div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function showConflictModal(conflicts, dateStr) {
+      let bodyHtml = `<p style="font-weight: 800; margin-bottom: 16px; color: var(--danger);">
+        ATTENTION! There is already a confirmed booking on ${dateStr} for this scooter(s).
+      </p>`;
+      
+      conflicts.forEach(c => {
+        bodyHtml += `
+          <div style="background: #f9fafb; padding: 16px; border: 2px solid var(--border); border-radius: 8px; margin-bottom: 16px;">
+            <p style="margin-bottom: 6px;"><strong>CLIENT:</strong> ${c.name}</p>
+            <p style="margin-bottom: 12px;"><strong>SCOOTER:</strong> ${c.scooterId}</p>
+            <a href="https://wa.me/${c.phone.replace('+','')}" class="btn btn-success" target="_blank" style="padding: 12px; font-size: 1.1rem; width: 100%; text-decoration: none;">
+              📱 SEND MESSAGE
+            </a>
+          </div>
+        `;
+      });
+
+      document.getElementById('conflict-body').innerHTML = bodyHtml;
+      document.getElementById('conflict-modal').classList.add('active');
+    }
+
+    function viewBookingDetails(bookingId) {
+      const b = bookings.find(x => x.id === bookingId);
+      if(!b) return;
+
+      const waPhone = (b.phone || '').replace(/\D/g, '');
+      document.getElementById('details-body').innerHTML = `
+        <p style="margin-bottom:12px;"><strong>CLIENT:</strong><br> ${b.name}</p>
+        <p style="margin-bottom:12px;"><strong>PHONE:</strong><br>
+          <a href="https://wa.me/${waPhone}" style="color:var(--primary); font-weight:bold;">${b.phone || '—'}</a>
+        </p>
+        <p style="margin-bottom:12px;"><strong>TOUR:</strong><br> ${b.tourName || b.tour || '—'}</p>
+        <p style="margin-bottom:12px;"><strong>START:</strong><br> ${b.date}</p>
+        <p style="margin-bottom:12px;"><strong>DURATION:</strong><br> ${b.duration} DAYS</p>
+        <p style="margin-bottom:12px; color: var(--success); font-weight: bold;">
+          ASSIGNED SCOOTERS: ${getScooterIds(b).join(', ') || '—'}
+        </p>
+        <div style="display:flex; gap:12px; margin-top:20px;">
+          <button class="btn btn-danger btn-half" onclick="closeModal('details-modal'); openCancelModal('${b.id}')">
+            CANCEL BOOKING
+          </button>
+          <button class="btn btn-primary btn-half" onclick="closeModal('details-modal')">CLOSE</button>
+        </div>
+      `;
+      document.getElementById('details-modal').classList.add('active');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    function showMessage(msg, isError = false) {
+      const box = document.getElementById('message-box');
+      box.innerText = msg;
+      if(isError) {
+        box.classList.add('error');
+      } else {
+        box.classList.remove('error');
+      }
+      box.classList.add('show');
+      setTimeout(() => box.classList.remove('show'), 3000);
+    }
+
+    document.getElementById('block-date').value = formatDate(currentDate);
+    // Initial render with empty arrays; listeners will fill them and re-render automatically
+    renderPending();
+    renderSchedule();
+    renderBlockedDatesList();
+
+  </script>
+</body>
+</html>

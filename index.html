@@ -26,6 +26,7 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="#tours" class="nav-link" onclick="closeMenu()">Tours</a></li>
         <li><a href="#about" class="nav-link" onclick="closeMenu()">About</a></li>
+        <li><a href="guides.html" class="nav-link" onclick="closeMenu()">Our Guides</a></li>
         <li><a href="faq.html" class="nav-link" onclick="closeMenu()">FAQ</a></li>
         <li><a href="#guarantee" class="nav-link" onclick="closeMenu()">Guarantee</a></li>
         <li><a href="#book" class="nav-link nav-cta" onclick="closeMenu()">Book Now</a></li>
@@ -95,6 +96,51 @@
       <span>Local Expert Guides</span>
     </div>
   </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       GUIDES PREVIEW
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="guides-preview">
+    <div class="container">
+      <div class="guides-preview-inner">
+
+        <div class="guides-preview-text">
+          <span class="section-label">The People Behind the Rides</span>
+          <h2 class="section-title">Guides Who Know Every Corner of These Roads</h2>
+          <p>We are not a travel agency. We are a small crew of riders from Dalat who have spent decades on these mountain roads — before the tours, before the tourists, before the guardrails.</p>
+          <p>Our guides speak Vietnamese, English, and the language of the highlands. They know the families at the guesthouses, the farmers along the trail, and the shortcuts through pine forests that no map will ever show you.</p>
+          <a href="guides.html" class="btn btn-primary">Meet Our Guides →</a>
+        </div>
+
+        <div class="guides-photo-stack" id="guidesHeroStack">
+          <!-- Filled by JS from photos/guides-hero/ -->
+          <div class="guides-photo-item primary" id="guidesPrimary">
+            <div class="guides-photo-placeholder">📷</div>
+          </div>
+          <div class="guides-photo-item secondary" id="guidesSecondary" style="display:none"></div>
+          <div class="guides-photo-item secondary" id="guidesTertiary" style="display:none"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <script>
+    (function () {
+      const slots = [
+        { el: document.getElementById('guidesPrimary'),   path: 'photos/guides-hero/01.jpg' },
+        { el: document.getElementById('guidesSecondary'), path: 'photos/guides-hero/02.jpg' },
+        { el: document.getElementById('guidesTertiary'),  path: 'photos/guides-hero/03.jpg' },
+      ];
+      slots.forEach(function (slot) {
+        const img = new Image();
+        img.onload = function () {
+          slot.el.innerHTML = '<img src="' + slot.path + '" alt="Our guides">';
+          slot.el.style.display = '';
+        };
+        img.src = slot.path;
+      });
+    }());
+  </script>
 
   <!-- ═══════════════════════════════════════════════════════════
        TOURS

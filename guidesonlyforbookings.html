@@ -204,6 +204,9 @@
       font-size: 1.1rem; 
     }
     .form-control:focus { outline: none; border-color: var(--primary); }
+    @media (max-width: 420px) {
+      .form-control { padding: 12px; font-size: 1rem; }
+    }
 
     .modal-overlay { 
       position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
@@ -259,20 +262,20 @@
 
   <div class="container">
     <div class="nav-tabs" id="nav-tabs">
-      <button class="tab-btn" data-target="view-pending">
+      <button class="tab-btn active" data-target="view-pending">
         1. PENDING <span class="badge-count" id="pending-count">0</span>
       </button>
-      <button class="tab-btn active" data-target="view-schedule">2. SCHEDULE</button>
+      <button class="tab-btn" data-target="view-schedule">2. SCHEDULE</button>
       <button class="tab-btn" data-target="view-block">3. BLOCK DATES</button>
     </div>
 
-    <div id="view-pending" class="view-section">
+    <div id="view-pending" class="view-section active">
       <div id="pending-list">
         <!-- Cards injected via JS -->
       </div>
     </div>
 
-    <div id="view-schedule" class="view-section active">
+    <div id="view-schedule" class="view-section">
       <div class="day-controls">
         <button class="btn-nav" onclick="changeDay(-1)">❮</button>
         <div class="current-day-label" id="current-day-label">MAY 19, 2026</div>

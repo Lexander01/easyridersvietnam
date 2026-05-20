@@ -8,6 +8,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
+  <style>
+    @media (max-width: 600px) {
+      .direction-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
 </head>
 <body>
 
@@ -41,7 +46,7 @@
         <p style="text-align:center; color:#666; max-width:520px; margin:0 auto;">Both routes cover the same roads and include the same accommodation, fuel, and guide. The difference is simply where you start and end.</p>
       </div>
 
-      <div class="tour-grid" style="margin-top:40px; display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+      <div class="direction-grid" style="margin-top:40px; display:grid; grid-template-columns:1fr 1fr; gap:24px;">
 
         <div class="card" style="padding:28px; border:2px solid #e5e7eb; border-radius:14px; background:#fff;">
           <div style="font-size:2rem; margin-bottom:12px;">🏍️ ➡️ 🌆</div>

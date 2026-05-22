@@ -3,8 +3,6 @@
 /* ═══════════════════════════════════════════════════════════
    CONSTANTS
 ═══════════════════════════════════════════════════════════ */
-const RATE_MULTIDAY   = 70;
-const RATE_ONEDAY     = 40;
 const DEPOSIT_PCT     = 0.20;
 const TOTAL_SCOOTERS  = 10;
 const EUR_TO_VND      = 30000;
@@ -14,14 +12,16 @@ const GUIDE_WHATSAPP  = '84000000000'; // ← replace with real guide WhatsApp n
    TOUR DATA
 ═══════════════════════════════════════════════════════════ */
 const tours = [
-  { id: 'dalatloop3day',   name: 'Dalat Loop',                  days: 3, nights: 2, rateType: 'daily', startsOutsideDalat: false },
-  { id: 'dalathoian5day',  name: 'Dalat to Hoi An',             days: 5, nights: 4, rateType: 'daily', startsOutsideDalat: false },
-  { id: 'hoiandalat5day',  name: 'Hoi An to Dalat',             days: 5, nights: 4, rateType: 'daily', startsOutsideDalat: true  },
-  { id: 'dalatsaigon4day', name: 'Dalat to Ho Chi Minh City',   days: 4, nights: 3, rateType: 'daily', startsOutsideDalat: false },
-  { id: 'saigondalat4day', name: 'Ho Chi Minh City to Dalat',   days: 4, nights: 3, rateType: 'daily', startsOutsideDalat: true  },
-  { id: 'dalatmuine2day',  name: 'Dalat to Mui Ne Beach',       days: 2, nights: 1, rateType: 'daily', startsOutsideDalat: false },
-  { id: 'alternative3day', name: 'Alternative 3-Day Trip',      days: 3, nights: 2, rateType: 'daily', startsOutsideDalat: false },
-  { id: 'dalattour1day',   name: 'One-Day Local Dalat Tour',    days: 1, nights: 0, rateType: 'flat',  startsOutsideDalat: false },
+  { id: 'dalatloop3day',   name: 'Dalat Loop',                  days: 3, nights: 2, rateType: 'daily', dailyRate: 70, startsOutsideDalat: false },
+  { id: 'dalathoian5day',  name: 'Dalat to Hoi An',             days: 5, nights: 4, rateType: 'daily', dailyRate: 75, startsOutsideDalat: false },
+  { id: 'hoiandalat5day',  name: 'Hoi An to Dalat',             days: 5, nights: 4, rateType: 'daily', dailyRate: 75, startsOutsideDalat: true  },
+  { id: 'dalatsaigon4day', name: 'Dalat to Ho Chi Minh City',   days: 4, nights: 3, rateType: 'daily', dailyRate: 70, startsOutsideDalat: false },
+  { id: 'saigondalat4day', name: 'Ho Chi Minh City to Dalat',   days: 4, nights: 3, rateType: 'daily', dailyRate: 70, startsOutsideDalat: true  },
+  { id: 'dalatmuine2day',  name: 'Dalat to Mui Ne Beach',       days: 2, nights: 1, rateType: 'daily', dailyRate: 70, startsOutsideDalat: false },
+  { id: 'alternative3day', name: 'Alternative 3-Day Trip',      days: 3, nights: 2, rateType: 'daily', dailyRate: 70, startsOutsideDalat: false },
+  { id: 'dalattour1day',   name: 'One-Day Local Dalat Tour',    days: 1, nights: 0, rateType: 'flat',  flatRate:  35, startsOutsideDalat: false },
+  { id: 'hoianhue1day',    name: 'Hoi An to Hue',               days: 1, nights: 0, rateType: 'flat',  flatRate:  45, startsOutsideDalat: true  },
+  { id: 'huehoan1day',     name: 'Hue to Hoi An',               days: 1, nights: 0, rateType: 'flat',  flatRate:  45, startsOutsideDalat: true  },
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -80,7 +80,7 @@ function fmtYMD(d) {
    PRICING HELPERS
 ═══════════════════════════════════════════════════════════ */
 function getTourPricePerPerson(tour) {
-  return tour.rateType === 'flat' ? RATE_ONEDAY : RATE_MULTIDAY * tour.days;
+  return tour.rateType === 'flat' ? tour.flatRate : tour.dailyRate * tour.days;
 }
 
 function formatEUR(amount) {
@@ -102,8 +102,8 @@ function calcPricing(tour, groupSize) {
   const deposit   = Math.ceil(total * DEPOSIT_PCT);
   const remainder = total - deposit;
   const rateLabel = tour.rateType === 'flat'
-    ? `${formatVND(RATE_ONEDAY)} flat / person`
-    : `${formatVND(RATE_MULTIDAY)}/person/day × ${tour.days} days`;
+    ? `${formatVND(tour.flatRate)} flat / person`
+    : `${formatVND(tour.dailyRate)}/person/day × ${tour.days} days`;
   return { perPerson, total, deposit, remainder, rateLabel };
 }
 
@@ -266,11 +266,13 @@ function updateMinDate() {
   const tour   = tours.find(t => t.id === tourId);
   const today  = new Date();
   today.setHours(0, 0, 0, 0);
+  const maxDate = new Date(today);
+  maxDate.setFullYear(maxDate.getFullYear() + 1);
+  d.max = fmtYMD(maxDate);
   if (tour && tour.startsOutsideDalat) {
     const minDate = new Date(today);
     minDate.setDate(minDate.getDate() + 2);
     d.min = fmtYMD(minDate);
-    // Clear the current value if it's now too early
     if (d.value && d.value < d.min) d.value = '';
   } else {
     d.min = fmtYMD(today);

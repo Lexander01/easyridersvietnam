@@ -775,3 +775,26 @@ button, input, select, textarea { font-family: inherit; }
   font-size: 0.8rem;
   color: var(--muted);
 }
+
+/* Hero principles pills */
+.hero-principles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  justify-content: center;
+  margin: 22px 0 28px;
+}
+.principle-pill {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 20px;
+  padding: 6px 15px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.88);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .principle-pill { font-size: 0.78rem; padding: 5px 12px; }
+}

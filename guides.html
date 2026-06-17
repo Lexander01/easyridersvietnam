@@ -14,12 +14,18 @@
   <header class="nav-wrapper" id="top">
     <nav class="nav-inner">
       <a href="index.html" class="nav-logo">
-        <span class="logo-icon">🏍</span>
+        <span class="logo-icon"><svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 21 L10 7 L17 18" stroke="rgba(255,255,255,0.45)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 21 L19 4 L27 21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 21.5 Q14 18.5 27 21.5" stroke="#e8640a" stroke-width="2.5" stroke-linecap="round"/></svg></span>
         <span class="logo-text">Easy Rider<br><em>Vietnam Loops</em></span>
       </a>
-      <ul class="nav-links">
+      <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
         <li><a href="index.html#tours" class="nav-link">Tours</a></li>
-        <li><a href="guides.html" class="nav-link" style="color:var(--orange)">Our Guides</a></li>
+        <li><a href="index.html#about" class="nav-link">About</a></li>
+        <li><a href="guides.html" class="nav-link">Our Guides</a></li>
+        <li><a href="faq.html" class="nav-link">FAQ</a></li>
+        <li><a href="index.html#guarantee" class="nav-link">Guarantee</a></li>
         <li><a href="index.html#book" class="nav-link nav-cta">Book Now</a></li>
       </ul>
     </nav>
@@ -30,7 +36,7 @@
     <div class="hero-content">
       <span class="hero-badge">Dalat · Central Highlands</span>
       <h1 class="hero-headline">The People Behind the Rides</h1>
-      <p class="hero-sub">We are two Dutch students who built this platform to help them. They are the ones who make every tour unforgettable.</p>
+      <p class="hero-sub">Born on these roads. Raised in these mountains. For over thirty years, they have been sharing Vietnam's hidden highlands with the world.</p>
     </div>
   </section>
 
@@ -40,20 +46,20 @@
 
       <div class="section-header">
         <span class="section-label">The Guide Centre</span>
-        <h2 class="section-title">Riders First, Guides Second</h2>
+        <h2 class="section-title">Riders First, Guides Always</h2>
       </div>
 
       <div class="guides-bio-grid">
         <div class="guides-bio-text">
-          <p>We should be upfront: we are not the guides. We are two students from the Netherlands who came to Vietnam, took one of these tours, and were so blown away that we wanted to help. The guides told us their bookings had collapsed since the Ha Giang Loop went viral — so we built this platform to do their marketing.</p>
           <p>The guide centre is based in Dalat. Most of the guides were born within a few hundred kilometres of the roads they ride. They grew up on these passes, spent their childhoods in the villages along the Ho Chi Minh Trail, and know every curve, every guesthouse, and every roadside pho spot between here and Hoi An.</p>
           <p>They speak fluent English and Vietnamese, and have real relationships with local minority communities along all of their routes. When your guide stops at a village and is greeted by name, that is not a performance — it is thirty years of friendship.</p>
           <p>Groups stay small — a maximum of ten riders — because that is how the guides have always worked. Not a convoy, not a package tour. Your guide is not following a script. They are sharing their home with you.</p>
           <p>Every guide holds a Vietnamese motorcycle guide licence and carries full emergency training. Your safety is the foundation on which every tour is built.</p>
         </div>
-        <div class="guides-bio-photo" id="guidesBioPhoto">
-          <!-- Filled by JS if photos/guides/01.jpg exists -->
-          <div style="width:100%;height:100%;min-height:300px;display:flex;align-items:center;justify-content:center;background:#e5e7eb;color:#aaa;font-size:2rem;">📷</div>
+        <div class="guides-bio-photo">
+          <img src="photos/guides/01.jpg" alt="Our guides"
+               style="width:100%;height:100%;object-fit:cover;display:block;"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{style:'width:100%;height:100%;min-height:300px;display:flex;align-items:center;justify-content:center;background:#e5e7eb;color:#aaa;font-size:2rem',textContent:'📷'}))">
         </div>
       </div>
 
@@ -92,6 +98,61 @@
     </div>
   </section>
 
+  <!-- MEET THE GUIDES -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">The Team</span>
+        <h2 class="section-title">Meet the Guides</h2>
+      </div>
+      <div class="guide-portraits">
+
+        <div class="guide-portrait-card">
+          <div class="guide-portrait-img">
+            <img src="photos/guides/mrsao.jpeg" alt="Mr. Sao" loading="lazy">
+          </div>
+          <p class="guide-portrait-name">Mr. Sao</p>
+        </div>
+
+        <div class="guide-portrait-card">
+          <div class="guide-portrait-img">
+            <img src="photos/guides/mrhung.jpeg" alt="Mr. Hùng" loading="lazy" style="object-position: center;">
+          </div>
+          <p class="guide-portrait-name">Mr. Hùng</p>
+        </div>
+
+        <div class="guide-portrait-card">
+          <div class="guide-portrait-img">
+            <img src="photos/guides/mrquang.jpeg" alt="Mr. Quang" loading="lazy">
+          </div>
+          <p class="guide-portrait-name">Mr. Quang</p>
+        </div>
+
+        <div class="guide-portrait-card">
+          <div class="guide-portrait-img">
+            <img src="photos/guides/mrthanh.jpeg" alt="Mr. Thành" loading="lazy" style="object-position: center;">
+          </div>
+          <p class="guide-portrait-name">Mr. Thành</p>
+        </div>
+
+        <div class="guide-portrait-card">
+          <div class="guide-portrait-img">
+            <img src="photos/guides/mrthang.jpeg" alt="Mr. Thang" loading="lazy">
+          </div>
+          <p class="guide-portrait-name">Mr. Thang</p>
+        </div>
+
+        <div class="guide-portrait-card">
+          <div class="guide-portrait-img">
+            <img src="photos/guides/mrtuyen.jpeg" alt="Mr. Tuyến" loading="lazy">
+          </div>
+          <p class="guide-portrait-name">Mr. Tuyến</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- PHOTO GALLERY -->
   <section class="section">
     <div class="container">
@@ -117,6 +178,7 @@
   <footer class="footer">
     <div class="container">
       <p class="footer-copy">© 2025 Easy Rider Vietnam Loops. Based in Dalat, Vietnam.</p>
+      <p class="footer-address">2 Đường Khởi Nghĩa Bắc Sơn, Xuân Hương · Đà Lạt, Lâm Đồng, Vietnam</p>
     </div>
   </footer>
 
@@ -129,16 +191,6 @@
   </div>
 
   <script>
-    // Bio photo — try photos/guides/01.jpg as featured image
-    (function () {
-      const img = new Image();
-      img.onload = function () {
-        document.getElementById('guidesBioPhoto').innerHTML =
-          '<img src="photos/guides/01.jpg" alt="Our guides" style="width:100%;height:100%;object-fit:cover;display:block;">';
-      };
-      img.src = 'photos/guides/01.jpg';
-    }());
-
     // Full gallery — photos/guides/01.jpg, 02.jpg, ...
     // Skip 01 in gallery since it's already shown in the bio section above
     (function () {
@@ -197,5 +249,13 @@
     }());
   </script>
 
+  <script>
+    (function(){
+      var h=document.getElementById('hamburger'),n=document.getElementById('navLinks');
+      if(!h||!n)return;
+      h.addEventListener('click',function(){h.classList.toggle('open');n.classList.toggle('open');});
+      document.addEventListener('click',function(e){if(!h.contains(e.target)&&!n.contains(e.target)){h.classList.remove('open');n.classList.remove('open');}});
+    })();
+  </script>
 </body>
 </html>

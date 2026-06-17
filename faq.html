@@ -13,13 +13,18 @@
   <header class="nav-wrapper" id="top">
     <nav class="nav-inner">
       <a href="index.html" class="nav-logo">
-        <span class="logo-icon">🏍</span>
+        <span class="logo-icon"><svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 21 L10 7 L17 18" stroke="rgba(255,255,255,0.45)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 21 L19 4 L27 21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 21.5 Q14 18.5 27 21.5" stroke="#e8640a" stroke-width="2.5" stroke-linecap="round"/></svg></span>
         <span class="logo-text">Easy Rider<br><em>Vietnam Loops</em></span>
       </a>
+      <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html#tours" class="nav-link">Tours</a></li>
         <li><a href="index.html#about" class="nav-link">About</a></li>
-        <li><a href="faq.html" class="nav-link active">FAQ</a></li>
+        <li><a href="guides.html" class="nav-link">Our Guides</a></li>
+        <li><a href="faq.html" class="nav-link">FAQ</a></li>
+        <li><a href="index.html#guarantee" class="nav-link">Guarantee</a></li>
         <li><a href="index.html#book" class="nav-link nav-cta">Book Now</a></li>
       </ul>
     </nav>
@@ -122,7 +127,7 @@
 
         <div class="faq-item">
           <h3>What is your cancellation and refund policy?</h3>
-          <p>We require a 20% deposit to secure your booking. If you cancel more than 48 hours before the tour, your deposit is fully refunded. If you cancel within 48 hours, the deposit is non-refundable. We offer a 100% money-back guarantee if the tour quality falls short of our promises.</p>
+          <p>We require a 20% deposit to secure your booking. This deposit is non-refundable. If you need to cancel or change your dates, please contact your guide via WhatsApp as early as possible — date changes are subject to availability. We offer a 100% money-back guarantee on the tour experience itself: if the quality falls short of what was described, your guide will refund the remaining 80% balance in cash on the spot.</p>
         </div>
 
         <div class="faq-item">
@@ -142,8 +147,17 @@
   <footer class="footer">
     <div class="container">
       <p class="footer-copy">© 2025 Easy Rider Vietnam Loops. Based in Dalat, Vietnam.</p>
+      <p class="footer-address">2 Đường Khởi Nghĩa Bắc Sơn, Xuân Hương · Đà Lạt, Lâm Đồng, Vietnam</p>
     </div>
   </footer>
 
+  <script>
+    (function(){
+      var h=document.getElementById('hamburger'),n=document.getElementById('navLinks');
+      if(!h||!n)return;
+      h.addEventListener('click',function(){h.classList.toggle('open');n.classList.toggle('open');});
+      document.addEventListener('click',function(e){if(!h.contains(e.target)&&!n.contains(e.target)){h.classList.remove('open');n.classList.remove('open');}});
+    })();
+  </script>
 </body>
 </html>

@@ -1,0 +1,31 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── bookings ───────────────────────────────────────────────────────────
+    // Anyone can submit a new booking (public booking form).
+    // Only authenticated guides can read, update, or delete bookings.
+    match /bookings/{bookingId} {
+
+      allow create: if
+        // Required string fields must be present
+        request.resource.data.name   is string &&
+        request.resource.data.tourId is string &&
+        request.resource.data.date   is string &&
+        // Prevent the public from self-approving a booking
+        request.resource.data.status == 'pending';
+
+      allow read, update, delete: if request.auth != null;
+    }
+
+    // ── blockedDates ───────────────────────────────────────────────────────
+    // Anyone can read blocked dates (availability display on public site).
+    // Only authenticated guides can create, update, or delete blocks.
+    match /blockedDates/{docId} {
+      allow read:  if true;
+      allow write: if request.auth != null;
+    }
+
+  }
+}

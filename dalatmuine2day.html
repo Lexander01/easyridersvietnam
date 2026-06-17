@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>One-Day Local Dalat Tour | Easy Rider Vietnam Loops</title>
+  <title>Dalat to Mui Ne Beach – 2-Day Tour | Easy Rider Vietnam Loops</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,11 +16,18 @@
   <header class="nav-wrapper" id="top">
     <nav class="nav-inner">
       <a href="index.html" class="nav-logo">
-        <span class="logo-icon">🏍</span>
+        <span class="logo-icon"><svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 21 L10 7 L17 18" stroke="rgba(255,255,255,0.45)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 21 L19 4 L27 21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 21.5 Q14 18.5 27 21.5" stroke="#e8640a" stroke-width="2.5" stroke-linecap="round"/></svg></span>
         <span class="logo-text">Easy Rider<br><em>Vietnam Loops</em></span>
       </a>
-      <ul class="nav-links">
-        <li><a href="index.html#tours" class="nav-link">Back to Tours</a></li>
+      <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#tours" class="nav-link">Tours</a></li>
+        <li><a href="index.html#about" class="nav-link">About</a></li>
+        <li><a href="guides.html" class="nav-link">Our Guides</a></li>
+        <li><a href="faq.html" class="nav-link">FAQ</a></li>
+        <li><a href="index.html#guarantee" class="nav-link">Guarantee</a></li>
         <li><a href="index.html#book" class="nav-link nav-cta">Book Now</a></li>
       </ul>
     </nav>
@@ -29,9 +36,9 @@
   <section class="hero" style="min-height: 60vh;">
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <span class="hero-badge">1 Day · No Overnight</span>
-      <h1 class="hero-headline">One-Day Local Dalat Tour</h1>
-      <p class="hero-sub">The best way to discover Dalat in a single day — a local guide, a motorbike, and the hidden corners of the city and its surrounding countryside that most tourists never find.</p>
+      <span class="hero-badge">2 Days · 1 Night</span>
+      <h1 class="hero-headline">Dalat to Mui Ne Beach</h1>
+      <p class="hero-sub">Drop from Dalat's mountain cool down through the highlands and into the desert-like dunes and tropical beaches of Mui Ne — one of Vietnam's most dramatic landscape transitions.</p>
     </div>
   </section>
 
@@ -39,47 +46,45 @@
     <div class="container">
 
       <div class="section-header">
-        <h2 class="section-title">What to Expect</h2>
-        <p style="text-align:center; color:#666;">Pickup from your hotel in Dalat — return drop-off by early evening.</p>
+        <h2 class="section-title">Tour Itinerary</h2>
+        <p style="text-align:center; color:#666;">Starting in Dalat — your guide picks you up at your hotel.</p>
       </div>
 
       <div class="itinerary">
         <div class="itinerary-day">
-          <h3>Morning: Countryside &amp; Coffee</h3>
-          <p>We start early and head out of the city into the surrounding farmland — flower fields, strawberry farms, coffee plantations, and vegetable gardens. We stop for a Vietnamese coffee at a local spot with a view that no guidebook will tell you about.</p>
+          <h3>Day 1: Dalat to the Foothills</h3>
+          <p>We leave Dalat and head southeast, winding down through pine forests and terraced farmland. The temperature climbs as we descend. We stop at local spots along the way — waterfalls, viewpoints, and hidden villages. Overnight in the foothills.</p>
         </div>
         <div class="itinerary-day">
-          <h3>Midday: Hidden Spots &amp; Local Food</h3>
-          <p>Your guide takes you to local lunch spots and lesser-known attractions around Dalat — places not on the tourist map. This is where the real Dalat is found. Expect excellent Vietnamese food and genuine local atmosphere.</p>
-        </div>
-        <div class="itinerary-day">
-          <h3>Afternoon: Waterfalls, Valleys &amp; Viewpoints</h3>
-          <p>The afternoon takes in scenic viewpoints, a waterfall or two, and a final ride through pine forests back to the city as the light turns golden. Drop-off at your accommodation by early evening.</p>
+          <h3>Day 2: Coastal Desert — Arrival in Mui Ne</h3>
+          <p>The final stretch is unforgettable — the landscape transforms into red and white sand dunes as we approach the coast. We arrive in Mui Ne and drop you at your beachfront hotel, ready for sun, sea, and sand.</p>
         </div>
       </div>
 
       <div class="map-section">
-        <h3 class="info-title">Areas We Cover</h3>
-        <p class="map-note">Your guide tailors the day to your interests — exact stops may vary. The map shows typical areas visited around Dalat.</p>
+        <h3 class="info-title">Approximate Route</h3>
+        <p class="map-note">Route shown is approximate — your guide may adjust based on conditions and group preference.</p>
         <div id="tourMap" class="map-embed"></div>
       </div>
 
       <div class="info-box" style="margin-top: 40px;">
         <h3 class="info-title">What's Included</h3>
         <ul class="info-list">
-          <li>✅ Local guide for the full day</li>
-          <li>✅ Motorbike</li>
+          <li>✅ Experienced local guide (or self-drive scooter + support)</li>
           <li>✅ All fuel</li>
-          <li>✅ Full day insurance</li>
-          <li>✅ Coffee &amp; snack stops included</li>
+          <li>✅ 1 night accommodation</li>
+          <li>✅ Full motorbike insurance</li>
+          <li>✅ Hotel pickup in Dalat</li>
+          <li>✅ Hotel drop-off at Mui Ne Beach</li>
+          <li>✅ Sightseeing tickets</li>
+          <li>❌ Food &amp; drinks not included</li>
         </ul>
       </div>
 
       <div class="pricing-box" style="margin-top: 32px; padding: 28px; background: #fff8f0; border: 2px solid #f97316; border-radius: 12px;">
-        <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">1.200.000 ₫ per person</h3>
-        <p style="color: #888; font-size: 0.9rem; margin-bottom: 12px;">≈ €40</p>
-        <p style="color: #555; margin-bottom: 8px;">Flat rate for the full day. No overnight — day tour only.</p>
-        <p style="color: #92400e; font-size: 0.9rem; margin-bottom: 20px;">Pay 20% deposit now, 80% in cash to your guide on the day.</p>
+        <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">4.200.000 ₫ <span style="font-size:1rem; font-weight:600; color:#888;">per person</span></h3>
+        <p style="color: #888; font-size: 0.9rem; margin-bottom: 16px;">≈ €140 · 2 days · 2.100.000 ₫/day</p>
+        <p style="color: #555; font-size: 0.9rem; margin-bottom: 20px;">Pay 20% deposit now (incl. 21% btw) — 80% cash to your guide on Day 1.</p>
         <a href="index.html#book" class="btn btn-primary" style="display:inline-block; text-decoration:none;">
           Book This Tour →
         </a>
@@ -87,7 +92,7 @@
 
       <div class="gallery-section">
         <h3 class="info-title">Photos from the Road</h3>
-        <p class="gallery-note">Add photos by uploading to <code>photos/local/01.jpg</code>, <code>02.jpg</code>, etc.</p>
+        <p class="gallery-note">Add photos by uploading to <code>photos/dalatmuine2day/01.jpg</code>, <code>02.jpg</code>, etc.</p>
         <div class="gallery-grid" id="photoGallery"></div>
         <p class="gallery-empty" id="galleryEmpty">Photos coming soon — check back before your tour!</p>
       </div>
@@ -98,6 +103,7 @@
   <footer class="footer">
     <div class="container">
       <p class="footer-copy">© 2025 Easy Rider Vietnam Loops. Based in Dalat, Vietnam.</p>
+      <p class="footer-address">2 Đường Khởi Nghĩa Bắc Sơn, Xuân Hương · Đà Lạt, Lâm Đồng, Vietnam</p>
     </div>
   </footer>
 
@@ -109,20 +115,25 @@
   </div>
 
   <script>
-    const TOUR_ID = 'dalattour1day';
+    const TOUR_ID = 'dalatmuine2day';
 
-    // MAP — local Dalat spots, no route polyline
-    const map = L.map('tourMap', { center: [11.9415,108.4423], zoom: 11, scrollWheelZoom: false });
+    // MAP
+    const route = [[11.9415,108.4423],[11.5445,107.8074],[11.5751,108.0704],[10.9281,108.1006],[10.9320,108.2760]];
+    const startLabel = 'Start: Dalat', endLabel = 'End: Mui Ne Beach';
+
+    const map = L.map('tourMap', { scrollWheelZoom: false });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       maxZoom: 18
     }).addTo(map);
-    const orange = { radius:7, color:'#E8640A', fillColor:'#fff', fillOpacity:1, weight:3 };
-    L.circleMarker([11.9415,108.4423], orange).bindPopup('<strong>Dalat City Centre</strong>').addTo(map).openPopup();
-    L.circleMarker([11.8800,108.4437], orange).bindPopup('<strong>Datanla Waterfall</strong>').addTo(map);
-    L.circleMarker([11.9982,108.3858], orange).bindPopup('<strong>Dankia Highlands</strong>').addTo(map);
-    L.circleMarker([11.9556,108.4300], orange).bindPopup('<strong>Flower Fields</strong>').addTo(map);
-    L.circleMarker([11.9700,108.4100], orange).bindPopup('<strong>Coffee Farm</strong>').addTo(map);
+    const poly = L.polyline(route, { color: '#E8640A', weight: 4, opacity: 0.85 }).addTo(map);
+    map.fitBounds(poly.getBounds(), { padding: [32, 32] });
+    L.circleMarker(route[0], { radius: 8, color: '#E8640A', fillColor: '#fff', fillOpacity: 1, weight: 3 })
+      .bindPopup('<strong>' + startLabel + '</strong>').addTo(map).openPopup();
+    if (route[route.length-1][0] !== route[0][0]) {
+      L.circleMarker(route[route.length-1], { radius: 8, color: '#E8640A', fillColor: '#E8640A', fillOpacity: 1, weight: 3 })
+        .bindPopup('<strong>' + endLabel + '</strong>').addTo(map);
+    }
 
     // GALLERY
     (function() {
@@ -168,5 +179,13 @@
     }());
   </script>
 
+  <script>
+    (function(){
+      var h=document.getElementById('hamburger'),n=document.getElementById('navLinks');
+      if(!h||!n)return;
+      h.addEventListener('click',function(){h.classList.toggle('open');n.classList.toggle('open');});
+      document.addEventListener('click',function(e){if(!h.contains(e.target)&&!n.contains(e.target)){h.classList.remove('open');n.classList.remove('open');}});
+    })();
+  </script>
 </body>
 </html>

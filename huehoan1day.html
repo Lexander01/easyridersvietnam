@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dalat Loop – 3-Day Tour | Easy Rider Vietnam Loops</title>
+  <title>Hue to Hoi An – Day Tour | Easy Rider Vietnam Loops</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,11 +16,18 @@
   <header class="nav-wrapper" id="top">
     <nav class="nav-inner">
       <a href="index.html" class="nav-logo">
-        <span class="logo-icon">🏍</span>
+        <span class="logo-icon"><svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 21 L10 7 L17 18" stroke="rgba(255,255,255,0.45)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 21 L19 4 L27 21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 21.5 Q14 18.5 27 21.5" stroke="#e8640a" stroke-width="2.5" stroke-linecap="round"/></svg></span>
         <span class="logo-text">Easy Rider<br><em>Vietnam Loops</em></span>
       </a>
-      <ul class="nav-links">
-        <li><a href="index.html#tours" class="nav-link">Back to Tours</a></li>
+      <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#tours" class="nav-link">Tours</a></li>
+        <li><a href="index.html#about" class="nav-link">About</a></li>
+        <li><a href="guides.html" class="nav-link">Our Guides</a></li>
+        <li><a href="faq.html" class="nav-link">FAQ</a></li>
+        <li><a href="index.html#guarantee" class="nav-link">Guarantee</a></li>
         <li><a href="index.html#book" class="nav-link nav-cta">Book Now</a></li>
       </ul>
     </nav>
@@ -29,32 +36,37 @@
   <section class="hero" style="min-height: 60vh;">
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <span class="hero-badge">3 Days · 2 Nights · ~550 km</span>
-      <h1 class="hero-headline">Dalat Loop</h1>
-      <p class="hero-sub">A circular route through the heart of the Central Highlands — Dalat to Ta Dung Lake, across to Lak Lake, and back to Dalat. Around 550 kilometres of some of the most spectacular riding in Vietnam.</p>
+      <span class="hero-badge">1 Day · No Overnight · ~120 km</span>
+      <h1 class="hero-headline">Hue to Hoi An</h1>
+      <p class="hero-sub">From Vietnam's imperial capital to the ancient lantern-lit streets of Hoi An — crossing the legendary Hai Van Pass and the dramatic Da Nang coastline in a single unforgettable day.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
 
+      <div class="availability-notice" style="background:#fff8e1;border:1.5px solid #f59e0b;border-radius:10px;padding:14px 18px;font-size:0.95rem;color:#92400e;margin-bottom:32px;display:flex;align-items:flex-start;gap:10px;">
+        <span style="font-size:1.2rem;">⏰</span>
+        <span><strong>Please book at least 2 days in advance.</strong> Our guides are based in Dalat and need time to travel to Hue before the tour starts.</span>
+      </div>
+
       <div class="section-header">
-        <h2 class="section-title">Tour Itinerary</h2>
-        <p style="text-align:center; color:#666;">Starting and finishing in Dalat — your guide picks you up at your hotel.</p>
+        <h2 class="section-title">What to Expect</h2>
+        <p style="text-align:center; color:#666;">Your guide meets you at your hotel in Hue and drops you off in Hoi An by late afternoon.</p>
       </div>
 
       <div class="itinerary">
         <div class="itinerary-day">
-          <h3>Day 1: Dalat to Ta Dung Lake</h3>
-          <p>We leave Dalat and head south-west toward Ta Dung Lake — a remote reservoir in the middle of a national park, surrounded by forested hills. The route passes through coffee and pepper plantations and isolated minority villages. Overnight at Ta Dung.</p>
+          <h3>Morning: Hue to the Hai Van Pass</h3>
+          <p>We leave Hue early and ride south through Lang Co — a narrow peninsula of lagoon and sea — before beginning the climb up the Hai Van Pass. The road rises steeply through jungle into the clouds, with views back over the Lang Co lagoon that will stop you in your tracks. At the summit we pass old wartime fortifications and look south toward Da Nang bay.</p>
         </div>
         <div class="itinerary-day">
-          <h3>Day 2: Ta Dung Lake to Lak Lake</h3>
-          <p>From Ta Dung we push east toward Lak Lake, the largest natural freshwater lake in the Central Highlands. The landscape is wide open and dramatic. We overnight in a traditional M'Nong longhouse on the lakeshore — one of the most memorable nights on any tour we run.</p>
+          <h3>Midday: Descent to Da Nang</h3>
+          <p>The descent from the pass is one of the great motorcycle moments in Vietnam — sweeping curves, jungle on both sides, and the entire Da Nang coastline opening up below. We ride through Da Nang and stop at the Marble Mountains if you'd like to climb for views over the sea.</p>
         </div>
         <div class="itinerary-day">
-          <h3>Day 3: Lak Lake Back to Dalat</h3>
-          <p>After an optional morning canoe on the lake, we loop back south and west to Dalat, completing the circle. The return route takes different roads, offering fresh scenery and more hidden stops along the way. Drop-off at your hotel in the afternoon.</p>
+          <h3>Afternoon: Arrival in Hoi An</h3>
+          <p>The final stretch south takes us through coconut groves and coastal villages into Hoi An. We drop you at your hotel in or near the Ancient Town in the late afternoon — giving you the evening to explore the famous lantern-lit streets at their most beautiful.</p>
         </div>
       </div>
 
@@ -69,17 +81,19 @@
         <ul class="info-list">
           <li>✅ Experienced local guide (or self-drive scooter + support)</li>
           <li>✅ All fuel</li>
-          <li>✅ 2 nights accommodation</li>
-          <li>✅ Full motorbike insurance</li>
-          <li>✅ Traditional longhouse stay at Lak Lake</li>
-          <li>✅ Hotel pickup &amp; drop-off in Dalat</li>
+          <li>✅ Full day insurance</li>
+          <li>✅ Hotel pickup in Hue</li>
+          <li>✅ Hotel drop-off in Hoi An</li>
+          <li>❌ Sightseeing tickets not included</li>
+          <li>❌ Food &amp; drinks not included</li>
         </ul>
       </div>
 
       <div class="pricing-box" style="margin-top: 32px; padding: 28px; background: #fff8f0; border: 2px solid #f97316; border-radius: 12px;">
-        <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 8px;">6.300.000 ₫ per person</h3>
-        <p style="color: #888; font-size: 0.9rem; margin-bottom: 12px;">≈ €210</p>
-        <p style="color: #555; margin-bottom: 20px;">2.100.000 ₫/person/day × 3 days · ≈ €210. Pay 20% deposit now, 80% in cash to your guide on Day 1.</p>
+        <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">1.350.000 ₫ <span style="font-size:1rem; font-weight:600; color:#888;">per person</span></h3>
+        <p style="color: #888; font-size: 0.9rem; margin-bottom: 16px;">≈ €45 · full day, no overnight</p>
+        <p style="color: #555; font-size: 0.9rem; margin-bottom: 4px;">Pay 20% deposit now (incl. 21% btw) — 80% cash to your guide on the day.</p>
+        <p style="color: #92400e; font-size: 0.9rem; margin-bottom: 20px;">⏰ Minimum 2 days advance booking required for this route.</p>
         <a href="index.html#book" class="btn btn-primary" style="display:inline-block; text-decoration:none;">
           Book This Tour →
         </a>
@@ -87,7 +101,7 @@
 
       <div class="gallery-section">
         <h3 class="info-title">Photos from the Road</h3>
-        <p class="gallery-note">Add photos by uploading to <code>photos/highlight-3/01.jpg</code>, <code>02.jpg</code>, etc.</p>
+        <p class="gallery-note">Add photos by uploading to <code>photos/huehoan1day/01.jpg</code>, <code>02.jpg</code>, etc.</p>
         <div class="gallery-grid" id="photoGallery"></div>
         <p class="gallery-empty" id="galleryEmpty">Photos coming soon — check back before your tour!</p>
       </div>
@@ -98,6 +112,7 @@
   <footer class="footer">
     <div class="container">
       <p class="footer-copy">© 2025 Easy Rider Vietnam Loops. Based in Dalat, Vietnam.</p>
+      <p class="footer-address">2 Đường Khởi Nghĩa Bắc Sơn, Xuân Hương · Đà Lạt, Lâm Đồng, Vietnam</p>
     </div>
   </footer>
 
@@ -109,11 +124,11 @@
   </div>
 
   <script>
-    const TOUR_ID = 'dalatloop3day';
+    const TOUR_ID = 'huehoan1day';
 
-    // MAP — circular loop
-    const route = [[11.9415,108.4423],[11.9052,107.8932],[12.3897,108.1953],[12.6722,108.0504],[11.9415,108.4423]];
-    const startLabel = 'Dalat (start & finish)', endLabel = '';
+    // MAP
+    const route = [[16.4637,107.5909],[16.3500,107.8700],[16.1700,108.1200],[16.0600,108.2200],[15.8800,108.3350]];
+    const startLabel = 'Start: Hue', endLabel = 'End: Hoi An';
 
     const map = L.map('tourMap', { scrollWheelZoom: false });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -122,18 +137,12 @@
     }).addTo(map);
     const poly = L.polyline(route, { color: '#E8640A', weight: 4, opacity: 0.85 }).addTo(map);
     map.fitBounds(poly.getBounds(), { padding: [32, 32] });
-    // start marker (white fill) — loop so only one marker at Dalat
     L.circleMarker(route[0], { radius: 8, color: '#E8640A', fillColor: '#fff', fillOpacity: 1, weight: 3 })
       .bindPopup('<strong>' + startLabel + '</strong>').addTo(map).openPopup();
-    // end marker skipped — route[route.length-1][0] === route[0][0] for loops
-    if (route[route.length-1][0] !== route[0][0]) {
-      L.circleMarker(route[route.length-1], { radius: 8, color: '#E8640A', fillColor: '#E8640A', fillOpacity: 1, weight: 3 })
-        .bindPopup('<strong>' + endLabel + '</strong>').addTo(map);
-    }
-    // midpoint markers
-    L.circleMarker([11.9052,107.8932], {radius:6,color:'#E8640A',fillColor:'#fff8f0',fillOpacity:1,weight:2}).bindPopup('<strong>Ta Dung Lake</strong>').addTo(map);
-    L.circleMarker([12.3897,108.1953], {radius:6,color:'#E8640A',fillColor:'#fff8f0',fillOpacity:1,weight:2}).bindPopup('<strong>Lak Lake</strong>').addTo(map);
-    L.circleMarker([12.6722,108.0504], {radius:6,color:'#E8640A',fillColor:'#fff8f0',fillOpacity:1,weight:2}).bindPopup('<strong>Buon Ma Thuot</strong>').addTo(map);
+    L.circleMarker(route[route.length-1], { radius: 8, color: '#E8640A', fillColor: '#E8640A', fillOpacity: 1, weight: 3 })
+      .bindPopup('<strong>' + endLabel + '</strong>').addTo(map);
+    L.circleMarker([16.1700,108.1200], {radius:6,color:'#E8640A',fillColor:'#fff8f0',fillOpacity:1,weight:2}).bindPopup('<strong>Hai Van Pass</strong>').addTo(map);
+    L.circleMarker([16.0748,108.2240], {radius:6,color:'#E8640A',fillColor:'#fff8f0',fillOpacity:1,weight:2}).bindPopup('<strong>Da Nang</strong>').addTo(map);
 
     // GALLERY
     (function() {
@@ -179,5 +188,13 @@
     }());
   </script>
 
+  <script>
+    (function(){
+      var h=document.getElementById('hamburger'),n=document.getElementById('navLinks');
+      if(!h||!n)return;
+      h.addEventListener('click',function(){h.classList.toggle('open');n.classList.toggle('open');});
+      document.addEventListener('click',function(e){if(!h.contains(e.target)&&!n.contains(e.target)){h.classList.remove('open');n.classList.remove('open');}});
+    })();
+  </script>
 </body>
 </html>

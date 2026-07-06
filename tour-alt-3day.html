@@ -54,7 +54,7 @@
         </div>
         <div class="itinerary-day">
           <h3>Day 3: Lak Lake to Buon Ma Thuot — then Hoi An by Sleeper Bus</h3>
-          <p>We ride from Lak Lake to Buon Ma Thuot (BMT) — the coffee capital of Vietnam. Your guide drops you in the city with time to explore before you board a sleeper bus to Hoi An in the evening. You'll arrive at the Ancient Town the following morning, refreshed and ready to explore.</p>
+          <p>We ride from Lak Lake to Buon Ma Thuot (BMT) — the coffee capital of Vietnam. Your guide drops you in the city with time to explore before you board the sleeper bus to Hoi An at <strong>5:00 PM</strong>. You'll arrive at the Ancient Town at <strong>6:00 AM</strong> the following morning, refreshed and ready to explore.</p>
         </div>
       </div>
 
@@ -114,7 +114,7 @@
     const TOUR_ID = 'alternative3day';
 
     // MAP
-    const route = [[11.9415,108.4423],[11.9052,107.8932],[12.3897,108.1953],[12.6722,108.0504]];
+    const route = [[11.9415,108.4423],[11.7300,107.8800],[12.3897,108.1953],[12.6722,108.0504]];
     const startLabel = 'Start: Dalat', endLabel = 'End: Buon Ma Thuot (then sleeper bus to Hoi An)';
 
     const map = L.map('tourMap', { scrollWheelZoom: false });
@@ -131,7 +131,7 @@
         .bindPopup('<strong>' + endLabel + '</strong>').addTo(map);
     }
     // midpoint markers
-    L.circleMarker([11.9052,107.8932], {radius:6,color:'#E8640A',fillColor:'#fff8f0',fillOpacity:1,weight:2}).bindPopup('<strong>Ta Dung Lake</strong>').addTo(map);
+    L.circleMarker([11.7300,107.8800], {radius:6,color:'#E8640A',fillColor:'#fff8f0',fillOpacity:1,weight:2}).bindPopup('<strong>Ta Dung Lake</strong>').addTo(map);
     L.circleMarker([12.3897,108.1953], {radius:6,color:'#E8640A',fillColor:'#fff8f0',fillOpacity:1,weight:2}).bindPopup('<strong>Lak Lake</strong>').addTo(map);
 
     // GALLERY

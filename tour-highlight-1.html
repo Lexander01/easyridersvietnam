@@ -94,11 +94,190 @@
         </a>
       </div>
 
-      <div class="gallery-section">
+      <div class="gallery-section" style="margin-top:48px;">
         <h3 class="info-title">Photos from the Road</h3>
-        <p class="gallery-note">Add photos by uploading to <code>photos/highlight-1/01.jpg</code>, <code>02.jpg</code>, etc.</p>
-        <div class="gallery-grid" id="photoGallery"></div>
-        <p class="gallery-empty" id="galleryEmpty">Photos coming soon — check back before your tour!</p>
+        <p style="text-align:center;color:#666;margin-bottom:28px;">Real shots taken by our guides on this route.</p>
+
+        <!-- Day tabs -->
+        <div class="day-tabs" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:32px;">
+          <button class="day-tab active" data-day="day1" onclick="showDay('day1',this)">Day 1</button>
+          <button class="day-tab" data-day="day2" onclick="showDay('day2',this)">Day 2</button>
+          <button class="day-tab" data-day="day3" onclick="showDay('day3',this)">Day 3</button>
+          <button class="day-tab" data-day="day4" onclick="showDay('day4',this)">Day 4</button>
+          <button class="day-tab" data-day="day5" onclick="showDay('day5',this)">Day 5</button>
+        </div>
+
+        <!-- Day 1 -->
+        <div class="day-panel" id="panel-day1">
+          <div class="loc-block">
+            <p class="loc-label">Linh An Pagoda &amp; Elephant Falls</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day1/Linh an pagoda + elephant fall/WhatsApp Image 2026-05-20 at 12.23.07 (1).webp')"><img src="photos/route1dalathoian5day/web/day1/Linh an pagoda + elephant fall/WhatsApp Image 2026-05-20 at 12.23.07 (1).webp" loading="lazy" alt="Linh An Pagoda"></div>
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day1/Linh an pagoda + elephant fall/WhatsApp Image 2026-05-20 at 12.23.07.webp')"><img src="photos/route1dalathoian5day/web/day1/Linh an pagoda + elephant fall/WhatsApp Image 2026-05-20 at 12.23.07.webp" loading="lazy" alt="Elephant Falls"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Silk Factory</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day1/Silk-factory/WhatsApp Image 2026-05-20 at 12.18.56 (1).webp')"><img src="photos/route1dalathoian5day/web/day1/Silk-factory/WhatsApp Image 2026-05-20 at 12.18.56 (1).webp" loading="lazy" alt="Silk Factory"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Flowers Farm</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day1/flowers-farm/WhatsApp Image 2026-05-20 at 12.11.11 (1).webp')"><img src="photos/route1dalathoian5day/web/day1/flowers-farm/WhatsApp Image 2026-05-20 at 12.11.11 (1).webp" loading="lazy" alt="Flowers Farm"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Coffee Farm</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day1/coffee-farm/Coffeefarm2.webp')"><img src="photos/route1dalathoian5day/web/day1/coffee-farm/Coffeefarm2.webp" loading="lazy" alt="Coffee Farm"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Nam Ka Lake &amp; Floating Village</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day1/Nam Ka lake . Floating village/WhatsApp Image 2026-05-20 at 12.28.21.webp')"><img src="photos/route1dalathoian5day/web/day1/Nam Ka lake . Floating village/WhatsApp Image 2026-05-20 at 12.28.21.webp" loading="lazy" alt="Nam Ka Lake"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Local Market</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day1/Local market/WhatsApp Image 2026-05-20 at 12.30.20.webp')"><img src="photos/route1dalathoian5day/web/day1/Local market/WhatsApp Image 2026-05-20 at 12.30.20.webp" loading="lazy" alt="Local Market"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Rice Fields</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day1/Rice fields/WhatsApp Image 2026-05-20 at 12.32.30.webp')"><img src="photos/route1dalathoian5day/web/day1/Rice fields/WhatsApp Image 2026-05-20 at 12.32.30.webp" loading="lazy" alt="Rice Fields"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div class="day-panel" id="panel-day2" style="display:none;">
+          <div class="loc-block">
+            <p class="loc-label">Jun Village</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day2/jun-village/WhatsApp Image 2026-05-20 at 12.35.27.webp')"><img src="photos/route1dalathoian5day/web/day2/jun-village/WhatsApp Image 2026-05-20 at 12.35.27.webp" loading="lazy" alt="Jun Village"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Cacao Farm</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day2/cacao-farm/WhatsApp Image 2026-05-20 at 12.37.33.webp')"><img src="photos/route1dalathoian5day/web/day2/cacao-farm/WhatsApp Image 2026-05-20 at 12.37.33.webp" loading="lazy" alt="Cacao Farm"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Cashew Farm</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day2/cashew-farm/WhatsApp Image 2026-05-20 at 12.39.00.webp')"><img src="photos/route1dalathoian5day/web/day2/cashew-farm/WhatsApp Image 2026-05-20 at 12.39.00.webp" loading="lazy" alt="Cashew Farm"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">History Bridge 14 (War Era)</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day2/History Bridge 14 in the War/WhatsApp Image 2026-05-20 at 12.48.05.webp')"><img src="photos/route1dalathoian5day/web/day2/History Bridge 14 in the War/WhatsApp Image 2026-05-20 at 12.48.05.webp" loading="lazy" alt="History Bridge 14"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Victory Monument — Buôn Ma Thuột</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day2/Victory Monument in BMT city/WhatsApp Image 2026-05-20 at 12.50.53.webp')"><img src="photos/route1dalathoian5day/web/day2/Victory Monument in BMT city/WhatsApp Image 2026-05-20 at 12.50.53.webp" loading="lazy" alt="Victory Monument BMT"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 3 -->
+        <div class="day-panel" id="panel-day3" style="display:none;">
+          <div class="loc-block">
+            <p class="loc-label">Memorial Monument</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day3/Memoral Monument/WhatsApp Image 2026-05-20 at 12.55.00.webp')"><img src="photos/route1dalathoian5day/web/day3/Memoral Monument/WhatsApp Image 2026-05-20 at 12.55.00.webp" loading="lazy" alt="Memorial Monument"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Rubber Trees Plantation</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day3/Ruber trees plantation/WhatsApp Image 2026-05-20 at 12.57.39.webp')"><img src="photos/route1dalathoian5day/web/day3/Ruber trees plantation/WhatsApp Image 2026-05-20 at 12.57.39.webp" loading="lazy" alt="Rubber Trees"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Pepper Farm</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day3/Pepper farm/WhatsApp Image 2026-05-20 at 12.59.42.webp')"><img src="photos/route1dalathoian5day/web/day3/Pepper farm/WhatsApp Image 2026-05-20 at 12.59.42.webp" loading="lazy" alt="Pepper Farm"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Tea Farm</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day3/Tea farm/WhatsApp Image 2026-05-20 at 13.00.39.webp')"><img src="photos/route1dalathoian5day/web/day3/Tea farm/WhatsApp Image 2026-05-20 at 13.00.39.webp" loading="lazy" alt="Tea Farm"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Ba Na People Village</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day3/Ba Na people village/WhatsApp Image 2026-05-21 at 10.09.24.webp')"><img src="photos/route1dalathoian5day/web/day3/Ba Na people village/WhatsApp Image 2026-05-21 at 10.09.24.webp" loading="lazy" alt="Ba Na Village"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Wooden Church</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day3/wooden church/WhatsApp Image 2026-05-20 at 13.09.56.webp')"><img src="photos/route1dalathoian5day/web/day3/wooden church/WhatsApp Image 2026-05-20 at 13.09.56.webp" loading="lazy" alt="Wooden Church"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 4 -->
+        <div class="day-panel" id="panel-day4" style="display:none;">
+          <div class="loc-block">
+            <p class="loc-label">Kon Klor Suspension Bridge</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day4/from Kon-Tum city to kam duoc ( Phú son Town ) 170 km we stop to see suspension Bridge Kon klor/WhatsApp Image 2026-05-21 at 10.15.06.webp')"><img src="photos/route1dalathoian5day/web/day4/from Kon-Tum city to kam duoc ( Phú son Town ) 170 km we stop to see suspension Bridge Kon klor/WhatsApp Image 2026-05-21 at 10.15.06.webp" loading="lazy" alt="Kon Klor Bridge"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Victory Monument — Dak To Tan Canh</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day4/Victory Monument Dak To Tan Canh/WhatsApp Image 2026-05-21 at 10.23.00.webp')"><img src="photos/route1dalathoian5day/web/day4/Victory Monument Dak To Tan Canh/WhatsApp Image 2026-05-21 at 10.23.00.webp" loading="lazy" alt="Victory Monument"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Ho Chi Minh Trail</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day4/Legendary Ho Chi Minh Trail/WhatsApp Image 2026-05-21 at 10.28.56.webp')"><img src="photos/route1dalathoian5day/web/day4/Legendary Ho Chi Minh Trail/WhatsApp Image 2026-05-21 at 10.28.56.webp" loading="lazy" alt="Ho Chi Minh Trail"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Swimming in the Jungle</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day4/Swimming at the Jungle/WhatsApp Image 2026-05-21 at 10.37.34.webp')"><img src="photos/route1dalathoian5day/web/day4/Swimming at the Jungle/WhatsApp Image 2026-05-21 at 10.37.34.webp" loading="lazy" alt="Jungle Swimming"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 5 -->
+        <div class="day-panel" id="panel-day5" style="display:none;">
+          <div class="loc-block">
+            <p class="loc-label">Pineapple Farm</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day5/Pineapple farm and enjoy it ( jummy )/WhatsApp Image 2026-05-21 at 10.49.32.webp')"><img src="photos/route1dalathoian5day/web/day5/Pineapple farm and enjoy it ( jummy )/WhatsApp Image 2026-05-21 at 10.49.32.webp" loading="lazy" alt="Pineapple Farm"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Incense Making</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day5/Incense making/WhatsApp Image 2026-05-21 at 10.52.45.webp')"><img src="photos/route1dalathoian5day/web/day5/Incense making/WhatsApp Image 2026-05-21 at 10.52.45.webp" loading="lazy" alt="Incense Making"></div>
+            </div>
+          </div>
+          <div class="loc-block">
+            <p class="loc-label">Mỹ Sơn — Chăm Tower</p>
+            <div class="photo-row">
+              <div class="photo-thumb" onclick="openLb(allPhotos,'photos/route1dalathoian5day/web/day5/Bang An Towerof Chăm people/WhatsApp Image 2026-05-21 at 10.53.50.webp')"><img src="photos/route1dalathoian5day/web/day5/Bang An Towerof Chăm people/WhatsApp Image 2026-05-21 at 10.53.50.webp" loading="lazy" alt="Cham Tower"></div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
     </div>
@@ -115,15 +294,94 @@
     <button class="lightbox-prev" id="lightboxPrev">‹</button>
     <img class="lightbox-img" id="lightboxImg" alt="Tour photo" />
     <button class="lightbox-next" id="lightboxNext">›</button>
+    <div class="lightbox-caption" id="lightboxCaption"></div>
   </div>
 
-  <script>
-    const TOUR_ID = 'dalathoian5day';
+  <style>
+    .day-tab {
+      padding: 10px 22px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      background: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .day-tab.active, .day-tab:hover {
+      background: #E8640A;
+      color: #fff;
+      border-color: #E8640A;
+    }
+    .loc-block { margin-bottom: 28px; }
+    .loc-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #888;
+      margin-bottom: 10px;
+    }
+    .photo-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+    }
+    .photo-thumb {
+      border-radius: 10px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      cursor: pointer;
+      background: #f3f4f6;
+    }
+    .photo-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.2s;
+    }
+    .photo-thumb:hover img { transform: scale(1.04); }
+    .gallery-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    .gallery-lightbox.active { display: flex; }
+    .lightbox-img { max-width: 90vw; max-height: 88vh; border-radius: 8px; }
+    .lightbox-close, .lightbox-prev, .lightbox-next {
+      position: fixed;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2.2rem;
+      cursor: pointer;
+      padding: 12px;
+      line-height: 1;
+    }
+    .lightbox-close { top: 18px; right: 22px; }
+    .lightbox-prev { left: 16px; top: 50%; transform: translateY(-50%); }
+    .lightbox-next { right: 16px; top: 50%; transform: translateY(-50%); }
+    .lightbox-caption {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #ddd;
+      font-size: 0.9rem;
+      background: rgba(0,0,0,0.5);
+      padding: 6px 16px;
+      border-radius: 20px;
+    }
+  </style>
 
+  <script>
     // MAP
     const route = [[11.9415,108.4423],[12.6722,108.0504],[13.9832,108.0066],[14.3497,107.9985],[15.8800,108.3350]];
-    const startLabel = 'Start: Dalat', endLabel = 'End: Hoi An';
-
     const map = L.map('tourMap', { scrollWheelZoom: false });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -132,54 +390,51 @@
     const poly = L.polyline(route, { color: '#E8640A', weight: 4, opacity: 0.85 }).addTo(map);
     map.fitBounds(poly.getBounds(), { padding: [32, 32] });
     L.circleMarker(route[0], { radius: 8, color: '#E8640A', fillColor: '#fff', fillOpacity: 1, weight: 3 })
-      .bindPopup('<strong>' + startLabel + '</strong>').addTo(map).openPopup();
-    if (route[route.length-1][0] !== route[0][0]) {
-      L.circleMarker(route[route.length-1], { radius: 8, color: '#E8640A', fillColor: '#E8640A', fillOpacity: 1, weight: 3 })
-        .bindPopup('<strong>' + endLabel + '</strong>').addTo(map);
+      .bindPopup('<strong>Start: Dalat</strong>').addTo(map).openPopup();
+    L.circleMarker(route[route.length-1], { radius: 8, color: '#E8640A', fillColor: '#E8640A', fillOpacity: 1, weight: 3 })
+      .bindPopup('<strong>End: Hoi An</strong>').addTo(map);
+
+    // DAY TABS
+    function showDay(day, btn) {
+      document.querySelectorAll('.day-panel').forEach(p => p.style.display = 'none');
+      document.querySelectorAll('.day-tab').forEach(b => b.classList.remove('active'));
+      document.getElementById('panel-' + day).style.display = 'block';
+      btn.classList.add('active');
     }
 
-    // GALLERY
-    (function() {
-      const grid = document.getElementById('photoGallery');
-      const empty = document.getElementById('galleryEmpty');
-      const loaded = [];
-      let i = 1;
-      function tryNext() {
-        const img = new Image();
-        const path = 'photos/' + TOUR_ID + '/' + String(i).padStart(2,'0') + '.jpg';
-        img.onload = function() {
-          loaded.push(path);
-          const idx = loaded.length - 1;
-          const el = document.createElement('div');
-          el.className = 'gallery-item';
-          el.innerHTML = '<img src="' + path + '" alt="Tour photo ' + i + '" loading="lazy">';
-          el.addEventListener('click', function() { openLb(idx); });
-          grid.appendChild(el);
-          i++; tryNext();
-        };
-        img.onerror = function() { if (loaded.length === 0) empty.style.display = 'block'; };
-        img.src = path;
-      }
-      tryNext();
+    // LIGHTBOX
+    const allPhotos = Array.from(document.querySelectorAll('.photo-thumb img')).map(i => ({src: i.src, alt: i.alt}));
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightboxImg');
+    const lbCap = document.getElementById('lightboxCaption');
+    let cur = 0;
 
-      const lb = document.getElementById('lightbox');
-      const lbImg = document.getElementById('lightboxImg');
-      let cur = 0;
-      function openLb(idx) {
-        cur = idx; lbImg.src = loaded[idx];
-        lb.classList.add('active');
-        document.body.classList.add('no-scroll');
-      }
-      function closeLb() { lb.classList.remove('active'); document.body.classList.remove('no-scroll'); }
-      document.getElementById('lightboxClose').addEventListener('click', closeLb);
-      document.getElementById('lightboxPrev').addEventListener('click', function() {
-        cur = (cur - 1 + loaded.length) % loaded.length; lbImg.src = loaded[cur];
-      });
-      document.getElementById('lightboxNext').addEventListener('click', function() {
-        cur = (cur + 1) % loaded.length; lbImg.src = loaded[cur];
-      });
-      lb.addEventListener('click', function(e) { if (e.target === lb) closeLb(); });
-    }());
+    function openLb(photos, src) {
+      cur = allPhotos.findIndex(p => p.src.endsWith(src.split('/').pop().replace(/\(|\)/g,''))) ;
+      // fallback: match by full src
+      const idx = allPhotos.findIndex(p => p.src === src || p.src.includes(encodeURIComponent(src.split('/').pop())));
+      cur = idx >= 0 ? idx : allPhotos.findIndex(p => p.alt === (photos || src));
+      lbImg.src = src;
+      lbCap.textContent = lbImg.alt || '';
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLb() { lb.classList.remove('active'); document.body.style.overflow = ''; }
+    function moveLb(dir) {
+      cur = (cur + dir + allPhotos.length) % allPhotos.length;
+      lbImg.src = allPhotos[cur].src;
+      lbCap.textContent = allPhotos[cur].alt;
+    }
+    document.getElementById('lightboxClose').onclick = closeLb;
+    document.getElementById('lightboxPrev').onclick = () => moveLb(-1);
+    document.getElementById('lightboxNext').onclick = () => moveLb(1);
+    lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+    document.addEventListener('keydown', e => {
+      if (!lb.classList.contains('active')) return;
+      if (e.key === 'ArrowRight') moveLb(1);
+      if (e.key === 'ArrowLeft') moveLb(-1);
+      if (e.key === 'Escape') closeLb();
+    });
   </script>
 
 </body>

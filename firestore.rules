@@ -1,0 +1,57 @@
+rules_version = '2';
+
+// Easy Rider Vietnam — Firestore security rules
+// Deploy with:  firebase deploy --only firestore:rules
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Admin allowlist ─────────────────────────────────────────
+    // Paste the UID of your guide/admin account(s) below.
+    // Find it in Firebase Console → Authentication → Users (after
+    // you create the account). Until a real UID is here, the admin
+    // dashboard will show no data, so do this before going live.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.uid in [
+          'PASTE_ADMIN_UID_HERE'
+        ];
+    }
+
+    function nonEmptyString(v) { return v is string && v.size() > 0; }
+
+    // ── bookings: contain customer PII (name, phone) ────────────
+    // Public may CREATE a booking from the form, but may NEVER read,
+    // list, update or delete. Only the signed-in admin can.
+    match /bookings/{id} {
+      allow read, update, delete: if isAdmin();
+      allow create: if request.resource.data.status == 'pending'
+        && nonEmptyString(request.resource.data.name)
+        && nonEmptyString(request.resource.data.date)
+        && request.resource.data.duration is number
+        && request.resource.data.groupSize is number;
+    }
+
+    // ── occupancy: PII-free, powers the PUBLIC availability calendar
+    // Anyone may read it (calendar) and create one (when booking).
+    // Only the admin may change/remove it (e.g. free a cancelled day).
+    match /occupancy/{id} {
+      allow read: if true;
+      allow create: if request.resource.data.status == 'pending'
+        && nonEmptyString(request.resource.data.date)
+        && request.resource.data.duration is number;
+      allow update, delete: if isAdmin();
+    }
+
+    // ── blockedDates: admin-managed day blocks ──────────────────
+    // Public may read (for the calendar); only the admin may write.
+    match /blockedDates/{id} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ── Everything else: denied by default ──────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

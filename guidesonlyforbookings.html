@@ -9,7 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
   <style>
     :root {
       --bg-page: #f3f4f6; /* Light gray background to reduce glare */
@@ -258,10 +259,33 @@
 </head>
 <body>
 
+  <!-- ── Admin login gate (covers the page until signed in) ─────── -->
+  <div id="login-gate" style="position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; background:#f3f4f6; padding:24px;">
+    <form id="login-form" style="background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:28px 24px; width:100%; max-width:340px; box-shadow:0 10px 40px rgba(0,0,0,0.08); font-family:'Inter',sans-serif;">
+      <div style="font-size:1.4rem; font-weight:800; margin-bottom:4px;">🏍 Guide Portal</div>
+      <div style="font-size:0.85rem; color:#6b7280; margin-bottom:20px;">Sign in to manage bookings.</div>
+      <label for="login-email" style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:6px;">Email</label>
+      <input id="login-email" type="email" autocomplete="username" required
+             style="width:100%; padding:12px 14px; border:1.5px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:14px;" />
+      <label for="login-password" style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:6px;">Password</label>
+      <input id="login-password" type="password" autocomplete="current-password" required
+             style="width:100%; padding:12px 14px; border:1.5px solid #d1d5db; border-radius:10px; font-size:16px; margin-bottom:14px;" />
+      <div id="login-error" style="color:#dc2626; font-size:0.8rem; min-height:18px; margin-bottom:8px;"></div>
+      <button type="submit"
+              style="width:100%; padding:13px; background:#E8640A; color:#fff; border:none; border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer;">
+        Sign In
+      </button>
+    </form>
+  </div>
+
   <header>
     <div class="brand">
       🏍 Easy Rider <em>Guides</em>
     </div>
+    <button onclick="logout()" title="Log out"
+            style="margin-left:auto; background:rgba(0,0,0,0.06); border:none; border-radius:8px; padding:8px 14px; font-size:0.85rem; font-weight:600; cursor:pointer;">
+      Log out
+    </button>
   </header>
 
   <div class="container">
@@ -413,18 +437,58 @@
     let bookings     = [];
     let blockedDates = [];
 
-    // ── Live listeners ─────────────────────────────────────────
-    db.collection('bookings').onSnapshot(snap => {
-      bookings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderPending();
-      renderSchedule();
-    }, err => console.error('Bookings listener:', err));
+    // ── Auth gate ──────────────────────────────────────────────
+    // This dashboard reads customer PII (names, phone numbers), so it
+    // requires a signed-in admin. The live listeners only attach after
+    // successful authentication — never on a public page load.
+    const auth = firebase.auth();
+    let _listenersAttached = false;
 
-    db.collection('blockedDates').onSnapshot(snap => {
-      blockedDates = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderSchedule();
-      renderBlockedDatesList();
-    }, err => console.error('BlockedDates listener:', err));
+    function attachListeners() {
+      if (_listenersAttached) return;
+      _listenersAttached = true;
+
+      db.collection('bookings').onSnapshot(snap => {
+        bookings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderPending();
+        renderSchedule();
+      }, err => console.error('Bookings listener:', err));
+
+      db.collection('blockedDates').onSnapshot(snap => {
+        blockedDates = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderSchedule();
+        renderBlockedDatesList();
+      }, err => console.error('BlockedDates listener:', err));
+    }
+
+    auth.onAuthStateChanged(user => {
+      const gate = document.getElementById('login-gate');
+      if (user) {
+        if (gate) gate.style.display = 'none';
+        attachListeners();
+      } else if (gate) {
+        gate.style.display = 'flex';
+      }
+    });
+
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const errEl = document.getElementById('login-error');
+        const email = document.getElementById('login-email').value.trim();
+        const pass  = document.getElementById('login-password').value;
+        errEl.textContent = '';
+        try {
+          await auth.signInWithEmailAndPassword(email, pass);
+        } catch (err) {
+          errEl.textContent = 'Login failed. Check your email and password.';
+          console.error('Login error:', err);
+        }
+      });
+    }
+
+    window.logout = function () { auth.signOut(); };
 
     // ── Button-fill progress helpers ───────────────────────────
     function startBtnFill(btn) {
@@ -507,6 +571,7 @@
       if (btn) { btn.disabled = true; btn.textContent = 'CANCELLING…'; }
       try {
         await db.collection('bookings').doc(bookingId).update({ status: 'cancelled' });
+        await freeOccupancy(bookingId);
         closeModal('cancel-modal');
         showMessage('BOOKING CANCELLED.');
         _cancelBookingId = null;
@@ -762,9 +827,21 @@
       }
     }
 
+    // Remove the PII-free occupancy mirror so the public calendar
+    // frees the day(s) when a booking is cancelled or rejected.
+    async function freeOccupancy(bookingId) {
+      try {
+        const snap = await db.collection('occupancy').where('bookingId', '==', bookingId).get();
+        await Promise.all(snap.docs.map(d => d.ref.delete()));
+      } catch (e) {
+        console.error('Failed to free occupancy for', bookingId, e);
+      }
+    }
+
     async function rejectBooking(bookingId) {
       try {
         await db.collection('bookings').doc(bookingId).update({ status: 'rejected' });
+        await freeOccupancy(bookingId);
         showMessage('BOOKING REJECTED.', true);
       } catch (e) {
         showMessage('ERROR SAVING. CHECK CONNECTION.', true);

@@ -29,9 +29,9 @@
   <section class="hero" style="min-height: 60vh;">
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <span class="hero-badge">3 Days · 2 Nights · ~550 km</span>
+      <span class="hero-badge">3 Days · 2 Nights · ~485 km</span>
       <h1 class="hero-headline">Dalat Loop</h1>
-      <p class="hero-sub">A circular route through the heart of the Central Highlands — Dalat to Ta Dung Lake, across to Lak Lake, and back to Dalat. Around 550 kilometres of some of the most spectacular riding in Vietnam.</p>
+      <p class="hero-sub">A circular route through the Central Highlands — Dalat to Lak Lake, on to Buôn Ma Thuột (BMT), and back to Dalat. Around 485 kilometres of highland roads, lake shores, and coffee country.</p>
     </div>
   </section>
 
@@ -45,16 +45,16 @@
 
       <div class="itinerary">
         <div class="itinerary-day">
-          <h3>Day 1: Dalat to Ta Dung Lake</h3>
-          <p>We leave Dalat and head south-west toward Ta Dung Lake — a remote reservoir in the middle of a national park, surrounded by forested hills. The route passes through coffee and pepper plantations and isolated minority villages. Overnight at Ta Dung.</p>
+          <h3>Day 1: Dalat to Lak Lake — 170 km</h3>
+          <p>We leave Dalat and ride north through the Central Highlands — passing silk factories, flower farms, coffee plantations, and local markets. After 170 km we arrive at Lak Lake, the largest natural freshwater lake in the Central Highlands, where we overnight in a traditional M'Nong longhouse on the lakeshore.</p>
         </div>
         <div class="itinerary-day">
-          <h3>Day 2: Ta Dung Lake to Lak Lake</h3>
-          <p>From Ta Dung we push east toward Lak Lake, the largest natural freshwater lake in the Central Highlands. The landscape is wide open and dramatic. We overnight in a traditional M'Nong longhouse on the lakeshore — one of the most memorable nights on any tour we run.</p>
+          <h3>Day 2: Lak Lake to Buôn Ma Thuột — 145 km</h3>
+          <p>From Lak Lake we ride 145 km to Buôn Ma Thuột (BMT) — the coffee capital of Vietnam and one of the most important cities in the Central Highlands. Along the way we stop at local farms, minority villages, and wartime landmarks. Overnight in BMT city.</p>
         </div>
         <div class="itinerary-day">
-          <h3>Day 3: Lak Lake Back to Dalat</h3>
-          <p>After an optional morning canoe on the lake, we loop back south and west to Dalat, completing the circle. The return route takes different roads, offering fresh scenery and more hidden stops along the way. Drop-off at your hotel in the afternoon.</p>
+          <h3>Day 3: Buôn Ma Thuột Back to Dalat — 170 km</h3>
+          <p>The return ride takes a different road south, looping back through highland scenery and rural villages before arriving back in Dalat in the afternoon. Drop-off at your hotel. Total loop: approximately 485 km.</p>
         </div>
       </div>
 
@@ -111,8 +111,8 @@
   <script>
     const TOUR_ID = 'dalatloop3day';
 
-    // MAP — circular loop
-    const route = [[11.9415,108.4423],[11.9052,107.8932],[12.3897,108.1953],[12.6722,108.0504],[11.9415,108.4423]];
+    // MAP — circular loop: Dalat → Lak Lake → BMT → Dalat
+    const route = [[11.9415,108.4423],[12.3897,108.1953],[12.6722,108.0504],[11.9415,108.4423]];
     const startLabel = 'Dalat (start & finish)', endLabel = '';
 
     const map = L.map('tourMap', { scrollWheelZoom: false });
@@ -130,10 +130,9 @@
       L.circleMarker(route[route.length-1], { radius: 8, color: '#E8640A', fillColor: '#E8640A', fillOpacity: 1, weight: 3 })
         .bindPopup('<strong>' + endLabel + '</strong>').addTo(map);
     }
-    // midpoint markers
-    L.circleMarker([11.9052,107.8932], {radius:6,color:'#E8640A',fillColor:'#fff8f0',fillOpacity:1,weight:2}).bindPopup('<strong>Ta Dung Lake</strong>').addTo(map);
-    L.circleMarker([12.3897,108.1953], {radius:6,color:'#E8640A',fillColor:'#fff8f0',fillOpacity:1,weight:2}).bindPopup('<strong>Lak Lake</strong>').addTo(map);
-    L.circleMarker([12.6722,108.0504], {radius:6,color:'#E8640A',fillColor:'#fff8f0',fillOpacity:1,weight:2}).bindPopup('<strong>Buon Ma Thuot</strong>').addTo(map);
+    // stop markers
+    L.circleMarker([12.3897,108.1953], {radius:6,color:'#E8640A',fillColor:'#fff8f0',fillOpacity:1,weight:2}).bindPopup('<strong>Lak Lake</strong><br>Night 1').addTo(map);
+    L.circleMarker([12.6722,108.0504], {radius:6,color:'#E8640A',fillColor:'#fff8f0',fillOpacity:1,weight:2}).bindPopup('<strong>Buôn Ma Thuột (BMT)</strong><br>Night 2').addTo(map);
 
     // GALLERY
     (function() {

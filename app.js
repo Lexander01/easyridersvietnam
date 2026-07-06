@@ -34,13 +34,16 @@ let _availabilityLoaded = false;
 function loadAvailabilityData() {
   if (!window.db) return;
 
-  window.db.collection('bookings')
-    .where('status', 'in', ['pending', 'approved'])
+  // Availability is read from the PII-free `occupancy` collection —
+  // NOT from `bookings`, which holds customer names and phone numbers.
+  window.db.collection('occupancy')
     .onSnapshot(snap => {
-      _allBookings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      _allBookings = snap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .filter(o => o.status === 'pending' || o.status === 'approved');
       _availabilityLoaded = true;
       revalidateDateIfSelected();
-    }, err => console.warn('Bookings listener error:', err));
+    }, err => console.warn('Occupancy listener error:', err));
 
   window.db.collection('blockedDates').onSnapshot(snap => {
     _blockedDates = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -140,6 +143,21 @@ async function saveBooking({ name, phone, tourId, date, groupSize, rideStyle, to
       // Forces the request to fail if it takes longer than 5 seconds
       const ref = await Promise.race([firestorePromise, timeoutPromise]);
       firestoreId = ref.id;
+
+      // Mirror to the PII-free `occupancy` collection so the public
+      // availability calendar reflects this booking without exposing
+      // the customer's name or phone number.
+      try {
+        await window.db.collection('occupancy').add({
+          date: booking.date,
+          duration: booking.duration,
+          status: 'pending',
+          bookingId: firestoreId,
+          createdAt: booking.createdAt,
+        });
+      } catch (occErr) {
+        console.error('Occupancy mirror failed:', occErr);
+      }
     } catch (e) {
       console.error('Firestore save failed or timed out:', e);
     }
@@ -150,6 +168,9 @@ async function saveBooking({ name, phone, tourId, date, groupSize, rideStyle, to
     existing.unshift({ ...booking, id: firestoreId || ('BK' + Date.now()) });
     localStorage.setItem('erv_bookings', JSON.stringify(existing));
   } catch (e) { /* localStorage unavailable */ }
+
+  // Returned so the checkout step can tie the Stripe payment to this booking.
+  return firestoreId;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -433,17 +454,47 @@ async function confirmAndPay() {
   startButtonFill(submitBtn);
 
   try {
-    await saveBooking(data);
+    const bookingId = await saveBooking(data);
     document.getElementById('bookingForm')?.reset();
     setGroupCount(1);
     const ps = document.getElementById('priceSummary');
     if (ps) ps.style.display = 'none';
+
+    if (!bookingId) {
+      alert('We could not reach our booking system. Please check your connection and try again.');
+      return;
+    }
+
+    // Show a brief "redirecting" state, then hand off to Stripe's
+    // secure hosted checkout for the deposit.
     showPaymentModal(data.deposit);
+    await startStripeCheckout(bookingId);
   } catch (error) {
     console.error('Booking submission error:', error);
     alert('An unexpected error occurred. Please try again.');
   } finally {
     completeButtonFill(submitBtn, origHTML);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   STRIPE CHECKOUT
+═══════════════════════════════════════════════════════════ */
+async function startStripeCheckout(bookingId) {
+  try {
+    const fns = firebase.app().functions('europe-west1');
+    const createSession = fns.httpsCallable('createCheckoutSession');
+    const res = await createSession({
+      bookingId,
+      returnUrl: location.href.split('?')[0],
+    });
+    const url = res && res.data && res.data.url;
+    if (!url) throw new Error('No checkout URL returned');
+    window.location.href = url; // redirect to Stripe-hosted checkout
+  } catch (e) {
+    console.error('Stripe checkout error:', e);
+    closePaymentModal();
+    alert('We could not start the secure payment. Your booking is saved — please try again, or reach us on WhatsApp to finish.');
   }
 }
 
@@ -524,6 +575,16 @@ document.addEventListener('DOMContentLoaded', () => {
   updateMinDate();
   setGroupCount(1);
   loadAvailabilityData();
+
+  // Returning from Stripe Checkout?
+  const _pay = new URLSearchParams(window.location.search).get('payment');
+  if (_pay === 'success') {
+    handlePaymentSuccess();
+    history.replaceState({}, '', window.location.pathname);
+  } else if (_pay === 'cancelled') {
+    alert('Payment was cancelled. Your booking is held — complete the deposit anytime to confirm your spot.');
+    history.replaceState({}, '', window.location.pathname);
+  }
 
   const preselect = new URLSearchParams(window.location.search).get('tour');
   if (preselect) {

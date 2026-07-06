@@ -1,0 +1,14 @@
+{
+  "name": "functions",
+  "description": "Easy Rider Vietnam — Stripe deposit + webhook (Cloud Functions, Gen 2)",
+  "private": true,
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.1.0",
+    "stripe": "^17.4.0"
+  }
+}

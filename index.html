@@ -37,7 +37,11 @@
   <!-- ═══════════════════════════════════════════════════════════
        HERO
   ═══════════════════════════════════════════════════════════ -->
-  <section class="hero">
+  <section class="hero hero-photo">
+    <div class="hero-bg">
+      <img id="heroBgImg" src="photos/background/background.jpeg"
+           alt="" fetchpriority="high" draggable="false">
+    </div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <span class="hero-badge">Dalat · Central Highlands · Vietnam</span>
@@ -603,6 +607,74 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script src="firebase-init.js"></script>
   <script src="app.js"></script>
+  <script>
+    // Interactive hero photo: gently follows the mouse on desktop,
+    // draggable on touch screens. Skipped for reduced-motion users.
+    (function () {
+      const hero = document.querySelector('.hero-photo');
+      const img  = document.getElementById('heroBgImg');
+      if (!hero || !img) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const SCALE = 1.18;
+      let cx = 0, cy = 0;   // current image offset (px)
+      let tx = 0, ty = 0;   // target image offset
+      let raf = null;
+      let dragging = false, startX = 0, startY = 0, baseX = 0, baseY = 0;
+
+      function maxShift() {
+        // how far the over-scaled photo can move before its edges show
+        return {
+          x: hero.clientWidth  * (SCALE - 1) / 2,
+          y: hero.clientHeight * (SCALE - 1) / 2,
+        };
+      }
+      function clampTarget() {
+        const m = maxShift();
+        tx = Math.max(-m.x, Math.min(m.x, tx));
+        ty = Math.max(-m.y, Math.min(m.y, ty));
+      }
+      function tick() {
+        cx += (tx - cx) * 0.09;
+        cy += (ty - cy) * 0.09;
+        img.style.transform = 'translate(' + cx.toFixed(2) + 'px,' + cy.toFixed(2) + 'px) scale(' + SCALE + ')';
+        if (Math.abs(tx - cx) > 0.1 || Math.abs(ty - cy) > 0.1) raf = requestAnimationFrame(tick);
+        else raf = null;
+      }
+      function kick() { if (!raf) raf = requestAnimationFrame(tick); }
+
+      // Mouse: parallax follows the cursor
+      hero.addEventListener('mousemove', function (e) {
+        if (dragging) return;
+        const r = hero.getBoundingClientRect();
+        const m = maxShift();
+        tx = -((e.clientX - r.left) / r.width  - 0.5) * 2 * m.x * 0.8;
+        ty = -((e.clientY - r.top)  / r.height - 0.5) * 2 * m.y * 0.8;
+        kick();
+      });
+      hero.addEventListener('mouseleave', function () {
+        if (!dragging) { tx = 0; ty = 0; kick(); }
+      });
+
+      // Touch: drag to pan (vertical swipes still scroll the page)
+      hero.addEventListener('pointerdown', function (e) {
+        if (e.pointerType === 'mouse' || e.target.closest('a, button')) return;
+        dragging = true;
+        startX = e.clientX; startY = e.clientY;
+        baseX = tx; baseY = ty;
+      });
+      window.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        tx = baseX + (e.clientX - startX) * 1.2;
+        ty = baseY + (e.clientY - startY) * 1.2;
+        clampTarget();
+        kick();
+      });
+      ['pointerup', 'pointercancel'].forEach(function (ev) {
+        window.addEventListener(ev, function () { dragging = false; });
+      });
+    }());
+  </script>
   <script src="photo-manifest.js"></script>
   <script>
     // Review photos come from photos/Reviews/ via photo-manifest.js.

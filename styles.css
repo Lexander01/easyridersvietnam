@@ -65,6 +65,25 @@ button, input, select, textarea { font-family: inherit; }
 .hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; }
 .hero::after { content: ''; position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(232,100,10,0.18) 0%, transparent 70%); pointer-events: none; }
 .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 60%, rgba(13,13,13,0.6) 100%); pointer-events: none; }
+
+/* Interactive photo hero (home page): the photo pans with the cursor
+   and can be dragged on touch screens. */
+.hero-bg { position: absolute; inset: 0; overflow: hidden; }
+.hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.18);
+  will-change: transform;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.hero-photo { touch-action: pan-y; }
+.hero-photo .hero-overlay {
+  background: linear-gradient(to bottom, rgba(13,27,16,0.50) 0%, rgba(13,27,16,0.28) 55%, rgba(13,13,13,0.72) 100%);
+}
 .hero-content { position: relative; z-index: 2; max-width: 640px; }
 .hero-badge { display: inline-block; background: rgba(232,100,10,0.15); border: 1px solid rgba(232,100,10,0.4); color: var(--orange-l); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; margin-bottom: 24px; }
 .hero-headline { font-family: var(--font-serif); font-size: clamp(40px, 10vw, 72px); line-height: 1.05; color: var(--white); margin-bottom: 20px; }

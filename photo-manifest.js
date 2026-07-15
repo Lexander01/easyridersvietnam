@@ -34,6 +34,48 @@ window.PHOTO_MANIFEST = {
       "photos/Motorbikes/WhatsApp%20Image%202026-05-24%20at%2011.25.49%20%289%29.jpeg"
     ]
   },
+  "Reviews": {
+    "photos": [
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.19.34%20%281%29.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.19.34%20%2810%29.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.19.34%20%282%29.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.19.34%20%283%29.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.19.34%20%284%29.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.19.34%20%285%29.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.19.34%20%286%29.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.19.34%20%287%29.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.19.34%20%288%29.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.19.34%20%289%29.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.19.34.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.21.04.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.21.21.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.21.37.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.21.50.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.22.04.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.22.21.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.22.36.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.22.52.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.23.06.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.23.19.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.23.33.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.23.46.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.23.59.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.24.17.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.24.36.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.24.58.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.25.15.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.25.32.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.25.43.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.25.58.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.26.18.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.26.32.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.26.44.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.26.59.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.27.11.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.27.27.jpeg",
+      "photos/Reviews/WhatsApp%20Image%202026-05-23%20at%2010.27.49.jpeg"
+    ]
+  },
   "route1dalathoian5day": {
     "days": [
       {

@@ -740,41 +740,17 @@ button, input, select, textarea { font-family: inherit; }
   to   { transform: translateX(-50%); }
 }
 
-.review-card {
-  background: var(--dark-3);
-  border: 1px solid rgba(255,255,255,0.08);
+.review-photo {
+  height: 340px;
+  width: auto;
   border-radius: 14px;
-  padding: 24px 28px;
-  width: 300px;
+  border: 1px solid rgba(255,255,255,0.08);
   flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  object-fit: contain;
+  background: var(--dark-3);
 }
-.review-stars {
-  color: var(--orange);
-  font-size: 1rem;
-  letter-spacing: 2px;
-}
-.review-text {
-  color: rgba(255,255,255,0.85);
-  font-size: 0.95rem;
-  line-height: 1.6;
-  flex: 1;
-}
-.review-author {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.review-name {
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--white);
-}
-.review-tour {
-  font-size: 0.8rem;
-  color: var(--muted);
+@media (max-width: 640px) {
+  .review-photo { height: 260px; }
 }
 
 /* Hero principles pills */

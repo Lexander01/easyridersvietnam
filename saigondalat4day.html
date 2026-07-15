@@ -106,7 +106,7 @@
 
       <div class="gallery-section">
         <h3 class="info-title">Photos from the Road</h3>
-        <p class="gallery-note">Add photos by uploading to <code>photos/saigondalat4day/01.jpg</code>, <code>02.jpg</code>, etc.</p>
+        <p class="gallery-note">Add photos by uploading to <code>photos/Route6DaLatcitytoHoChiMinhCity4days/01.jpg</code>, <code>02.jpg</code>, etc.</p>
         <div class="gallery-grid" id="photoGallery"></div>
         <p class="gallery-empty" id="galleryEmpty">Photos coming soon — check back before your tour!</p>
       </div>
@@ -129,7 +129,7 @@
   </div>
 
   <script>
-    const TOUR_ID = 'saigondalat4day';
+    const PHOTO_DIR = 'photos/Route6DaLatcitytoHoChiMinhCity4days/';
 
     // MAP
     const route = [[10.7769,106.7009],[10.9574,106.8427],[11.5445,107.8074],[11.9415,108.4423]];
@@ -157,7 +157,7 @@
       let i = 1;
       function tryNext() {
         const img = new Image();
-        const path = 'photos/' + TOUR_ID + '/' + String(i).padStart(2,'0') + '.jpg';
+        const path = PHOTO_DIR + String(i).padStart(2,'0') + '.jpg';
         img.onload = function() {
           loaded.push(path);
           const idx = loaded.length - 1;

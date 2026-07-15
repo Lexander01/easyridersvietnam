@@ -111,7 +111,7 @@
 
       <div class="gallery-section">
         <h3 class="info-title">Photos from the Road</h3>
-        <p class="gallery-note">Add photos by uploading to <code>photos/hoiandalat5day/01.jpg</code>, <code>02.jpg</code>, etc.</p>
+        <p class="gallery-note">Add photos by uploading to <code>photos/route4HoiAntodalat5day/01.jpg</code>, <code>02.jpg</code>, etc.</p>
         <div class="gallery-grid" id="photoGallery"></div>
         <p class="gallery-empty" id="galleryEmpty">Photos coming soon — check back before your tour!</p>
       </div>
@@ -134,7 +134,7 @@
   </div>
 
   <script>
-    const TOUR_ID = 'hoiandalat5day';
+    const PHOTO_DIR = 'photos/route4HoiAntodalat5day/';
 
     // MAP
     const route = [[15.8800,108.3350],[14.3497,107.9985],[13.9832,108.0066],[12.6722,108.0504],[11.9415,108.4423]];
@@ -162,7 +162,7 @@
       let i = 1;
       function tryNext() {
         const img = new Image();
-        const path = 'photos/' + TOUR_ID + '/' + String(i).padStart(2,'0') + '.jpg';
+        const path = PHOTO_DIR + String(i).padStart(2,'0') + '.jpg';
         img.onload = function() {
           loaded.push(path);
           const idx = loaded.length - 1;

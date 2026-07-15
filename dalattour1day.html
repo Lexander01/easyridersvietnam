@@ -95,7 +95,7 @@
 
       <div class="gallery-section">
         <h3 class="info-title">Photos from the Road</h3>
-        <p class="gallery-note">Add photos by uploading to <code>photos/dalattour1day/01.jpg</code>, <code>02.jpg</code>, etc.</p>
+        <p class="gallery-note">Add photos by uploading to <code>photos/Route7tourinDaLatcity/01.jpg</code>, <code>02.jpg</code>, etc.</p>
         <div class="gallery-grid" id="photoGallery"></div>
         <p class="gallery-empty" id="galleryEmpty">Photos coming soon — check back before your tour!</p>
       </div>
@@ -118,7 +118,7 @@
   </div>
 
   <script>
-    const TOUR_ID = 'dalattour1day';
+    const PHOTO_DIR = 'photos/Route7tourinDaLatcity/';
 
     // MAP — local Dalat spots, no route polyline
     const map = L.map('tourMap', { center: [11.9415,108.4423], zoom: 11, scrollWheelZoom: false });
@@ -141,7 +141,7 @@
       let i = 1;
       function tryNext() {
         const img = new Image();
-        const path = 'photos/' + TOUR_ID + '/' + String(i).padStart(2,'0') + '.jpg';
+        const path = PHOTO_DIR + String(i).padStart(2,'0') + '.jpg';
         img.onload = function() {
           loaded.push(path);
           const idx = loaded.length - 1;

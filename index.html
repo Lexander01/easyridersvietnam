@@ -604,7 +604,7 @@
   <script src="firebase-init.js"></script>
   <script src="app.js"></script>
   <script>
-    // Load review photos from photos/reviews/ — name them review1.jpg, review2.jpg, ...
+    // Load review photos from photos/Reviews/ — name them review1.jpg, review2.jpg, ...
     // (jpg, jpeg, png or webp). New photos appear automatically, no code changes needed.
     (function () {
       const track = document.getElementById('marqueeTrack');
@@ -623,7 +623,7 @@
 
       async function findPhoto(n) {
         for (const ext of EXTS) {
-          const img = await tryLoad('photos/reviews/review' + n + '.' + ext);
+          const img = await tryLoad('photos/Reviews/review' + n + '.' + ext);
           if (img) return img;
         }
         return null;

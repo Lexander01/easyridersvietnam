@@ -98,7 +98,7 @@
 
       <div class="gallery-section">
         <h3 class="info-title">Photos from the Road</h3>
-        <p class="gallery-note">Add photos by uploading to <code>photos/alternative3day/01.jpg</code>, <code>02.jpg</code>, etc.</p>
+        <p class="gallery-note">Add photos by uploading to <code>photos/route3alternative3day/01.jpg</code>, <code>02.jpg</code>, etc.</p>
         <div class="gallery-grid" id="photoGallery"></div>
         <p class="gallery-empty" id="galleryEmpty">Photos coming soon — check back before your tour!</p>
       </div>
@@ -121,7 +121,7 @@
   </div>
 
   <script>
-    const TOUR_ID = 'alternative3day';
+    const PHOTO_DIR = 'photos/route3alternative3day/';
 
     // MAP
     const route = [[11.9415,108.4423],[11.9052,107.8932],[12.3897,108.1953],[12.6722,108.0504]];
@@ -152,7 +152,7 @@
       let i = 1;
       function tryNext() {
         const img = new Image();
-        const path = 'photos/' + TOUR_ID + '/' + String(i).padStart(2,'0') + '.jpg';
+        const path = PHOTO_DIR + String(i).padStart(2,'0') + '.jpg';
         img.onload = function() {
           loaded.push(path);
           const idx = loaded.length - 1;

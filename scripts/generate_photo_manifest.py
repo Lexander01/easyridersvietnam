@@ -1,0 +1,174 @@
+#!/usr/bin/env python3
+"""Generate photo-manifest.js from the photos/ folder tree.
+
+The site is statically hosted, so pages cannot list directories at
+runtime. This script walks photos/ and writes photo-manifest.js, which
+the pages read to build their galleries.
+
+Run from the repository root whenever photos are added or removed:
+
+    python3 scripts/generate_photo_manifest.py
+
+Folder conventions it understands, per route folder:
+  - "dayN..." subfolders (e.g. "day1from Da Lat city to Lak Lake 170 km")
+    become itinerary days; anything after the day number is kept as the
+    day's route description.
+  - Subfolders inside a day (or directly inside the route folder, for
+    one-day tours) are sightseeing stops; their name is the caption.
+  - A "web" subfolder, when present, replaces its siblings (it holds the
+    web-optimised versions of the same photos).
+  - Loose image files become a plain photo list (e.g. Reviews).
+"""
+import json
+import os
+import re
+import sys
+from urllib.parse import quote
+
+PHOTOS_DIR = "photos"
+OUTPUT = "photo-manifest.js"
+PHOTO_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"}
+DAY_RE = re.compile(r"^day\s*(\d+)\s*(.*)$", re.IGNORECASE)
+
+
+def is_photo(name):
+    return os.path.splitext(name)[1].lower() in PHOTO_EXTS
+
+
+def url_path(*segments):
+    return "/".join(quote(seg) for seg in segments)
+
+
+def clean_label(name):
+    return re.sub(r"\s+", " ", name.replace("_", " ")).strip()
+
+
+def list_dir(path):
+    dirs, files = [], []
+    for entry in sorted(os.listdir(path), key=str.lower):
+        full = os.path.join(path, entry)
+        if os.path.isdir(full):
+            dirs.append(entry)
+        elif is_photo(entry):
+            files.append(entry)
+    return dirs, files
+
+
+def collect_photos_recursive(path, url_prefix):
+    photos = []
+    for root, dirnames, filenames in os.walk(path):
+        dirnames.sort(key=str.lower)
+        rel = os.path.relpath(root, path)
+        for f in sorted(filenames, key=str.lower):
+            if is_photo(f):
+                segs = [] if rel == "." else rel.split(os.sep)
+                photos.append(url_prefix + "/" + url_path(*segs, f))
+    return photos
+
+
+def build_stop(path, url_prefix, name):
+    return {
+        "name": clean_label(name),
+        "photos": collect_photos_recursive(path, url_prefix),
+    }
+
+
+def merge_stops(stops):
+    """Merge stops whose cleaned names differ only by case/punctuation."""
+    merged = []
+    index = {}
+    for stop in stops:
+        key = re.sub(r"[^a-z0-9]+", "", stop["name"].lower())
+        if key in index:
+            index[key]["photos"].extend(stop["photos"])
+        else:
+            index[key] = stop
+            merged.append(stop)
+    return [s for s in merged if s["photos"]]
+
+
+def build_route_entry(route_dir, route_url):
+    dirs, files = list_dir(route_dir)
+
+    # A "web" subfolder holds web-optimised copies of everything else.
+    if "web" in [d.lower() for d in dirs]:
+        web_name = next(d for d in dirs if d.lower() == "web")
+        return build_route_entry(
+            os.path.join(route_dir, web_name), route_url + "/" + quote(web_name)
+        )
+
+    days = {}
+    stops = []
+    for d in dirs:
+        sub = os.path.join(route_dir, d)
+        m = DAY_RE.match(d)
+        if m:
+            num = int(m.group(1))
+            desc = clean_label(m.group(2))
+            day = days.setdefault(num, {"day": num, "route": "", "stops": []})
+            if desc and not day["route"]:
+                day["route"] = desc
+            sub_dirs, sub_files = list_dir(sub)
+            day_url = route_url + "/" + quote(d)
+            for sd in sub_dirs:
+                day["stops"].append(
+                    build_stop(os.path.join(sub, sd), day_url + "/" + quote(sd), sd)
+                )
+            if sub_files:
+                day["stops"].append(
+                    {"name": "", "photos": [day_url + "/" + quote(f) for f in sub_files]}
+                )
+        else:
+            stops.append(build_stop(sub, route_url + "/" + quote(d), d))
+
+    entry = {}
+    if days:
+        entry["days"] = [
+            {**day, "stops": merge_stops(day["stops"])}
+            for _, day in sorted(days.items())
+        ]
+        entry["days"] = [d for d in entry["days"] if d["stops"]]
+    if stops:
+        entry["stops"] = merge_stops(stops)
+    if files:
+        entry["photos"] = [route_url + "/" + quote(f) for f in files]
+    return entry
+
+
+def main():
+    if not os.path.isdir(PHOTOS_DIR):
+        sys.exit(f"error: {PHOTOS_DIR}/ not found — run from the repository root")
+
+    manifest = {}
+    top_dirs, _ = list_dir(PHOTOS_DIR)
+    for d in top_dirs:
+        entry = build_route_entry(
+            os.path.join(PHOTOS_DIR, d), PHOTOS_DIR + "/" + quote(d)
+        )
+        if entry:
+            manifest[d] = entry
+
+    body = json.dumps(manifest, indent=2, ensure_ascii=True)
+    with open(OUTPUT, "w", encoding="utf-8") as f:
+        f.write(
+            "// AUTO-GENERATED by scripts/generate_photo_manifest.py — do not edit.\n"
+            "// Regenerate with: python3 scripts/generate_photo_manifest.py\n"
+            "window.PHOTO_MANIFEST = "
+        )
+        f.write(body)
+        f.write(";\n")
+
+    total = sum(
+        len(s["photos"])
+        for e in manifest.values()
+        for s in (
+            [st for day in e.get("days", []) for st in day["stops"]]
+            + e.get("stops", [])
+            + ([{"photos": e["photos"]}] if "photos" in e else [])
+        )
+    )
+    print(f"wrote {OUTPUT}: {len(manifest)} folders, {total} photos")
+
+
+if __name__ == "__main__":
+    main()

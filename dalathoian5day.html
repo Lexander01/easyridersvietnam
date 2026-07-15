@@ -105,8 +105,7 @@
 
       <div class="gallery-section">
         <h3 class="info-title">Photos from the Road</h3>
-        <p class="gallery-note">Add photos by uploading to <code>photos/dalathoian5day/01.jpg</code>, <code>02.jpg</code>, etc.</p>
-        <div class="gallery-grid" id="photoGallery"></div>
+        <div id="photoGallery"></div>
         <p class="gallery-empty" id="galleryEmpty">Photos coming soon — check back before your tour!</p>
       </div>
 
@@ -128,7 +127,6 @@
   </div>
 
   <script>
-    const TOUR_ID = 'dalathoian5day';
 
     // MAP
     const route = [[11.9415,108.4423],[12.6722,108.0504],[13.9832,108.0066],[14.3497,107.9985],[15.8800,108.3350]];
@@ -147,50 +145,10 @@
       L.circleMarker(route[route.length-1], { radius: 8, color: '#E8640A', fillColor: '#E8640A', fillOpacity: 1, weight: 3 })
         .bindPopup('<strong>' + endLabel + '</strong>').addTo(map);
     }
-
-    // GALLERY
-    (function() {
-      const grid = document.getElementById('photoGallery');
-      const empty = document.getElementById('galleryEmpty');
-      const loaded = [];
-      let i = 1;
-      function tryNext() {
-        const img = new Image();
-        const path = 'photos/' + TOUR_ID + '/' + String(i).padStart(2,'0') + '.jpg';
-        img.onload = function() {
-          loaded.push(path);
-          const idx = loaded.length - 1;
-          const el = document.createElement('div');
-          el.className = 'gallery-item';
-          el.innerHTML = '<img src="' + path + '" alt="Tour photo ' + i + '" loading="lazy">';
-          el.addEventListener('click', function() { openLb(idx); });
-          grid.appendChild(el);
-          i++; tryNext();
-        };
-        img.onerror = function() { if (loaded.length === 0) empty.style.display = 'block'; };
-        img.src = path;
-      }
-      tryNext();
-
-      const lb = document.getElementById('lightbox');
-      const lbImg = document.getElementById('lightboxImg');
-      let cur = 0;
-      function openLb(idx) {
-        cur = idx; lbImg.src = loaded[idx];
-        lb.classList.add('active');
-        document.body.classList.add('no-scroll');
-      }
-      function closeLb() { lb.classList.remove('active'); document.body.classList.remove('no-scroll'); }
-      document.getElementById('lightboxClose').addEventListener('click', closeLb);
-      document.getElementById('lightboxPrev').addEventListener('click', function() {
-        cur = (cur - 1 + loaded.length) % loaded.length; lbImg.src = loaded[cur];
-      });
-      document.getElementById('lightboxNext').addEventListener('click', function() {
-        cur = (cur + 1) % loaded.length; lbImg.src = loaded[cur];
-      });
-      lb.addEventListener('click', function(e) { if (e.target === lb) closeLb(); });
-    }());
   </script>
+  <script src="photo-manifest.js"></script>
+  <script src="gallery.js"></script>
+  <script>renderTourGallery('route1dalathoian5day');</script>
 
   <script>
     (function(){

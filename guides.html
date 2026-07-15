@@ -57,7 +57,7 @@
           <p>Every guide holds a Vietnamese motorcycle guide licence and carries full emergency training. Your safety is the foundation on which every tour is built.</p>
         </div>
         <div class="guides-bio-photo">
-          <img src="photos/guides/01.jpg" alt="Our guides"
+          <img src="photos/guides-hero/01.jpg" alt="Our guides"
                style="width:100%;height:100%;object-fit:cover;display:block;"
                onerror="this.replaceWith(Object.assign(document.createElement('div'),{style:'width:100%;height:100%;min-height:300px;display:flex;align-items:center;justify-content:center;background:#e5e7eb;color:#aaa;font-size:2rem',textContent:'📷'}))">
         </div>
@@ -190,36 +190,32 @@
     <button class="lightbox-next" id="lightboxNext">›</button>
   </div>
 
+  <script src="photo-manifest.js"></script>
   <script>
-    // Full gallery — photos/guides/01.jpg, 02.jpg, ...
-    // Skip 01 in gallery since it's already shown in the bio section above
+    // On-the-road gallery — photos/Motorbikes/ via photo-manifest.js.
+    // After uploading new photos, regenerate the manifest with:
+    //   python3 scripts/generate_photo_manifest.py
     (function () {
       const grid   = document.getElementById('guidesGallery');
       const empty  = document.getElementById('guidesGalleryEmpty');
       const loaded = [];
-      let i = 1;
+      const paths  = ((window.PHOTO_MANIFEST || {}).Motorbikes || {}).photos || [];
 
-      function tryNext() {
-        const img  = new Image();
-        const path = 'photos/guides/' + String(i).padStart(2, '0') + '.jpg';
-        img.onload = function () {
-          loaded.push(path);
-          const idx = loaded.length - 1;
-          const el  = document.createElement('div');
-          el.className = 'gallery-item';
-          el.innerHTML = '<img src="' + path + '" alt="Guide photo ' + i + '" loading="lazy">';
-          el.addEventListener('click', function () { openLb(idx); });
-          grid.appendChild(el);
-          empty.style.display = 'none';
-          i++;
-          tryNext();
-        };
-        img.onerror = function () {
-          if (loaded.length === 0) empty.style.display = 'block';
-        };
+      if (!paths.length) empty.style.display = 'block';
+      paths.forEach(function (path, i) {
+        loaded.push(path);
+        const idx = loaded.length - 1;
+        const el  = document.createElement('div');
+        el.className = 'gallery-item';
+        const img = document.createElement('img');
         img.src = path;
-      }
-      tryNext();
+        img.alt = 'On the road photo ' + (i + 1);
+        img.loading = 'lazy';
+        img.addEventListener('error', function () { el.remove(); });
+        el.appendChild(img);
+        el.addEventListener('click', function () { openLb(idx); });
+        grid.appendChild(el);
+      });
 
       const lb    = document.getElementById('lightbox');
       const lbImg = document.getElementById('lightboxImg');

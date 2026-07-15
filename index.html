@@ -603,14 +603,15 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script src="firebase-init.js"></script>
   <script src="app.js"></script>
+  <script src="photo-manifest.js"></script>
   <script>
-    // Load review photos from photos/Reviews/ — name them review1.jpg, review2.jpg, ...
-    // (jpg, jpeg, png or webp). New photos appear automatically, no code changes needed.
+    // Review photos come from photos/Reviews/ via photo-manifest.js.
+    // After uploading new photos, regenerate the manifest with:
+    //   python3 scripts/generate_photo_manifest.py
     (function () {
       const track = document.getElementById('marqueeTrack');
       if (!track) return;
-      const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
-      const MAX_PHOTOS = 50;
+      const paths = ((window.PHOTO_MANIFEST || {}).Reviews || {}).photos || [];
 
       function tryLoad(src) {
         return new Promise(function (resolve) {
@@ -621,21 +622,8 @@
         });
       }
 
-      async function findPhoto(n) {
-        for (const ext of EXTS) {
-          const img = await tryLoad('photos/Reviews/review' + n + '.' + ext);
-          if (img) return img;
-        }
-        return null;
-      }
-
       (async function () {
-        const photos = [];
-        for (let n = 1; n <= MAX_PHOTOS; n++) {
-          const img = await findPhoto(n);
-          if (!img) break;
-          photos.push(img);
-        }
+        const photos = (await Promise.all(paths.map(tryLoad))).filter(Boolean);
 
         if (!photos.length) {
           const section = document.querySelector('.reviews-section');

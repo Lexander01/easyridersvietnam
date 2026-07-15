@@ -662,6 +662,28 @@ button, input, select, textarea { font-family: inherit; }
   margin-top: 12px;
   display: none;
 }
+.gallery-day { margin-top: 36px; }
+.gallery-day:first-child { margin-top: 16px; }
+.gallery-day-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--orange);
+}
+.gallery-day-route {
+  font-weight: 600;
+  font-size: 0.85em;
+  color: var(--muted);
+}
+.gallery-stop { margin-top: 18px; }
+.gallery-stop-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
 
 /* LIGHTBOX */
 .gallery-lightbox {

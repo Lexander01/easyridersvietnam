@@ -765,13 +765,8 @@ button, input, select, textarea { font-family: inherit; }
   display: flex;
   gap: 20px;
   width: max-content;
-  animation: marquee-scroll 40s linear infinite;
-}
-.marquee-track:hover { animation-play-state: paused; }
-
-@keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  /* movement is driven by JS (see index.html) — a CSS-animated strip of
+     all photos becomes too wide for mobile GPUs to animate */
 }
 
 .review-photo {

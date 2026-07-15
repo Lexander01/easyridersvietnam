@@ -681,21 +681,65 @@
           return;
         }
 
-        photos.forEach(function (img) {
+        // Recycling marquee: keep only ~2 screen-widths of photos in the
+        // DOM and move each photo that scrolls off to the back with the
+        // next photo in the queue. A single CSS-animated strip of all
+        // photos gets too wide for mobile GPUs to animate.
+        const GAP = 20; // must match .marquee-track gap
+        const urls = photos.map(function (img) { return img.src; });
+        let qi = 0;
+
+        function appendNext() {
+          const img = document.createElement('img');
+          img.src = urls[qi % urls.length];
+          qi++;
           img.className = 'review-photo';
           img.alt = 'Traveller review';
           track.appendChild(img);
-        });
-
-        // Repeat the photos until they fill the viewport, then double the
-        // whole track so the -50% scroll animation loops seamlessly
-        const base = track.innerHTML;
-        let copies = 1;
-        while (track.scrollWidth < window.innerWidth && copies < 10) {
-          track.innerHTML += base;
-          copies++;
+          return img;
         }
-        track.innerHTML += track.innerHTML;
+
+        function fill() {
+          let guard = 0;
+          while (track.scrollWidth < window.innerWidth * 2 + 400 && guard < 200) {
+            appendNext();
+            guard++;
+          }
+        }
+        fill();
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        const SPEED = 45; // px per second
+        let offset = 0;
+        let last = null;
+        let paused = false;
+
+        track.addEventListener('mouseenter', function () { paused = true; });
+        track.addEventListener('mouseleave', function () { paused = false; });
+        track.addEventListener('touchstart', function () { paused = true; }, { passive: true });
+        track.addEventListener('touchend',   function () { paused = false; }, { passive: true });
+        track.addEventListener('touchcancel',function () { paused = false; }, { passive: true });
+
+        function step(ts) {
+          if (last !== null && !paused) {
+            offset += Math.min(ts - last, 100) / 1000 * SPEED;
+            let first = track.firstElementChild;
+            let w = first.getBoundingClientRect().width + GAP;
+            while (first && offset >= w) {
+              offset -= w;
+              first.remove();
+              appendNext();
+              first = track.firstElementChild;
+              w = first.getBoundingClientRect().width + GAP;
+            }
+            fill(); // top up after rotations or window resize
+            track.style.transform = 'translateX(' + (-offset).toFixed(2) + 'px)';
+          }
+          last = ts;
+          requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
       }());
     }());
   </script>
